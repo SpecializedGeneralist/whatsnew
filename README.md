@@ -71,7 +71,7 @@ docker run -d -p 5432:5432 --name postgres -e POSTGRES_PASSWORD=postgres postgre
 
 Create a new PostgreSQL DB with name `whatsnew` (actually the name is your choice).
 
-Take your time to create the configuration file, starting from `sample-configuration.yml` in the project folder. If we did well you should understand all the settings as you go.
+Take your time to create the configuration file, starting from [sample-configuration.yml](https://github.com/SpecializedGeneralist/whatsnew/blob/main/sample-configuration.yml) in the project folder. If we did well you should understand all the settings as you go.
 
 Set up the database running:
 
