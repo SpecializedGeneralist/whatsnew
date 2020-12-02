@@ -1,0 +1,28 @@
+log_level: 'info'
+db:
+  dsn: 'host=localhost port=5432 user=postgres password=postgres dbname=whatsnew sslmode=disable statement_cache_mode=describe'
+elasticsearch:
+  url: 'http://localhost:9200'
+  index_name: 'whatsnew-events'
+rabbitmq:
+  uri: 'amqp://guest:guest@localhost:5672/'
+  exchange_name: 'whatsnew'
+feeds_fetching:
+  num_workers: 50
+  max_allowed_failures: 15
+  sleeping_time_seconds: 600
+  omit_feed_items_published_before_enabled: true
+  omit_feed_items_published_before: '2020-12-01T00:00:00Z'
+  new_web_resource_routing_key: 'new_web_resource'
+  new_feed_item_routing_key: 'new_feed_item'
+gdelt_fetching:
+  sleeping_time_seconds: 300
+  new_web_resource_routing_key: 'new_web_resource'
+  new_gdelt_event_routing_key: 'new_gdelt_event'
+  top_level_cameo_event_code_whitelist: [ ]
+web_scraping:
+  num_workers: 40
+  sub_queue_name: 'whatsnew.web_scraping'
+  sub_new_web_resource_routing_key: 'new_web_resource'
+  pub_new_web_article_routing_key: 'new_web_article'
+supported_languages: [ 'en', 'es' ]
