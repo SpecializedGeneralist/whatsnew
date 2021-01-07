@@ -14,7 +14,7 @@ A simple tool to collect and process quite a few web news from multiple sources.
 WhatsNew is a Go module, so it can be used as a library within your own software.
 
 ```console
-go get -u github.com/specializedgeneralist/whatsnew
+go get -u github.com/SpecializedGeneralist/whatsnew
 ```
 
 It also works out-of-the-box using its CLI mode:
