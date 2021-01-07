@@ -5,9 +5,9 @@
 package internal
 
 import (
-	"github.com/nlpodyssey/whatsnew/pkg/models"
-	"github.com/nlpodyssey/whatsnew/pkg/rabbitmq"
-	"github.com/nlpodyssey/whatsnew/pkg/tasks/webscraping"
+	"github.com/SpecializedGeneralist/whatsnew/pkg/models"
+	"github.com/SpecializedGeneralist/whatsnew/pkg/rabbitmq"
+	"github.com/SpecializedGeneralist/whatsnew/pkg/tasks/webscraping"
 	"github.com/urfave/cli/v2"
 )
 

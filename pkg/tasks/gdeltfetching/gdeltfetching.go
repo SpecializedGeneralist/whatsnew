@@ -5,8 +5,8 @@
 package gdeltfetching
 
 import (
-	"github.com/nlpodyssey/whatsnew/pkg/configuration"
-	"github.com/nlpodyssey/whatsnew/pkg/rabbitmq"
+	"github.com/SpecializedGeneralist/whatsnew/pkg/configuration"
+	"github.com/SpecializedGeneralist/whatsnew/pkg/rabbitmq"
 	"github.com/rs/zerolog"
 	"gorm.io/gorm"
 	"os"

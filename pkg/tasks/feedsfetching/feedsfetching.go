@@ -5,10 +5,10 @@
 package feedsfetching
 
 import (
-	"github.com/nlpodyssey/whatsnew/pkg/configuration"
-	"github.com/nlpodyssey/whatsnew/pkg/models"
-	"github.com/nlpodyssey/whatsnew/pkg/rabbitmq"
-	"github.com/nlpodyssey/whatsnew/pkg/tasks/workerpool"
+	"github.com/SpecializedGeneralist/whatsnew/pkg/configuration"
+	"github.com/SpecializedGeneralist/whatsnew/pkg/models"
+	"github.com/SpecializedGeneralist/whatsnew/pkg/rabbitmq"
+	"github.com/SpecializedGeneralist/whatsnew/pkg/tasks/workerpool"
 	"github.com/rs/zerolog"
 	"gorm.io/gorm"
 	"time"

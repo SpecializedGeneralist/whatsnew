@@ -6,7 +6,7 @@ package models
 
 import (
 	"fmt"
-	"github.com/nlpodyssey/whatsnew/pkg/gormlogger"
+	"github.com/SpecializedGeneralist/whatsnew/pkg/gormlogger"
 	"github.com/rs/zerolog"
 	"gorm.io/driver/postgres"
 	"gorm.io/gorm"

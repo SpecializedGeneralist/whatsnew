@@ -5,7 +5,7 @@
 package internal
 
 import (
-	"github.com/nlpodyssey/whatsnew/pkg/configuration"
+	"github.com/SpecializedGeneralist/whatsnew/pkg/configuration"
 	"github.com/rs/zerolog"
 	"github.com/urfave/cli/v2"
 	"log"

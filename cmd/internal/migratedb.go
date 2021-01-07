@@ -5,7 +5,7 @@
 package internal
 
 import (
-	"github.com/nlpodyssey/whatsnew/pkg/models"
+	"github.com/SpecializedGeneralist/whatsnew/pkg/models"
 	"github.com/urfave/cli/v2"
 )
 
