@@ -51,8 +51,8 @@ func runProducer(
 	for {
 		logger.Info().Msg("producer: start finding feeds in batch")
 
-		var results []*struct{ ID uint }
-		result := db.Model(&models.Feed{}).Order("last_retrieved_at, id").FindInBatches(
+		var results []*models.Feed
+		result := db.Order("last_retrieved_at, id").FindInBatches(
 			&results, 100,
 			func(_ *gorm.DB, batch int) error {
 				for _, result := range results {
