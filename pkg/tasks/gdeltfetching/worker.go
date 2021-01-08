@@ -7,10 +7,10 @@ package gdeltfetching
 import (
 	"database/sql"
 	"fmt"
+	"github.com/SpecializedGeneralist/whatsnew/pkg/configuration"
+	"github.com/SpecializedGeneralist/whatsnew/pkg/models"
+	"github.com/SpecializedGeneralist/whatsnew/pkg/rabbitmq"
 	"github.com/jackc/pgtype"
-	"github.com/nlpodyssey/whatsnew/pkg/configuration"
-	"github.com/nlpodyssey/whatsnew/pkg/models"
-	"github.com/nlpodyssey/whatsnew/pkg/rabbitmq"
 	"github.com/rs/zerolog"
 	"github.com/specializedgeneralist/gdelt"
 	"github.com/specializedgeneralist/gdelt/events"

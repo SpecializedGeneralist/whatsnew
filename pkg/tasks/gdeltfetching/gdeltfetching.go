@@ -5,8 +5,8 @@
 package gdeltfetching
 
 import (
-	"github.com/nlpodyssey/whatsnew/pkg/configuration"
-	"github.com/nlpodyssey/whatsnew/pkg/rabbitmq"
+	"github.com/SpecializedGeneralist/whatsnew/pkg/configuration"
+	"github.com/SpecializedGeneralist/whatsnew/pkg/rabbitmq"
 	"github.com/rs/zerolog"
 	"gorm.io/gorm"
 	"os"
@@ -36,15 +36,15 @@ func FetchGDELT(
 
 		var sleepingTime time.Duration
 		if err == nil {
-			sleepingTime = config.GDELTFetching.SleepingTimeSeconds
-			logger.Info().Msgf("sleeping for %d seconds...", sleepingTime)
+			sleepingTime = config.GDELTFetching.SleepingTime
+			logger.Info().Msgf("sleeping for %s...", sleepingTime)
 		} else {
-			sleepingTime = 30
+			sleepingTime = 30 * time.Second
 			logger.Err(err).Msgf("an error occurred - retrying in %d seconds...", sleepingTime)
 		}
 
 		select {
-		case <-time.After(sleepingTime * time.Second):
+		case <-time.After(sleepingTime):
 		case s := <-termChan:
 			logger.Info().Msgf("signal received: %v", s)
 			done = true

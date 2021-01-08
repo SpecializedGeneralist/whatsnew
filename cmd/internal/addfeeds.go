@@ -5,8 +5,8 @@
 package internal
 
 import (
-	"github.com/nlpodyssey/whatsnew/pkg/models"
-	"github.com/nlpodyssey/whatsnew/pkg/tasks/feedsimporting"
+	"github.com/SpecializedGeneralist/whatsnew/pkg/models"
+	"github.com/SpecializedGeneralist/whatsnew/pkg/tasks/feedsimporting"
 	"github.com/urfave/cli/v2"
 )
 

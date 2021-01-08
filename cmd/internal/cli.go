@@ -5,7 +5,7 @@
 package internal
 
 import (
-	"github.com/nlpodyssey/whatsnew/pkg/configuration"
+	"github.com/SpecializedGeneralist/whatsnew/pkg/configuration"
 	"github.com/rs/zerolog"
 	"github.com/urfave/cli/v2"
 	"log"
@@ -86,7 +86,7 @@ func (app *CLIApp) newLogger() zerolog.Logger {
 		Out:        os.Stderr,
 		TimeFormat: time.RFC3339,
 	}
-	return zerolog.New(w).With().Timestamp().Logger().Level(app.config.LogLevel.Level)
+	return zerolog.New(w).With().Timestamp().Logger().Level(zerolog.Level(app.config.LogLevel))
 }
 
 func (app *CLIApp) newContextLogger(c *cli.Context) zerolog.Logger {

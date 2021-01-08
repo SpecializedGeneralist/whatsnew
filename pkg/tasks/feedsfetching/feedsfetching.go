@@ -5,10 +5,10 @@
 package feedsfetching
 
 import (
-	"github.com/nlpodyssey/whatsnew/pkg/configuration"
-	"github.com/nlpodyssey/whatsnew/pkg/models"
-	"github.com/nlpodyssey/whatsnew/pkg/rabbitmq"
-	"github.com/nlpodyssey/whatsnew/pkg/tasks/workerpool"
+	"github.com/SpecializedGeneralist/whatsnew/pkg/configuration"
+	"github.com/SpecializedGeneralist/whatsnew/pkg/models"
+	"github.com/SpecializedGeneralist/whatsnew/pkg/rabbitmq"
+	"github.com/SpecializedGeneralist/whatsnew/pkg/tasks/workerpool"
 	"github.com/rs/zerolog"
 	"gorm.io/gorm"
 	"time"
@@ -25,7 +25,7 @@ func FetchFeeds(
 	workers := make([]*Worker, config.FeedsFetching.NumWorkers)
 	for workerID := range workers {
 		workers[workerID] = NewWorker(
-			config, db, rmq,
+			config, db.Session(&gorm.Session{}), rmq,
 			logger.With().Int("workerID", workerID).Logger(),
 		)
 	}
@@ -51,8 +51,8 @@ func runProducer(
 	for {
 		logger.Info().Msg("producer: start finding feeds in batch")
 
-		var results []*struct{ ID uint }
-		result := db.Model(&models.Feed{}).Order("last_retrieved_at, id").FindInBatches(
+		var results []*models.Feed
+		result := db.Order("last_retrieved_at, id").FindInBatches(
 			&results, 100,
 			func(_ *gorm.DB, batch int) error {
 				for _, result := range results {
@@ -62,13 +62,13 @@ func runProducer(
 			},
 		)
 
-		sleepingDuration := config.FeedsFetching.SleepingTimeSeconds
+		sleepingDuration := config.FeedsFetching.SleepingTime
 		if result.Error != nil {
 			logger.Err(result.Error).Msg("producer: FindInBatches error")
-			sleepingDuration = 10
+			sleepingDuration = 10 * time.Second
 		}
 
-		logger.Info().Msgf("producer: sleeping for %d seconds...", sleepingDuration)
-		time.Sleep(sleepingDuration * time.Second)
+		logger.Info().Msgf("producer: sleeping for %s...", sleepingDuration)
+		time.Sleep(sleepingDuration)
 	}
 }

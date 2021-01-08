@@ -7,7 +7,7 @@ package feedsimporting
 import (
 	"bufio"
 	"fmt"
-	"github.com/nlpodyssey/whatsnew/pkg/models"
+	"github.com/SpecializedGeneralist/whatsnew/pkg/models"
 	"gorm.io/gorm"
 	"gorm.io/gorm/clause"
 	"os"

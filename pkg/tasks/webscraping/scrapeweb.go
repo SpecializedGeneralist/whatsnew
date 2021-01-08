@@ -6,9 +6,9 @@ package webscraping
 
 import (
 	"fmt"
-	"github.com/nlpodyssey/whatsnew/pkg/configuration"
-	"github.com/nlpodyssey/whatsnew/pkg/rabbitmq"
-	"github.com/nlpodyssey/whatsnew/pkg/tasks/workerpool"
+	"github.com/SpecializedGeneralist/whatsnew/pkg/configuration"
+	"github.com/SpecializedGeneralist/whatsnew/pkg/rabbitmq"
+	"github.com/SpecializedGeneralist/whatsnew/pkg/tasks/workerpool"
 	"github.com/rs/zerolog"
 	"github.com/streadway/amqp"
 	"gorm.io/gorm"
@@ -25,7 +25,7 @@ func ScrapeWeb(
 	workers := make([]*Worker, config.WebScraping.NumWorkers)
 	for workerID := range workers {
 		workers[workerID] = NewWorker(
-			config, db, rmq,
+			config, db.Session(&gorm.Session{}), rmq,
 			logger.With().Int("workerID", workerID).Logger(),
 		)
 	}

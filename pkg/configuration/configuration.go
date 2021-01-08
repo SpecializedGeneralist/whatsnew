@@ -5,24 +5,12 @@
 package configuration
 
 import (
-	"encoding"
 	"fmt"
 	"github.com/rs/zerolog"
-	"gopkg.in/yaml.v2"
+	"gopkg.in/yaml.v3"
 	"os"
 	"time"
 )
-
-type LogLevel struct {
-	zerolog.Level
-}
-
-var _ encoding.TextUnmarshaler = &LogLevel{}
-
-func (l *LogLevel) UnmarshalText(text []byte) (err error) {
-	l.Level, err = zerolog.ParseLevel(string(text))
-	return err
-}
 
 // Configuration provides app-wide settings.
 type Configuration struct {
@@ -58,7 +46,7 @@ type RabbitMQConfiguration struct {
 type FeedsFetchingConfiguration struct {
 	NumWorkers                          int           `yaml:"num_workers"`
 	MaxAllowedFailures                  int           `yaml:"max_allowed_failures"`
-	SleepingTimeSeconds                 time.Duration `yaml:"sleeping_time_seconds"`
+	SleepingTime                        time.Duration `yaml:"sleeping_time"`
 	OmitFeedItemsPublishedBeforeEnabled bool          `yaml:"omit_feed_items_published_before_enabled"`
 	OmitFeedItemsPublishedBefore        time.Time     `yaml:"omit_feed_items_published_before"`
 	NewWebResourceRoutingKey            string        `yaml:"new_web_resource_routing_key"`
@@ -68,7 +56,7 @@ type FeedsFetchingConfiguration struct {
 // GDELTFetchingConfiguration provides specific settings for the
 // GDELT-fetching operation.
 type GDELTFetchingConfiguration struct {
-	SleepingTimeSeconds             time.Duration `yaml:"sleeping_time_seconds"`
+	SleepingTime                    time.Duration `yaml:"sleeping_time"`
 	NewWebResourceRoutingKey        string        `yaml:"new_web_resource_routing_key"`
 	NewGDELTEventRoutingKey         string        `yaml:"new_gdelt_event_routing_key"`
 	TopLevelCameoEventCodeWhitelist []string      `yaml:"top_level_cameo_event_code_whitelist"`
@@ -90,6 +78,16 @@ func (c *Configuration) LanguageIsSupported(code string) bool {
 		}
 	}
 	return false
+}
+
+// LogLevel is a redefinition of zerolog.Level which satisfies encoding.TextUnmarshaler.
+type LogLevel zerolog.Level
+
+// UnmarshalText unmarshals the text to a LogLevel.
+func (l *LogLevel) UnmarshalText(text []byte) (err error) {
+	zl, err := zerolog.ParseLevel(string(text))
+	*l = LogLevel(zl)
+	return err
 }
 
 // FromYAMLFile reads a Configuration object from a YAML file.

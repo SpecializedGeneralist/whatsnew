@@ -5,7 +5,7 @@
 package main
 
 import (
-	"github.com/nlpodyssey/whatsnew/cmd/internal"
+	"github.com/SpecializedGeneralist/whatsnew/cmd/internal"
 )
 
 func main() {

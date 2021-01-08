@@ -26,7 +26,7 @@ func TestFromYAMLFile(t *testing.T) {
 		}
 
 		expected := Configuration{
-			LogLevel: LogLevel{Level: zerolog.InfoLevel},
+			LogLevel: LogLevel(zerolog.InfoLevel),
 			DB: DBConfiguration{
 				DSN: "host=localhost port=5432 user=postgres password=postgres dbname=whatsnew sslmode=disable statement_cache_mode=describe",
 			},
@@ -41,14 +41,14 @@ func TestFromYAMLFile(t *testing.T) {
 			FeedsFetching: FeedsFetchingConfiguration{
 				NumWorkers:                          50,
 				MaxAllowedFailures:                  15,
-				SleepingTimeSeconds:                 600,
+				SleepingTime:                        10 * time.Minute,
 				OmitFeedItemsPublishedBeforeEnabled: true,
 				OmitFeedItemsPublishedBefore:        omitFeedItemsPublishedBefore,
 				NewWebResourceRoutingKey:            "new_web_resource",
 				NewFeedItemRoutingKey:               "new_feed_item",
 			},
 			GDELTFetching: GDELTFetchingConfiguration{
-				SleepingTimeSeconds:             300,
+				SleepingTime:                    5 * time.Minute,
 				NewWebResourceRoutingKey:        "new_web_resource",
 				NewGDELTEventRoutingKey:         "new_gdelt_event",
 				TopLevelCameoEventCodeWhitelist: []string{},
@@ -62,7 +62,7 @@ func TestFromYAMLFile(t *testing.T) {
 			SupportedLanguages: []string{"en", "es"},
 		}
 
-		filename := path.Join(getProjectRootDir(), "configuration", "test", "sample-configuration.yml")
+		filename := path.Join(getProjectRootDir(), "configuration", "testdata", "sample-configuration.yml")
 		fileMustExist(t, filename)
 		config, err := FromYAMLFile(filename)
 		if err != nil {
@@ -87,7 +87,7 @@ func TestFromYAMLFile(t *testing.T) {
 	t.Run("loading a non-YAML file", func(t *testing.T) {
 		t.Parallel()
 
-		filename := path.Join(getProjectRootDir(), "configuration", "test", "another_file.txt")
+		filename := path.Join(getProjectRootDir(), "configuration", "testdata", "another_file.txt")
 		fileMustExist(t, filename)
 		_, err := FromYAMLFile(filename)
 		if err == nil {
