@@ -62,7 +62,7 @@ func TestFromYAMLFile(t *testing.T) {
 			SupportedLanguages: []string{"en", "es"},
 		}
 
-		filename := path.Join(getProjectRootDir(), "configuration", "test", "sample-configuration.yml")
+		filename := path.Join(getProjectRootDir(), "configuration", "testdata", "sample-configuration.yml")
 		fileMustExist(t, filename)
 		config, err := FromYAMLFile(filename)
 		if err != nil {
@@ -87,7 +87,7 @@ func TestFromYAMLFile(t *testing.T) {
 	t.Run("loading a non-YAML file", func(t *testing.T) {
 		t.Parallel()
 
-		filename := path.Join(getProjectRootDir(), "configuration", "test", "another_file.txt")
+		filename := path.Join(getProjectRootDir(), "configuration", "testdata", "another_file.txt")
 		fileMustExist(t, filename)
 		_, err := FromYAMLFile(filename)
 		if err == nil {
