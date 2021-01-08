@@ -27,14 +27,33 @@ func (app *CLIApp) createDB() *cli.Command {
 			if err != nil {
 				return err
 			}
+
+			// `db.Exec` argument interpolation does not work properly, causing the
+			// command to always fail. So we build the statement with a humble
+			// `fmt.Sprintf`, just providing minimal validation.
 			dbName := c.String("name")
-			result := db.Exec("CREATE DATABASE ?;", dbName)
+			if err = validateDatabaseName(dbName); err != nil {
+				return err
+			}
+
+			result := db.Exec(fmt.Sprintf("CREATE DATABASE %s;", dbName))
 			if result.Error != nil {
-				fmt.Printf("Unable to create `%s`, it may already exists...", dbName)
-				return nil
+				return result.Error
 			}
 			fmt.Printf("Done!")
 			return nil
 		},
 	}
+}
+
+func validateDatabaseName(name string) error {
+	if len(name) == 0 {
+		return fmt.Errorf("please provide a valid database name")
+	}
+	for _, c := range name {
+		if !((c >= 'a' && c <= 'z') || (c >= 'A' && c <= 'Z') || (c >= '0' && c <= '9') || c == '_') {
+			return fmt.Errorf("the database name contains illegal characters")
+		}
+	}
+	return nil
 }
