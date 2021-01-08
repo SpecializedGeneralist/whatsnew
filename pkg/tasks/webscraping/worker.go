@@ -106,7 +106,18 @@ func (w *Worker) processWebResourceID(webResourceID uint) (uint, error) {
 		return 0, nil
 	}
 
-	article, err := w.scraper.ExtractFromRawHTML(body, webResource.URL)
+	// Gracefully handle ExtractFromRawHTML panics.
+	// For example, a panic was raised by a dependency package when parsing crappy HTML
+	// content, here: https://github.com/PuerkitoBio/goquery/blob/v1.6.0/manipulation.go#L579
+	article, err := func() (article *goose.Article, err error) {
+		defer func() {
+			if r := recover(); r != nil {
+				err = fmt.Errorf("article extraction panicked: %v", r)
+			}
+		}()
+		return w.scraper.ExtractFromRawHTML(body, webResource.URL)
+	}()
+
 	if err != nil {
 		// TODO: consider recovery, but it might fail forever...
 		logger.Warn().Err(err).Msg("error scraping HTML content - article skipped")
