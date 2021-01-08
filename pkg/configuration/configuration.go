@@ -5,24 +5,12 @@
 package configuration
 
 import (
-	"encoding"
 	"fmt"
 	"github.com/rs/zerolog"
 	"gopkg.in/yaml.v3"
 	"os"
 	"time"
 )
-
-type LogLevel struct {
-	zerolog.Level
-}
-
-var _ encoding.TextUnmarshaler = &LogLevel{}
-
-func (l *LogLevel) UnmarshalText(text []byte) (err error) {
-	l.Level, err = zerolog.ParseLevel(string(text))
-	return err
-}
 
 // Configuration provides app-wide settings.
 type Configuration struct {
@@ -90,6 +78,16 @@ func (c *Configuration) LanguageIsSupported(code string) bool {
 		}
 	}
 	return false
+}
+
+// LogLevel is a redefinition of zerolog.Level which satisfies encoding.TextUnmarshaler.
+type LogLevel zerolog.Level
+
+// UnmarshalText unmarshals the text to a LogLevel.
+func (l *LogLevel) UnmarshalText(text []byte) (err error) {
+	zl, err := zerolog.ParseLevel(string(text))
+	*l = LogLevel(zl)
+	return err
 }
 
 // FromYAMLFile reads a Configuration object from a YAML file.

@@ -26,7 +26,7 @@ func TestFromYAMLFile(t *testing.T) {
 		}
 
 		expected := Configuration{
-			LogLevel: LogLevel{Level: zerolog.InfoLevel},
+			LogLevel: LogLevel(zerolog.InfoLevel),
 			DB: DBConfiguration{
 				DSN: "host=localhost port=5432 user=postgres password=postgres dbname=whatsnew sslmode=disable statement_cache_mode=describe",
 			},
