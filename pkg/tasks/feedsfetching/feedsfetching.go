@@ -25,7 +25,7 @@ func FetchFeeds(
 	workers := make([]*Worker, config.FeedsFetching.NumWorkers)
 	for workerID := range workers {
 		workers[workerID] = NewWorker(
-			config, db, rmq,
+			config, db.Session(&gorm.Session{}), rmq,
 			logger.With().Int("workerID", workerID).Logger(),
 		)
 	}
