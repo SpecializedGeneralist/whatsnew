@@ -62,13 +62,13 @@ func runProducer(
 			},
 		)
 
-		sleepingDuration := config.FeedsFetching.SleepingTimeSeconds
+		sleepingDuration := config.FeedsFetching.SleepingTime
 		if result.Error != nil {
 			logger.Err(result.Error).Msg("producer: FindInBatches error")
-			sleepingDuration = 10
+			sleepingDuration = 10 * time.Second
 		}
 
 		logger.Info().Msgf("producer: sleeping for %d seconds...", sleepingDuration)
-		time.Sleep(sleepingDuration * time.Second)
+		time.Sleep(sleepingDuration)
 	}
 }

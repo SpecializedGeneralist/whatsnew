@@ -36,15 +36,15 @@ func FetchGDELT(
 
 		var sleepingTime time.Duration
 		if err == nil {
-			sleepingTime = config.GDELTFetching.SleepingTimeSeconds
+			sleepingTime = config.GDELTFetching.SleepingTime
 			logger.Info().Msgf("sleeping for %d seconds...", sleepingTime)
 		} else {
-			sleepingTime = 30
+			sleepingTime = 30 * time.Second
 			logger.Err(err).Msgf("an error occurred - retrying in %d seconds...", sleepingTime)
 		}
 
 		select {
-		case <-time.After(sleepingTime * time.Second):
+		case <-time.After(sleepingTime):
 		case s := <-termChan:
 			logger.Info().Msgf("signal received: %v", s)
 			done = true

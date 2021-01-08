@@ -58,7 +58,7 @@ type RabbitMQConfiguration struct {
 type FeedsFetchingConfiguration struct {
 	NumWorkers                          int           `yaml:"num_workers"`
 	MaxAllowedFailures                  int           `yaml:"max_allowed_failures"`
-	SleepingTimeSeconds                 time.Duration `yaml:"sleeping_time_seconds"`
+	SleepingTime                        time.Duration `yaml:"sleeping_time"`
 	OmitFeedItemsPublishedBeforeEnabled bool          `yaml:"omit_feed_items_published_before_enabled"`
 	OmitFeedItemsPublishedBefore        time.Time     `yaml:"omit_feed_items_published_before"`
 	NewWebResourceRoutingKey            string        `yaml:"new_web_resource_routing_key"`
@@ -68,7 +68,7 @@ type FeedsFetchingConfiguration struct {
 // GDELTFetchingConfiguration provides specific settings for the
 // GDELT-fetching operation.
 type GDELTFetchingConfiguration struct {
-	SleepingTimeSeconds             time.Duration `yaml:"sleeping_time_seconds"`
+	SleepingTime                    time.Duration `yaml:"sleeping_time"`
 	NewWebResourceRoutingKey        string        `yaml:"new_web_resource_routing_key"`
 	NewGDELTEventRoutingKey         string        `yaml:"new_gdelt_event_routing_key"`
 	TopLevelCameoEventCodeWhitelist []string      `yaml:"top_level_cameo_event_code_whitelist"`

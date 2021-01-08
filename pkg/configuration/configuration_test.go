@@ -41,14 +41,14 @@ func TestFromYAMLFile(t *testing.T) {
 			FeedsFetching: FeedsFetchingConfiguration{
 				NumWorkers:                          50,
 				MaxAllowedFailures:                  15,
-				SleepingTimeSeconds:                 600,
+				SleepingTime:                        10 * time.Minute,
 				OmitFeedItemsPublishedBeforeEnabled: true,
 				OmitFeedItemsPublishedBefore:        omitFeedItemsPublishedBefore,
 				NewWebResourceRoutingKey:            "new_web_resource",
 				NewFeedItemRoutingKey:               "new_feed_item",
 			},
 			GDELTFetching: GDELTFetchingConfiguration{
-				SleepingTimeSeconds:             300,
+				SleepingTime:                    5 * time.Minute,
 				NewWebResourceRoutingKey:        "new_web_resource",
 				NewGDELTEventRoutingKey:         "new_gdelt_event",
 				TopLevelCameoEventCodeWhitelist: []string{},
