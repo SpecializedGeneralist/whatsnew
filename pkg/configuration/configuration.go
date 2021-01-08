@@ -8,7 +8,7 @@ import (
 	"encoding"
 	"fmt"
 	"github.com/rs/zerolog"
-	"gopkg.in/yaml.v2"
+	"gopkg.in/yaml.v3"
 	"os"
 	"time"
 )
