@@ -68,7 +68,7 @@ func runProducer(
 			sleepingDuration = 10 * time.Second
 		}
 
-		logger.Info().Msgf("producer: sleeping for %d seconds...", sleepingDuration)
+		logger.Info().Msgf("producer: sleeping for %s...", sleepingDuration)
 		time.Sleep(sleepingDuration)
 	}
 }
