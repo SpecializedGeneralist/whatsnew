@@ -7,6 +7,7 @@ package duplicatedetector
 import (
 	"fmt"
 	"github.com/SpecializedGeneralist/whatsnew/pkg/configuration"
+	"github.com/SpecializedGeneralist/whatsnew/pkg/models"
 	"github.com/SpecializedGeneralist/whatsnew/pkg/rabbitmq"
 	"github.com/rs/zerolog"
 	"gorm.io/gorm"
@@ -15,10 +16,22 @@ import (
 	"syscall"
 )
 
+type CustomizeQueryFunc func(tx *gorm.DB, webArticle *models.WebArticle) (*gorm.DB, error)
+
+func DefaultDetectDuplicates(
+	config configuration.Configuration,
+	db *gorm.DB,
+	rmq *rabbitmq.Client,
+	logger zerolog.Logger,
+) error {
+	return DetectDuplicates(config, db, rmq, nil, logger)
+}
+
 func DetectDuplicates(
 	config configuration.Configuration,
 	db *gorm.DB,
 	rmq *rabbitmq.Client,
+	customizeQuery CustomizeQueryFunc,
 	logger zerolog.Logger,
 ) error {
 	logger.Info().Msg("start duplication detection")
@@ -35,10 +48,11 @@ func DetectDuplicates(
 	}
 
 	worker := &Worker{
-		config: config,
-		db:     db,
-		rmq:    rmq,
-		logger: logger,
+		config:         config,
+		db:             db,
+		rmq:            rmq,
+		customizeQuery: customizeQuery,
+		logger:         logger,
 	}
 
 	for done := false; !done; {

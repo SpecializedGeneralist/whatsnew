@@ -19,10 +19,11 @@ import (
 )
 
 type Worker struct {
-	config configuration.Configuration
-	db     *gorm.DB
-	rmq    *rabbitmq.Client
-	logger zerolog.Logger
+	config         configuration.Configuration
+	db             *gorm.DB
+	rmq            *rabbitmq.Client
+	customizeQuery CustomizeQueryFunc
+	logger         zerolog.Logger
 }
 
 func (w *Worker) do(delivery amqp.Delivery) {
@@ -109,6 +110,13 @@ func (w *Worker) findMostSimilarWebArticle(webArticle *models.WebArticle) (uint,
 		Where("vector IS NOT NULL").
 		Where("id < ?", webArticle.ID).
 		Where("publish_date >= ?", pastDate.Format(time.RFC3339))
+
+	if w.customizeQuery != nil {
+		query, err = w.customizeQuery(query, webArticle)
+		if err != nil {
+			return 0, 0, fmt.Errorf("query customization error: %v", err)
+		}
+	}
 
 	var maxScore float32
 	var maxID uint = 0
