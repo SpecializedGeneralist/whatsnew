@@ -69,6 +69,7 @@ func TestFromYAMLFile(t *testing.T) {
 				SubNewWebArticleRoutingKey:           "new_web_article",
 				PubNewVectorizedWebArticleRoutingKey: "new_vectorized_web_article",
 				LabseGrpcAddress:                     "localhost:4000",
+				LabseTLSDisable:                      false,
 			},
 			SupportedLanguages: []string{"en", "es"},
 		}

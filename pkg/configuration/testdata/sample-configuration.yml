@@ -35,5 +35,6 @@ vectorizer:
   sub_new_web_article_routing_key: "new_web_article"
   pub_new_vectorized_web_article_routing_key: "new_vectorized_web_article"
   labse_grpc_address: "localhost:4000"
+  labse_tls_disable: false
 supported_languages: [ 'en', 'es' ]
 

@@ -84,6 +84,7 @@ type VectorizerConfiguration struct {
 	SubNewWebArticleRoutingKey           string `yaml:"sub_new_web_article_routing_key"`
 	PubNewVectorizedWebArticleRoutingKey string `yaml:"pub_new_vectorized_web_article_routing_key"`
 	LabseGrpcAddress                     string `yaml:"labse_grpc_address"`
+	LabseTLSDisable                      bool   `yaml:"labse_tls_disable"`
 }
 
 func (c *Configuration) LanguageIsSupported(code string) bool {
