@@ -63,6 +63,13 @@ func TestFromYAMLFile(t *testing.T) {
 				PubNewEventRoutingKey:   "new_event",
 				PubNewRelatedRoutingKey: "new_related",
 			},
+			Vectorizer: VectorizerConfiguration{
+				NumWorkers:                           4,
+				SubQueueName:                         "whatsnew.vectorizer",
+				SubNewWebArticleRoutingKey:           "new_web_article",
+				PubNewVectorizedWebArticleRoutingKey: "new_vectorized_web_article",
+				LabseGrpcAddress:                     "localhost:4000",
+			},
 			SupportedLanguages: []string{"en", "es"},
 		}
 

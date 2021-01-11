@@ -29,5 +29,11 @@ duplicate_detector:
   sub_routing_key: "new_vectorized_web_article"
   pub_new_event_routing_key: "new_event"
   pub_new_related_routing_key: "new_related"
+vectorizer:
+  num_workers: 4
+  sub_queue_name: "whatsnew.vectorizer"
+  sub_new_web_article_routing_key: "new_web_article"
+  pub_new_vectorized_web_article_routing_key: "new_vectorized_web_article"
+  labse_grpc_address: "localhost:4000"
 supported_languages: [ 'en', 'es' ]
 

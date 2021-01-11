@@ -21,6 +21,7 @@ type Configuration struct {
 	GDELTFetching      GDELTFetchingConfiguration     `yaml:"gdelt_fetching"`
 	WebScraping        WebScrapingConfiguration       `yaml:"web_scraping"`
 	DuplicateDetector  DuplicateDetectorConfiguration `yaml:"duplicate_detector"`
+	Vectorizer         VectorizerConfiguration        `yaml:"vectorizer"`
 	SupportedLanguages []string                       `yaml:"supported_languages"`
 }
 
@@ -74,6 +75,15 @@ type DuplicateDetectorConfiguration struct {
 	SubRoutingKey           string  `yaml:"sub_routing_key"`
 	PubNewEventRoutingKey   string  `yaml:"pub_new_event_routing_key"`
 	PubNewRelatedRoutingKey string  `yaml:"pub_new_related_routing_key"`
+}
+
+// VectorizerConfiguration provides specific settings for the vectorization operation.
+type VectorizerConfiguration struct {
+	NumWorkers                           int    `yaml:"num_workers"`
+	SubQueueName                         string `yaml:"sub_queue_name"`
+	SubNewWebArticleRoutingKey           string `yaml:"sub_new_web_article_routing_key"`
+	PubNewVectorizedWebArticleRoutingKey string `yaml:"pub_new_vectorized_web_article_routing_key"`
+	LabseGrpcAddress                     string `yaml:"labse_grpc_address"`
 }
 
 func (c *Configuration) LanguageIsSupported(code string) bool {
