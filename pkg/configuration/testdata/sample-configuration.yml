@@ -22,5 +22,12 @@ web_scraping:
   sub_queue_name: 'whatsnew.web_scraping'
   sub_new_web_resource_routing_key: 'new_web_resource'
   pub_new_web_article_routing_key: 'new_web_article'
+duplicate_detector:
+  timeframe_hours: 72
+  similarity_threshold: 0.7
+  sub_queue_name: "whatsnew.duplicate_detector"
+  sub_routing_key: "new_vectorized_web_article"
+  pub_new_event_routing_key: "new_event"
+  pub_new_related_routing_key: "new_related"
 supported_languages: [ 'en', 'es' ]
 

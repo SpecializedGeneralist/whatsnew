@@ -55,6 +55,14 @@ func TestFromYAMLFile(t *testing.T) {
 				SubNewWebResourceRoutingKey: "new_web_resource",
 				PubNewWebArticleRoutingKey:  "new_web_article",
 			},
+			DuplicateDetector: DuplicateDetectorConfiguration{
+				TimeframeHours:          72,
+				SimilarityThreshold:     0.7,
+				SubQueueName:            "whatsnew.duplicate_detector",
+				SubRoutingKey:           "new_vectorized_web_article",
+				PubNewEventRoutingKey:   "new_event",
+				PubNewRelatedRoutingKey: "new_related",
+			},
 			SupportedLanguages: []string{"en", "es"},
 		}
 

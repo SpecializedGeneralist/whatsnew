@@ -17,10 +17,11 @@ type Configuration struct {
 	LogLevel           LogLevel `yaml:"log_level"`
 	DB                 DBConfiguration
 	RabbitMQ           RabbitMQConfiguration
-	FeedsFetching      FeedsFetchingConfiguration `yaml:"feeds_fetching"`
-	GDELTFetching      GDELTFetchingConfiguration `yaml:"gdelt_fetching"`
-	WebScraping        WebScrapingConfiguration   `yaml:"web_scraping"`
-	SupportedLanguages []string                   `yaml:"supported_languages"`
+	FeedsFetching      FeedsFetchingConfiguration     `yaml:"feeds_fetching"`
+	GDELTFetching      GDELTFetchingConfiguration     `yaml:"gdelt_fetching"`
+	WebScraping        WebScrapingConfiguration       `yaml:"web_scraping"`
+	DuplicateDetector  DuplicateDetectorConfiguration `yaml:"duplicate_detector"`
+	SupportedLanguages []string                       `yaml:"supported_languages"`
 }
 
 // DBConfiguration provides database-specific settings.
@@ -62,6 +63,17 @@ type WebScrapingConfiguration struct {
 	SubQueueName                string `yaml:"sub_queue_name"`
 	SubNewWebResourceRoutingKey string `yaml:"sub_new_web_resource_routing_key"`
 	PubNewWebArticleRoutingKey  string `yaml:"pub_new_web_article_routing_key"`
+}
+
+// DuplicateDetectorConfiguration provides specific settings for near-duplicate web
+// articles detection.
+type DuplicateDetectorConfiguration struct {
+	TimeframeHours          int     `yaml:"timeframe_hours"`
+	SimilarityThreshold     float32 `yaml:"similarity_threshold"`
+	SubQueueName            string  `yaml:"sub_queue_name"`
+	SubRoutingKey           string  `yaml:"sub_routing_key"`
+	PubNewEventRoutingKey   string  `yaml:"pub_new_event_routing_key"`
+	PubNewRelatedRoutingKey string  `yaml:"pub_new_related_routing_key"`
 }
 
 func (c *Configuration) LanguageIsSupported(code string) bool {
