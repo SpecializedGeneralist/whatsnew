@@ -14,7 +14,7 @@ import (
 	"gorm.io/gorm"
 )
 
-func AnalyzeArticles(
+func Vectorize(
 	config configuration.Configuration,
 	db *gorm.DB,
 	rmq *rabbitmq.Client,
