@@ -1,9 +1,6 @@
 log_level: 'info'
 db:
   dsn: 'host=localhost port=5432 user=postgres password=postgres dbname=whatsnew sslmode=disable statement_cache_mode=describe'
-elasticsearch:
-  url: 'http://localhost:9200'
-  index_name: 'whatsnew-events'
 rabbitmq:
   uri: 'amqp://guest:guest@localhost:5672/'
   exchange_name: 'whatsnew'
@@ -26,3 +23,4 @@ web_scraping:
   sub_new_web_resource_routing_key: 'new_web_resource'
   pub_new_web_article_routing_key: 'new_web_article'
 supported_languages: [ 'en', 'es' ]
+

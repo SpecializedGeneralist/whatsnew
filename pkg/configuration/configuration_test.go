@@ -30,10 +30,6 @@ func TestFromYAMLFile(t *testing.T) {
 			DB: DBConfiguration{
 				DSN: "host=localhost port=5432 user=postgres password=postgres dbname=whatsnew sslmode=disable statement_cache_mode=describe",
 			},
-			Elasticsearch: ElasticsearchConfiguration{
-				URL:       "http://localhost:9200",
-				IndexName: "whatsnew-events",
-			},
 			RabbitMQ: RabbitMQConfiguration{
 				URI:          "amqp://guest:guest@localhost:5672/",
 				ExchangeName: "whatsnew",

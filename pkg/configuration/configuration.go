@@ -16,7 +16,6 @@ import (
 type Configuration struct {
 	LogLevel           LogLevel `yaml:"log_level"`
 	DB                 DBConfiguration
-	Elasticsearch      ElasticsearchConfiguration
 	RabbitMQ           RabbitMQConfiguration
 	FeedsFetching      FeedsFetchingConfiguration `yaml:"feeds_fetching"`
 	GDELTFetching      GDELTFetchingConfiguration `yaml:"gdelt_fetching"`
@@ -27,12 +26,6 @@ type Configuration struct {
 // DBConfiguration provides database-specific settings.
 type DBConfiguration struct {
 	DSN string
-}
-
-// ElasticsearchConfiguration provides Elasticsearch specific settings (legacy DB).
-type ElasticsearchConfiguration struct {
-	URL       string `yaml:"url"`
-	IndexName string `yaml:"index_name"`
 }
 
 // RabbitMQConfiguration provides RabbitMQ-specific settings.
