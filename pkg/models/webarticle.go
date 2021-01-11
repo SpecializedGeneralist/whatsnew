@@ -7,6 +7,7 @@ package models
 import (
 	"database/sql"
 	"fmt"
+	"github.com/jackc/pgtype"
 	"gorm.io/gorm"
 	"time"
 )
@@ -15,16 +16,20 @@ import (
 type WebArticle struct {
 	Model
 	// WebResourceID allows the has-one relation with a WebResource.
-	WebResourceID      uint   `gorm:"not null;uniqueIndex;constraint:OnDelete:CASCADE"`
-	Title              string `gorm:"not null;index"`
-	TitleUnmodified    string
-	CleanedText        string
-	CanonicalLink      string
-	TopImage           string
-	FinalURL           string
-	ScrapedPublishDate sql.NullTime
-	Language           string    `gorm:"not null"`
-	PublishDate        time.Time `gorm:"not null"`
+	WebResourceID         uint   `gorm:"not null;uniqueIndex;constraint:OnDelete:CASCADE"`
+	Title                 string `gorm:"not null;index"`
+	TitleUnmodified       string
+	CleanedText           string
+	CanonicalLink         string
+	TopImage              string
+	FinalURL              string
+	ScrapedPublishDate    sql.NullTime
+	Language              string    `gorm:"not null"`
+	PublishDate           time.Time `gorm:"not null"`
+	RelatedToWebArticleID *uint
+	RelatedToWebArticle   *WebArticle
+	RelatedScore          sql.NullFloat64
+	Vector                pgtype.Bytea `gorm:"type:bytea"`
 }
 
 // FindWebArticle returns the web article by its id.

@@ -28,10 +28,12 @@ require (
 	github.com/specializedgeneralist/gdelt v0.0.0-20201201000611-1d387c3a4d70
 	github.com/streadway/amqp v1.0.0
 	github.com/urfave/cli/v2 v2.3.0
+	github.com/vmihailenco/msgpack v4.0.4+incompatible
 	golang.org/x/crypto v0.0.0-20201221181555-eec23a3978ad // indirect
 	golang.org/x/net v0.0.0-20201224014010-6772e930b67b
 	golang.org/x/text v0.3.5
 	golang.org/x/xerrors v0.0.0-20200804184101-5ec99f83aff1 // indirect
+	google.golang.org/appengine v1.6.7 // indirect
 	gopkg.in/yaml.v3 v3.0.0-20210107192922-496545a6307b
 	gorm.io/driver/postgres v1.0.6
 	gorm.io/gorm v1.20.10
