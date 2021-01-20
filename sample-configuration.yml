@@ -1,9 +1,6 @@
 log_level: 'info'
 db:
   dsn: 'host=localhost port=5432 user=postgres password=postgres dbname=whatsnew sslmode=disable statement_cache_mode=describe'
-elasticsearch:
-  url: 'http://localhost:9200'
-  index_name: 'whatsnew-events'
 rabbitmq:
   uri: 'amqp://guest:guest@localhost:5672/'
   exchange_name: 'whatsnew'
@@ -25,4 +22,18 @@ web_scraping:
   sub_queue_name: 'whatsnew.web_scraping'
   sub_new_web_resource_routing_key: 'new_web_resource'
   pub_new_web_article_routing_key: 'new_web_article'
+duplicate_detector:
+  timeframe_hours: 72
+  similarity_threshold: 0.7
+  sub_queue_name: "whatsnew.duplicate_detector"
+  sub_routing_key: "new_vectorized_web_article"
+  pub_new_event_routing_key: "new_event"
+  pub_new_related_routing_key: "new_related"
+vectorizer:
+  num_workers: 4
+  sub_queue_name: "whatsnew.vectorizer"
+  sub_new_web_article_routing_key: "new_web_article"
+  pub_new_vectorized_web_article_routing_key: "new_vectorized_web_article"
+  labse_grpc_address: "localhost:4000"
+  labse_tls_disable: false
 supported_languages: [ 'en', 'es' ]

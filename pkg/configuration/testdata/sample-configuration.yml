@@ -37,4 +37,3 @@ vectorizer:
   labse_grpc_address: "localhost:4000"
   labse_tls_disable: false
 supported_languages: [ 'en', 'es' ]
-
