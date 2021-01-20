@@ -13,10 +13,7 @@ import (
 
 // ZeroShotClassification is the result of a spaGO zero-shot classification.
 type ZeroShotClassification struct {
-	Class        string                `json:"class"`
-	Confidence   float32               `json:"confidence"`
 	Distribution []ClassConfidencePair `json:"distribution"`
-	Took         int                   `json:"took"`
 }
 
 // ClassConfidencePair is a pair of class and confidence.

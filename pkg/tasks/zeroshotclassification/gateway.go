@@ -41,12 +41,7 @@ func (s *Gateway) ClassifyNLI(text, hypothesisTemplate string, possibleLabels []
 		}
 	}
 
-	return &ZeroShotClassification{
-		Class:        reply.Class,
-		Confidence:   float32(reply.Confidence),
-		Distribution: dist,
-		Took:         int(reply.Took),
-	}, nil
+	return &ZeroShotClassification{Distribution: dist}, nil
 }
 
 // Close closes the connection.
