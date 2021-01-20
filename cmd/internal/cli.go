@@ -105,6 +105,7 @@ func (app *CLIApp) commands() []*cli.Command {
 		app.fetchFeeds(),
 		app.fetchGDELT(),
 		app.scrapeWeb(),
+		app.zeroShotClassification(),
 		app.vectorize(),
 		app.duplicateDetector(),
 	}

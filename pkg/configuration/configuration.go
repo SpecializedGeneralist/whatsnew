@@ -14,15 +14,16 @@ import (
 
 // Configuration provides app-wide settings.
 type Configuration struct {
-	LogLevel           LogLevel `yaml:"log_level"`
-	DB                 DBConfiguration
-	RabbitMQ           RabbitMQConfiguration
-	FeedsFetching      FeedsFetchingConfiguration     `yaml:"feeds_fetching"`
-	GDELTFetching      GDELTFetchingConfiguration     `yaml:"gdelt_fetching"`
-	WebScraping        WebScrapingConfiguration       `yaml:"web_scraping"`
-	DuplicateDetector  DuplicateDetectorConfiguration `yaml:"duplicate_detector"`
-	Vectorizer         VectorizerConfiguration        `yaml:"vectorizer"`
-	SupportedLanguages []string                       `yaml:"supported_languages"`
+	LogLevel               LogLevel `yaml:"log_level"`
+	DB                     DBConfiguration
+	RabbitMQ               RabbitMQConfiguration
+	FeedsFetching          FeedsFetchingConfiguration          `yaml:"feeds_fetching"`
+	GDELTFetching          GDELTFetchingConfiguration          `yaml:"gdelt_fetching"`
+	WebScraping            WebScrapingConfiguration            `yaml:"web_scraping"`
+	DuplicateDetector      DuplicateDetectorConfiguration      `yaml:"duplicate_detector"`
+	Vectorizer             VectorizerConfiguration             `yaml:"vectorizer"`
+	ZeroShotClassification ZeroShotClassificationConfiguration `yaml:"zero_shot_classification"`
+	SupportedLanguages     []string                            `yaml:"supported_languages"`
 }
 
 // DBConfiguration provides database-specific settings.
@@ -85,6 +86,19 @@ type VectorizerConfiguration struct {
 	PubNewVectorizedWebArticleRoutingKey string `yaml:"pub_new_vectorized_web_article_routing_key"`
 	LabseGrpcAddress                     string `yaml:"labse_grpc_address"`
 	LabseTLSDisable                      bool   `yaml:"labse_tls_disable"`
+}
+
+// ZeroShotClassificationConfiguration provides specific settings for spaGO zero-shot classification operation.
+type ZeroShotClassificationConfiguration struct {
+	NumWorkers          int      `yaml:"num_workers"`
+	SubQueueName        string   `yaml:"sub_queue_name"`
+	SubRoutingKey       string   `yaml:"sub_routing_key"`
+	PubRoutingKey       string   `yaml:"pub_routing_key"`
+	ZeroShotGRPCAddress string   `yaml:"zero_shot_grpc_address"`
+	GRPCTLSDisable      bool     `yaml:"grpc_tls_disable"`
+	HypothesisTemplate  string   `yaml:"hypothesis_template"`
+	PossibleLabels      []string `yaml:"possible_labels"`
+	MultiClass          bool     `yaml:"multi_class"`
 }
 
 func (c *Configuration) LanguageIsSupported(code string) bool {
