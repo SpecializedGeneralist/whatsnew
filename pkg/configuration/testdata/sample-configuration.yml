@@ -36,5 +36,15 @@ vectorizer:
   pub_new_vectorized_web_article_routing_key: "new_vectorized_web_article"
   labse_grpc_address: "localhost:4000"
   labse_tls_disable: false
+zero_shot_classification:
+  num_workers: 4
+  sub_queue_name: 'whatsnew.zero_shot_classification'
+  sub_routing_key: 'new_web_article'
+  pub_routing_key: 'web_article_classified'
+  payload_key: 'zero_shot_classification'
+  zero_shot_grpc_address: "localhost:4001"
+  grpc_tls_disable: true
+  hypothesis_template: 'This text is about {}.'
+  possible_labels: ['sport', 'economy', 'science']
+  multi_class: true
 supported_languages: [ 'en', 'es' ]
-

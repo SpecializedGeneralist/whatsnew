@@ -71,6 +71,18 @@ func TestFromYAMLFile(t *testing.T) {
 				LabseGrpcAddress:                     "localhost:4000",
 				LabseTLSDisable:                      false,
 			},
+			ZeroShotClassification: ZeroShotClassificationConfiguration{
+				NumWorkers:          4,
+				SubQueueName:        "whatsnew.zero_shot_classification",
+				SubRoutingKey:       "new_web_article",
+				PubRoutingKey:       "web_article_classified",
+				PayloadKey:          "zero_shot_classification",
+				ZeroShotGRPCAddress: "localhost:4001",
+				GRPCTLSDisable:      true,
+				HypothesisTemplate:  "This text is about {}.",
+				PossibleLabels:      []string{"sport", "economy", "science"},
+				MultiClass:          true,
+			},
 			SupportedLanguages: []string{"en", "es"},
 		}
 

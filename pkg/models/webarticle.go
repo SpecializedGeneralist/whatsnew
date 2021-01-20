@@ -29,7 +29,8 @@ type WebArticle struct {
 	RelatedToWebArticleID *uint
 	RelatedToWebArticle   *WebArticle
 	RelatedScore          sql.NullFloat64
-	Vector                pgtype.Bytea `gorm:"type:bytea"`
+	Payload               map[string]interface{} `gorm:"type:JSONB"`
+	Vector                pgtype.Bytea           `gorm:"type:bytea"`
 }
 
 // FindWebArticle returns the web article by its id.
@@ -39,6 +40,11 @@ func FindWebArticle(tx *gorm.DB, id uint) (*WebArticle, error) {
 	result := tx.First(webArticle, id)
 	if result.Error != nil {
 		return nil, fmt.Errorf("find WebArticle %d: %v", id, result.Error)
+	}
+	if webArticle.Vector.Status == pgtype.Undefined {
+		// FIXME: if the value is null, the status is Undefined instead of null
+		//        so saving the article back would fail.
+		webArticle.Vector.Status = pgtype.Null
 	}
 	return webArticle, nil
 }

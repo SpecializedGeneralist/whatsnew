@@ -13,6 +13,7 @@ import (
 	"github.com/SpecializedGeneralist/whatsnew/pkg/rabbitmq"
 	"github.com/SpecializedGeneralist/whatsnew/pkg/tasks/languagerecognition"
 	goose "github.com/advancedlogic/GoOse"
+	"github.com/jackc/pgtype"
 	"github.com/pkg/errors"
 	"github.com/rs/zerolog"
 	"github.com/streadway/amqp"
@@ -203,6 +204,7 @@ func (w *Worker) creteWebArticle(
 			article.PublishDate,
 			webResource.CreatedAt,
 		),
+		Vector: pgtype.Bytea{Bytes: nil, Status: pgtype.Null},
 	}
 
 	if article.PublishDate != nil {
