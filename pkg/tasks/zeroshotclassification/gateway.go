@@ -37,15 +37,15 @@ func (s *Gateway) ClassifyNLI(text, hypothesisTemplate string, possibleLabels []
 	for i, p := range reply.Distribution {
 		dist[i] = ClassConfidencePair{
 			Class:      p.Class,
-			Confidence: p.Confidence,
+			Confidence: float32(p.Confidence),
 		}
 	}
 
 	return &ZeroShotClassification{
 		Class:        reply.Class,
-		Confidence:   reply.Confidence,
+		Confidence:   float32(reply.Confidence),
 		Distribution: dist,
-		Took:         reply.Took,
+		Took:         int(reply.Took),
 	}, nil
 }
 

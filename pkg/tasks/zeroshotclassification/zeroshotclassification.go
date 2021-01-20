@@ -14,15 +14,15 @@ import (
 // ZeroShotClassification is the result of a spaGO zero-shot classification.
 type ZeroShotClassification struct {
 	Class        string                `json:"class"`
-	Confidence   float64               `json:"confidence"`
+	Confidence   float32               `json:"confidence"`
 	Distribution []ClassConfidencePair `json:"distribution"`
-	Took         int64                 `json:"took"`
+	Took         int                   `json:"took"`
 }
 
 // ClassConfidencePair is a pair of class and confidence.
 type ClassConfidencePair struct {
 	Class      string  `json:"class"`
-	Confidence float64 `json:"confidence"`
+	Confidence float32 `json:"confidence"`
 }
 
 var _ sql.Scanner = &ZeroShotClassification{}
