@@ -29,8 +29,8 @@ type WebArticle struct {
 	RelatedToWebArticleID *uint
 	RelatedToWebArticle   *WebArticle
 	RelatedScore          sql.NullFloat64
-	Payload               interface{}  `gorm:"type:JSONB"`
-	Vector                pgtype.Bytea `gorm:"type:bytea"`
+	Payload               map[string]interface{} `gorm:"type:JSONB"`
+	Vector                pgtype.Bytea           `gorm:"type:bytea"`
 }
 
 // FindWebArticle returns the web article by its id.

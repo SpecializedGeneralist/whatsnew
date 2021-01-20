@@ -91,7 +91,10 @@ func (w *Worker) processWebArticleID(webArticleID uint) (bool, error) {
 		return false, fmt.Errorf("ClassifyNLI error: %w", err)
 	}
 
-	webArticle.Payload = zsc
+	if webArticle.Payload == nil {
+		webArticle.Payload = make(map[string]interface{}, 1)
+	}
+	webArticle.Payload[conf.PayloadKey] = zsc
 
 	result := w.db.Save(webArticle)
 	if result.Error != nil {

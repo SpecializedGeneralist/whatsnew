@@ -41,6 +41,7 @@ zero_shot_classification:
   sub_queue_name: 'whatsnew.zero_shot_classification'
   sub_routing_key: 'new_web_article'
   pub_routing_key: 'web_article_classified'
+  payload_key: 'zero_shot_classification'
   zero_shot_grpc_address: "localhost:4001"
   grpc_tls_disable: true
   hypothesis_template: 'This text is about {}.'

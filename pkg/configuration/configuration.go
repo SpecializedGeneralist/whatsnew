@@ -94,6 +94,7 @@ type ZeroShotClassificationConfiguration struct {
 	SubQueueName        string   `yaml:"sub_queue_name"`
 	SubRoutingKey       string   `yaml:"sub_routing_key"`
 	PubRoutingKey       string   `yaml:"pub_routing_key"`
+	PayloadKey          string   `yaml:"payload_key"`
 	ZeroShotGRPCAddress string   `yaml:"zero_shot_grpc_address"`
 	GRPCTLSDisable      bool     `yaml:"grpc_tls_disable"`
 	HypothesisTemplate  string   `yaml:"hypothesis_template"`
