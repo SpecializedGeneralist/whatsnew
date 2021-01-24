@@ -6,6 +6,7 @@ package labse
 
 import (
 	"context"
+	"github.com/nlpodyssey/spago/pkg/mat32"
 
 	spagogrpcapi "github.com/nlpodyssey/spago/pkg/nlp/transformers/bert/grpcapi"
 	"google.golang.org/grpc"
@@ -30,11 +31,15 @@ func (s *Gateway) Vectorize(text string) ([]float32, error) {
 		Text: text,
 	})
 	if err != nil {
-		return []float32{}, err
+		return nil, err
 	}
-	return encoding.Vector, nil
+	return normalize(encoding.Vector), nil
 }
 
 func (s *Gateway) Close() error {
 	return s.connection.Close()
+}
+
+func normalize(xs []float32) []float32 {
+	return mat32.NewVecDense(xs).Normalize2().Data()
 }
