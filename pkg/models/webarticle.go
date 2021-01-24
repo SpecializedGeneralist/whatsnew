@@ -6,6 +6,8 @@ package models
 
 import (
 	"database/sql"
+	"database/sql/driver"
+	"encoding/json"
 	"fmt"
 	"github.com/jackc/pgtype"
 	"gorm.io/gorm"
@@ -29,8 +31,8 @@ type WebArticle struct {
 	RelatedToWebArticleID *uint
 	RelatedToWebArticle   *WebArticle
 	RelatedScore          sql.NullFloat64
-	Payload               map[string]interface{} `gorm:"type:JSONB"`
-	Vector                pgtype.Bytea           `gorm:"type:bytea"`
+	Payload               Payload      `gorm:"type:JSONB"`
+	Vector                pgtype.Bytea `gorm:"type:bytea"`
 }
 
 // FindWebArticle returns the web article by its id.
@@ -47,4 +49,37 @@ func FindWebArticle(tx *gorm.DB, id uint) (*WebArticle, error) {
 		webArticle.Vector.Status = pgtype.Null
 	}
 	return webArticle, nil
+}
+
+// Payload is a generic payload for a WebArticle.
+type Payload map[string]interface{}
+
+var _ sql.Scanner = &Payload{}
+var _ driver.Valuer = &Payload{}
+
+func (p *Payload) Scan(src interface{}) error {
+	bytes, ok := src.([]byte)
+	if !ok {
+		return fmt.Errorf("failed to unmarshal JSONB Payload value of type %T: %#v", src, src)
+	}
+	if len(bytes) == 0 {
+		*p = make(Payload, 0)
+		return nil
+	}
+	err := json.Unmarshal(bytes, p)
+	if err != nil {
+		return fmt.Errorf("failed to unmarshal JSONB Payload %#v: %w", string(bytes), err)
+	}
+	return nil
+}
+
+func (p *Payload) Value() (driver.Value, error) {
+	if len(*p) == 0 {
+		return nil, nil
+	}
+	v, err := json.Marshal(p)
+	if err != nil {
+		return nil, fmt.Errorf("failed to marshal Payload %#v: %w", *p, err)
+	}
+	return v, nil
 }

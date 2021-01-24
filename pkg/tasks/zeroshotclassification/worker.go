@@ -92,7 +92,7 @@ func (w *Worker) processWebArticleID(webArticleID uint) (bool, error) {
 	}
 
 	if webArticle.Payload == nil {
-		webArticle.Payload = make(map[string]interface{}, 1)
+		webArticle.Payload = make(models.Payload, 1)
 	}
 	webArticle.Payload[conf.PayloadKey] = zsc
 
