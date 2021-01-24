@@ -27,17 +27,21 @@ USAGE:
    whatsnew [global options] command [command options] [arguments...]
 
 COMMANDS:
-   create-db    Perform automatic database creation
-   migrate-db   Perform automatic database migration
-   add-feeds    Add new feeds from a list
-   fetch-feeds  Fetch all feeds and get new feed items
-   fetch-gdelt  Fetch latest news from GDELT
-   scrape-web   Scrape news articles from `Web Resource` URLs
-   help, h      Shows a list of commands or help for one command
+   create-db                 Perform automatic database creation
+   migrate-db                Perform automatic database migration
+   add-feeds                 Add new feeds from a list
+   fetch-feeds               Fetch all feeds and get new feed items
+   fetch-gdelt               Fetch latest news from GDELT
+   scrape-web                Scrape news articles from `Web Resource` URLs
+   zero-shot-classification  Classify scraped news articles with a spaGO zero-shot classification service
+   vectorize                 Set `WebArticle.Vector` through LaBSE encoding
+   duplicate-detector        Perform near-duplicate news detection via cosine similarity
+   help, h                   Shows a list of commands or help for one command
 
 GLOBAL OPTIONS:
    --config FILE, -c FILE  load configuration from YAML FILE
    --help, -h              show help (default: false)
+
 ```
 
 ### Build
