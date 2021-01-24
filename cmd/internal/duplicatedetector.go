@@ -32,7 +32,8 @@ func (app *CLIApp) duplicateDetector() *cli.Command {
 				}
 			}()
 
-			return duplicatedetector.DefaultDetectDuplicates(app.config, db, rmq, app.newContextLogger(c))
+			return duplicatedetector.DefaultDetectDuplicates(
+				app.config.DuplicateDetector, db, rmq, app.newContextLogger(c))
 		},
 	}
 }

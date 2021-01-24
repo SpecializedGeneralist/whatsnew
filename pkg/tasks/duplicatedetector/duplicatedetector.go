@@ -19,7 +19,7 @@ import (
 type CustomizeQueryFunc func(tx *gorm.DB, webArticle *models.WebArticle) (*gorm.DB, error)
 
 func DefaultDetectDuplicates(
-	config configuration.Configuration,
+	config configuration.DuplicateDetectorConfiguration,
 	db *gorm.DB,
 	rmq *rabbitmq.Client,
 	logger zerolog.Logger,
@@ -28,7 +28,7 @@ func DefaultDetectDuplicates(
 }
 
 func DetectDuplicates(
-	config configuration.Configuration,
+	config configuration.DuplicateDetectorConfiguration,
 	db *gorm.DB,
 	rmq *rabbitmq.Client,
 	customizeQuery CustomizeQueryFunc,
@@ -40,8 +40,8 @@ func DetectDuplicates(
 	signal.Notify(termChan, syscall.SIGINT, syscall.SIGTERM)
 
 	deliveries, consumerTag, err := rmq.Consume(
-		config.DuplicateDetector.SubQueueName,
-		config.DuplicateDetector.SubRoutingKey,
+		config.SubQueueName,
+		config.SubRoutingKey,
 	)
 	if err != nil {
 		return fmt.Errorf("starting consuming: %v", err)

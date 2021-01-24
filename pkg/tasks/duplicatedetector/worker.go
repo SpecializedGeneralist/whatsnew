@@ -19,7 +19,7 @@ import (
 )
 
 type Worker struct {
-	config         configuration.Configuration
+	config         configuration.DuplicateDetectorConfiguration
 	db             *gorm.DB
 	rmq            *rabbitmq.Client
 	customizeQuery CustomizeQueryFunc
@@ -69,8 +69,8 @@ func (w *Worker) processWebArticle(webArticle *models.WebArticle) error {
 	logger := w.logger.With().Uint("WebArticleID", webArticle.ID).
 		Uint("maxID", maxID).Float32("maxScore", maxScore).Logger()
 
-	if maxID == 0 || maxScore < w.config.DuplicateDetector.SimilarityThreshold {
-		err = w.rmq.PublishID(w.config.DuplicateDetector.PubNewEventRoutingKey, webArticle.ID)
+	if maxID == 0 || maxScore < w.config.SimilarityThreshold {
+		err = w.rmq.PublishID(w.config.PubNewEventRoutingKey, webArticle.ID)
 		if err != nil {
 			return fmt.Errorf("error publishing new event %d: %v", webArticle.ID, err)
 		}
@@ -88,7 +88,7 @@ func (w *Worker) processWebArticle(webArticle *models.WebArticle) error {
 		return fmt.Errorf("error saving related article %d: %v", webArticle.ID, err)
 	}
 
-	err = w.rmq.PublishID(w.config.DuplicateDetector.PubNewRelatedRoutingKey, webArticle.ID)
+	err = w.rmq.PublishID(w.config.PubNewRelatedRoutingKey, webArticle.ID)
 	if err != nil {
 		return fmt.Errorf("error publishing new related %d: %v", webArticle.ID, err)
 	}
@@ -102,7 +102,7 @@ func (w *Worker) findMostSimilarWebArticle(webArticle *models.WebArticle) (uint,
 		return 0, 0, fmt.Errorf("reference vector byteSliceToFloat32Slice: %v", err)
 	}
 
-	timeframe := time.Duration(w.config.DuplicateDetector.TimeframeHours) * time.Hour
+	timeframe := time.Duration(w.config.TimeframeHours) * time.Hour
 	pastDate := webArticle.PublishDate.Add(-timeframe)
 
 	query := w.db.
