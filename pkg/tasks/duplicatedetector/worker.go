@@ -121,11 +121,8 @@ func (w *Worker) findMostSimilarWebArticle(webArticle *models.WebArticle) (uint,
 	var maxScore float32
 	var maxID uint = 0
 
-	var results []struct {
-		ID     uint
-		Vector pgtype.Bytea
-	}
-	result := query.FindInBatches(&results, 100, func(tx *gorm.DB, batch int) error {
+	var results []models.WebArticle
+	result := query.Select("id", "vector").FindInBatches(&results, 100, func(tx *gorm.DB, batch int) error {
 		if tx.Error != nil {
 			return tx.Error
 		}
