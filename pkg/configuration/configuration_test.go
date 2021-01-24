@@ -66,9 +66,9 @@ func TestFromYAMLFile(t *testing.T) {
 			Vectorizer: VectorizerConfiguration{
 				NumWorkers:                           4,
 				SubQueueName:                         "whatsnew.vectorizer",
-				SubNewWebArticleRoutingKey:           "new_web_article",
+				SubNewWebArticleRoutingKey:           "web_article_classified",
 				PubNewVectorizedWebArticleRoutingKey: "new_vectorized_web_article",
-				LabseGrpcAddress:                     "localhost:4000",
+				LabseGrpcAddress:                     "localhost:1976",
 				LabseTLSDisable:                      false,
 			},
 			ZeroShotClassification: ZeroShotClassificationConfiguration{

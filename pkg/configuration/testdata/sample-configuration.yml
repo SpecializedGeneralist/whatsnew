@@ -32,9 +32,9 @@ duplicate_detector:
 vectorizer:
   num_workers: 4
   sub_queue_name: "whatsnew.vectorizer"
-  sub_new_web_article_routing_key: "new_web_article"
+  sub_new_web_article_routing_key: "web_article_classified"
   pub_new_vectorized_web_article_routing_key: "new_vectorized_web_article"
-  labse_grpc_address: "localhost:4000"
+  labse_grpc_address: "localhost:1976"
   labse_tls_disable: false
 zero_shot_classification:
   num_workers: 4
