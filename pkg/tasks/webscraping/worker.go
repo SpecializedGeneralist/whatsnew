@@ -6,6 +6,7 @@ package webscraping
 
 import (
 	"bytes"
+	"crypto/tls"
 	"database/sql"
 	"fmt"
 	"github.com/SpecializedGeneralist/whatsnew/pkg/configuration"
@@ -255,6 +256,9 @@ func (w *Worker) sendAck(delivery amqp.Delivery) {
 func (w *Worker) fetchURLAndGetBody(url string) (strBody string, err error) {
 	client := &http.Client{
 		Timeout: 30 * time.Second,
+		Transport: &http.Transport{
+			TLSClientConfig: &tls.Config{InsecureSkipVerify: true},
+		},
 	}
 
 	req, err := http.NewRequest("GET", url, nil)
