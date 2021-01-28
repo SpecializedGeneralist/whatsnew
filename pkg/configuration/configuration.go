@@ -5,9 +5,11 @@
 package configuration
 
 import (
+	"bytes"
 	"fmt"
 	"github.com/rs/zerolog"
 	"gopkg.in/yaml.v3"
+	"io/ioutil"
 	"os"
 	"time"
 )
@@ -123,17 +125,12 @@ func (l *LogLevel) UnmarshalText(text []byte) (err error) {
 
 // FromYAMLFile reads a Configuration object from a YAML file.
 func FromYAMLFile(filename string) (config Configuration, err error) {
-	file, err := os.Open(filename)
+	content, err := ioutil.ReadFile(filename)
 	if err != nil {
-		return config, fmt.Errorf("open file %s: %v", filename, err)
+		return config, fmt.Errorf("reading file %s: %v", filename, err)
 	}
-	defer func() {
-		if e := file.Close(); e != nil && err == nil {
-			err = fmt.Errorf("close file %s: %v", filename, e)
-		}
-	}()
-
-	err = yaml.NewDecoder(file).Decode(&config)
+	content = []byte(os.ExpandEnv(string(content)))
+	err = yaml.NewDecoder(bytes.NewReader(content)).Decode(&config)
 	if err != nil {
 		return config, fmt.Errorf("decode YAML file %s: %v", filename, err)
 	}
