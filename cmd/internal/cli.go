@@ -105,6 +105,7 @@ func (app *CLIApp) commands() []*cli.Command {
 		app.addTwitterSources(),
 		app.fetchFeeds(),
 		app.fetchGDELT(),
+		app.fetchTweets(),
 		app.scrapeWeb(),
 		app.zeroShotClassification(),
 		app.vectorize(),
