@@ -20,7 +20,7 @@ func TestFromYAMLFile(t *testing.T) {
 	t.Run("loading sample configuration file", func(t *testing.T) {
 		t.Parallel()
 
-		omitFeedItemsPublishedBefore, err := time.Parse(time.RFC3339, "2020-12-01T00:00:00Z")
+		omitPublishedBefore, err := time.Parse(time.RFC3339, "2020-12-01T00:00:00Z")
 		if err != nil {
 			t.Fatal(err)
 		}
@@ -39,7 +39,7 @@ func TestFromYAMLFile(t *testing.T) {
 				MaxAllowedFailures:                  15,
 				SleepingTime:                        10 * time.Minute,
 				OmitFeedItemsPublishedBeforeEnabled: true,
-				OmitFeedItemsPublishedBefore:        omitFeedItemsPublishedBefore,
+				OmitFeedItemsPublishedBefore:        omitPublishedBefore,
 				NewWebResourceRoutingKey:            "new_web_resource",
 				NewFeedItemRoutingKey:               "new_feed_item",
 			},
@@ -48,6 +48,15 @@ func TestFromYAMLFile(t *testing.T) {
 				NewWebResourceRoutingKey:        "new_web_resource",
 				NewGDELTEventRoutingKey:         "new_gdelt_event",
 				TopLevelCameoEventCodeWhitelist: []string{},
+			},
+			TweetsFetching: TweetsFetchingConfiguration{
+				NumWorkers:                       50,
+				SleepingTime:                     5 * time.Minute,
+				OmitTweetsPublishedBeforeEnabled: true,
+				OmitTweetsPublishedBefore:        omitPublishedBefore,
+				NewWebResourceRoutingKey:         "",
+				NewTweetRoutingKey:               "new_tweet",
+				NewWebArticleRoutingKey:          "new_web_article",
 			},
 			WebScraping: WebScrapingConfiguration{
 				NumWorkers:                  40,

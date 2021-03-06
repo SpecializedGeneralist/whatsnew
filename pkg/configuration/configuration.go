@@ -21,6 +21,7 @@ type Configuration struct {
 	RabbitMQ               RabbitMQConfiguration
 	FeedsFetching          FeedsFetchingConfiguration          `yaml:"feeds_fetching"`
 	GDELTFetching          GDELTFetchingConfiguration          `yaml:"gdelt_fetching"`
+	TweetsFetching         TweetsFetchingConfiguration         `yaml:"tweets_fetching"`
 	WebScraping            WebScrapingConfiguration            `yaml:"web_scraping"`
 	DuplicateDetector      DuplicateDetectorConfiguration      `yaml:"duplicate_detector"`
 	Vectorizer             VectorizerConfiguration             `yaml:"vectorizer"`
@@ -58,6 +59,18 @@ type GDELTFetchingConfiguration struct {
 	NewWebResourceRoutingKey        string        `yaml:"new_web_resource_routing_key"`
 	NewGDELTEventRoutingKey         string        `yaml:"new_gdelt_event_routing_key"`
 	TopLevelCameoEventCodeWhitelist []string      `yaml:"top_level_cameo_event_code_whitelist"`
+}
+
+// TweetsFetchingConfiguration provides specific settings for the
+// tweets-fetching operation.
+type TweetsFetchingConfiguration struct {
+	NumWorkers                       int           `yaml:"num_workers"`
+	SleepingTime                     time.Duration `yaml:"sleeping_time"`
+	OmitTweetsPublishedBeforeEnabled bool          `yaml:"omit_tweets_published_before_enabled"`
+	OmitTweetsPublishedBefore        time.Time     `yaml:"omit_tweets_published_before"`
+	NewWebResourceRoutingKey         string        `yaml:"new_web_resource_routing_key"`
+	NewTweetRoutingKey               string        `yaml:"new_tweet_routing_key"`
+	NewWebArticleRoutingKey          string        `yaml:"new_web_article_routing_key"`
 }
 
 // WebScrapingConfiguration provides specific settings for the
