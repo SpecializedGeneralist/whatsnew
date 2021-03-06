@@ -28,7 +28,7 @@ import (
 	"time"
 )
 
-// WebScrapingWorker is a single worker for scraping Web Resources.
+// Worker is a single worker for scraping Web Resources.
 type Worker struct {
 	config  configuration.Configuration
 	db      *gorm.DB
@@ -283,7 +283,7 @@ func (w *Worker) fetchURLAndGetBody(url string) (strBody string, err error) {
 
 	contentType := w.getContentType(resp)
 
-	if !w.isTextOrHtmlContent(contentType) {
+	if !w.isTextOrHTMLContent(contentType) {
 		return "", nil
 	}
 
@@ -310,7 +310,7 @@ func (w *Worker) getContentType(resp *http.Response) string {
 	return contentType[0]
 }
 
-func (w *Worker) isTextOrHtmlContent(contentType string) bool {
+func (w *Worker) isTextOrHTMLContent(contentType string) bool {
 	contentType = strings.ToLower(contentType)
 	return strings.Contains(contentType, "text") || strings.Contains(contentType, "html")
 }

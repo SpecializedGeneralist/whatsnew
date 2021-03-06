@@ -179,7 +179,7 @@ func (c *Client) Consume(queueName string, routingKey string) (<-chan amqp.Deliv
 	return msgs, consumerTag, nil
 }
 
-// Cancel stops deliveries to the consumer.
+// CancelConsumer stops deliveries to the consumer.
 func (c *Client) CancelConsumer(consumerTag string) error {
 	return c.channel.Cancel(consumerTag, false)
 }
