@@ -189,9 +189,14 @@ func (w *Worker) creteWebArticle(
 		}
 	}
 
+	title := article.Title
+	if len(webResource.FeedItem.Title) > 0 {
+		title = webResource.FeedItem.Title
+	}
+
 	webArticle := &models.WebArticle{
 		WebResourceID:      webResource.ID,
-		Title:              article.Title,
+		Title:              title,
 		TitleUnmodified:    article.TitleUnmodified,
 		CleanedText:        article.CleanedText,
 		CanonicalLink:      article.CanonicalLink,
