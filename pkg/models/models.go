@@ -13,5 +13,7 @@ func GetAllModels() []interface{} {
 		&WebArticle{},
 		&FeedItem{},
 		&GDELTEvent{},
+		&TwitterSource{},
+		&Tweet{},
 	}
 }

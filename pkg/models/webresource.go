@@ -21,6 +21,8 @@ type WebResource struct {
 	FeedItem FeedItem
 	// GDELTEvent allows the has-one relation with a models.GDELTEvent.
 	GDELTEvent GDELTEvent
+	// Tweet allows the has-one relation with a models.Tweet.
+	Tweet Tweet
 }
 
 // FindWebResourceByURL returns the web resource associated to a url.
