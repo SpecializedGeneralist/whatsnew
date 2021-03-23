@@ -12,7 +12,9 @@ RUN go mod download
 RUN GOOS=linux GOARCH=amd64 CGO_ENABLED=0 go build -ldflags="-extldflags=-static" -v -x -a -o whatsnew cmd/whatsnew.go
 
 # The definition of the runtime container now follows.
-FROM scratch
+FROM alpine:3.13.2
+
+RUN apk add --no-cache ca-certificates
 
 # Copy the compiled program from the Builder container.
 COPY --from=Builder /build/whatsnew whatsnew
