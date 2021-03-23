@@ -54,6 +54,7 @@ func TestFromYAMLFile(t *testing.T) {
 				SleepingTime:                     5 * time.Minute,
 				OmitTweetsPublishedBeforeEnabled: true,
 				OmitTweetsPublishedBefore:        omitPublishedBefore,
+				MaxTweetsNumber:                  3200,
 				NewWebResourceRoutingKey:         "",
 				NewTweetRoutingKey:               "new_tweet",
 				NewWebArticleRoutingKey:          "new_web_article",

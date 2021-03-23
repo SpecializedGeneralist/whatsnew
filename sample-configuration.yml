@@ -22,6 +22,7 @@ tweets_fetching:
   sleeping_time: 5m
   omit_tweets_published_before_enabled: true
   omit_tweets_published_before: '2020-12-01T00:00:00Z'
+  max_tweets_number: 3200
   new_web_resource_routing_key: ''
   new_tweet_routing_key: 'new_tweet'
   new_web_article_routing_key: 'new_web_article'

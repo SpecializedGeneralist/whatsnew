@@ -68,6 +68,7 @@ type TweetsFetchingConfiguration struct {
 	SleepingTime                     time.Duration `yaml:"sleeping_time"`
 	OmitTweetsPublishedBeforeEnabled bool          `yaml:"omit_tweets_published_before_enabled"`
 	OmitTweetsPublishedBefore        time.Time     `yaml:"omit_tweets_published_before"`
+	MaxTweetsNumber                  int           `yaml:"max_tweets_number"`
 	NewWebResourceRoutingKey         string        `yaml:"new_web_resource_routing_key"`
 	NewTweetRoutingKey               string        `yaml:"new_tweet_routing_key"`
 	NewWebArticleRoutingKey          string        `yaml:"new_web_article_routing_key"`

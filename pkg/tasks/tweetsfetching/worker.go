@@ -28,8 +28,6 @@ type Worker struct {
 	scraper *twitterscraper.Scraper
 }
 
-const maxTweetsNumber = 50
-
 func NewWorker(
 	config configuration.Configuration,
 	db *gorm.DB,
@@ -72,9 +70,9 @@ func (w *Worker) processTwitterSource(logger zerolog.Logger, ts *models.TwitterS
 
 	switch ts.Type {
 	case models.UserTwitterSource:
-		ch = w.scraper.GetTweets(context.Background(), ts.Value, maxTweetsNumber)
+		ch = w.scraper.GetTweets(context.Background(), ts.Value, w.config.TweetsFetching.MaxTweetsNumber)
 	case models.SearchTwitterSource:
-		ch = w.scraper.SearchTweets(context.Background(), ts.Value, maxTweetsNumber)
+		ch = w.scraper.SearchTweets(context.Background(), ts.Value, w.config.TweetsFetching.MaxTweetsNumber)
 	default:
 		return fmt.Errorf("unexpected twitter-source type %#v", ts.Type)
 	}
