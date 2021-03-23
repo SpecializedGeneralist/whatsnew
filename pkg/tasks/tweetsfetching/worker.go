@@ -165,7 +165,7 @@ func (w *Worker) publishNewWebArticle(logger zerolog.Logger, newWebArticle *mode
 }
 
 func (w *Worker) publishNewWebResource(logger zerolog.Logger, newWebResource *models.WebResource) {
-	routingKey := w.config.TweetsFetching.NewWebArticleRoutingKey
+	routingKey := w.config.TweetsFetching.NewWebResourceRoutingKey
 	if len(routingKey) == 0 {
 		return
 	}
