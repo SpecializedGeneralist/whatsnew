@@ -21,7 +21,7 @@ require (
 	github.com/modern-go/concurrent v0.0.0-20180306012644-bacd9c7ef1dd // indirect
 	github.com/modern-go/reflect2 v1.0.1 // indirect
 	github.com/n0madic/twitter-scraper v0.0.0-20210301103805-e93b4bc2e6f1
-	github.com/nlpodyssey/spago v0.4.1
+	github.com/nlpodyssey/spago v0.5.2
 	github.com/olekukonko/tablewriter v0.0.4 // indirect
 	github.com/pkg/errors v0.9.1
 	github.com/rs/zerolog v1.20.0
@@ -30,11 +30,12 @@ require (
 	github.com/urfave/cli/v2 v2.3.0
 	github.com/vmihailenco/msgpack v4.0.4+incompatible
 	golang.org/x/crypto v0.0.0-20201221181555-eec23a3978ad // indirect
-	golang.org/x/net v0.0.0-20201224014010-6772e930b67b
-	golang.org/x/text v0.3.5
-	golang.org/x/xerrors v0.0.0-20200804184101-5ec99f83aff1 // indirect
+	golang.org/x/net v0.0.0-20210421230115-4e50805a0758
+	golang.org/x/sys v0.0.0-20210423082822-04245dca01da // indirect
+	golang.org/x/text v0.3.6
 	google.golang.org/appengine v1.6.7 // indirect
-	google.golang.org/grpc v1.34.1
+	google.golang.org/genproto v0.0.0-20210422153429-2279cbceda62 // indirect
+	google.golang.org/grpc v1.37.0
 	gopkg.in/yaml.v3 v3.0.0-20210107192922-496545a6307b
 	gorm.io/driver/postgres v1.0.6
 	gorm.io/gorm v1.20.10

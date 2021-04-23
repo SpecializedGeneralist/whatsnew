@@ -6,7 +6,7 @@ package zeroshotclassification
 
 import (
 	"context"
-	spagogrpcapi "github.com/nlpodyssey/spago/pkg/nlp/transformers/bart/bartserver/grpcapi"
+	spagogrpcapi "github.com/nlpodyssey/spago/pkg/nlp/transformers/bart/server/grpcapi"
 	"google.golang.org/grpc"
 )
 
