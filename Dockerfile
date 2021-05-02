@@ -1,4 +1,4 @@
-# Copyright 2020 WhatsNew Authors. All rights reserved.
+# Copyright 2020-2021 WhatsNew Authors. All rights reserved.
 # Use of this source code is governed by a BSD-style
 # license that can be found in the LICENSE file.
 
@@ -7,25 +7,17 @@ FROM golang:1.16.3-alpine3.13 as Builder
 WORKDIR /go/src/whatsnew
 COPY . .
 
-# Build statically linked Go binaries without CGO.
-RUN mkdir /build
-ADD . /build/
-WORKDIR /build
-RUN go mod download
-RUN GOOS=linux GOARCH=amd64 CGO_ENABLED=0 go build -ldflags="-extldflags=-static" -v -x -a -o whatsnew cmd/whatsnew.go
+RUN go mod download \
+    && CGO_ENABLED=0 go build \
+        -ldflags="-extldflags=-static" \
+        -o /go/bin/whatsnew \
+        cmd/whatsnew.go
 
-# The definition of the runtime container now follows.
-FROM alpine:3.13.2
+FROM alpine:3.13.5
 
 RUN apk add --no-cache ca-certificates
 
-# Copy the compiled program from the Builder container.
-COPY --from=Builder /build/whatsnew whatsnew
+COPY --from=Builder /go/bin/whatsnew /bin/whatsnew
 
-# Setup the environment
-ENV GOOS linux
-ENV GOARCH amd64
-
-# Run WhatsNew
-ENTRYPOINT ["/whatsnew"]
+ENTRYPOINT ["/bin/whatsnew"]
 CMD ["help"]
