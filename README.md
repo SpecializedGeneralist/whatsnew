@@ -4,8 +4,7 @@ A simple tool to collect and process quite a few web news from multiple sources.
 
 ## Requirements
 
-* [Go 1.15](https://golang.org/dl/)
-* [Go modules](https://blog.golang.org/using-go-modules)
+* [Go 1.16](https://golang.org/dl/)
 * [RabbitMQ](https://www.rabbitmq.com/)
 * [PostgreSQL](https://www.postgresql.org/)
 
