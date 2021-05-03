@@ -57,6 +57,70 @@ subscription and/or for publishing.
 So, by simply configuring a bunch of routing keys, you can actually set up
 an entire processing **pipeline**.
 
+Following is an example of configuration in which you can see the use of routing keys (publish/subscribe) for each task:
+
+```console
+log_level: 'info'
+db:
+  dsn: 'host=localhost port=5432 user=postgres password=postgres dbname=whatsnew sslmode=disable statement_cache_mode=describe'
+rabbitmq:
+  uri: 'amqp://guest:guest@localhost:5672/'
+  exchange_name: 'whatsnew'
+feeds_fetching:
+  num_workers: 50
+  max_allowed_failures: 15
+  sleeping_time: 10m
+  omit_feed_items_published_before_enabled: true
+  omit_feed_items_published_before: '2020-12-01T00:00:00Z'
+  new_web_resource_routing_key: 'new_web_resource'
+  new_feed_item_routing_key: 'new_feed_item'
+gdelt_fetching:
+  sleeping_time: 5m
+  new_web_resource_routing_key: 'new_web_resource'
+  new_gdelt_event_routing_key: 'new_gdelt_event'
+  top_level_cameo_event_code_whitelist: [ ]
+tweets_fetching:
+  num_workers: 50
+  sleeping_time: 5m
+  omit_tweets_published_before_enabled: true
+  omit_tweets_published_before: '2020-12-01T00:00:00Z'
+  max_tweets_number: 3200
+  new_web_resource_routing_key: ''
+  new_tweet_routing_key: 'new_tweet'
+  new_web_article_routing_key: 'new_web_article'
+web_scraping:
+  num_workers: 40
+  sub_queue_name: 'whatsnew.web_scraping'
+  sub_new_web_resource_routing_key: 'new_web_resource'
+  pub_new_web_article_routing_key: 'new_web_article'
+duplicate_detector:
+  timeframe_hours: 72
+  similarity_threshold: 0.7
+  sub_queue_name: "whatsnew.duplicate_detector"
+  sub_routing_key: "new_vectorized_web_article"
+  pub_new_event_routing_key: "new_event"
+  pub_new_related_routing_key: "new_related"
+vectorizer:
+  num_workers: 4
+  sub_queue_name: "whatsnew.vectorizer"
+  sub_new_web_article_routing_key: "web_article_classified"
+  pub_new_vectorized_web_article_routing_key: "new_vectorized_web_article"
+  labse_grpc_address: "localhost:1976"
+  labse_tls_disable: false
+zero_shot_classification:
+  num_workers: 4
+  sub_queue_name: 'whatsnew.zero_shot_classification'
+  sub_routing_key: 'new_web_article'
+  pub_routing_key: 'web_article_classified'
+  payload_key: 'zero_shot_classification'
+  zero_shot_grpc_address: "localhost:4001"
+  grpc_tls_disable: true
+  hypothesis_template: 'This text is about {}.'
+  possible_labels: ['sport', 'economy', 'science']
+  multi_class: true
+supported_languages: [ 'en', 'es' ]
+```
+
 Each task being part of a pipeline can still be a completely independent
 program. It's easy to make it use system resources or be scaled according to
 specific needs, especially in cloud-computing environments. Each task/program
