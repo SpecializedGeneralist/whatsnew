@@ -2,6 +2,8 @@
 
 A simple tool to collect and process quite a few web news from multiple sources.
 
+![](https://raw.githubusercontent.com/SpecializedGeneralist/whatsnew/main/assets/architecture.png)
+
 ## Requirements
 
 * [Go 1.16](https://golang.org/dl/)
