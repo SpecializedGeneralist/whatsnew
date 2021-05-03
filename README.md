@@ -97,6 +97,9 @@ commands and source code packages:
   Classify scraped news articles and tweets with a [spaGO](https://github.com/nlpodyssey/spago)
   zero-shot classification service (it must run separately and be configured
   appropriately).
+  The categories are arbitrary, and the software does not require training. 
+  For instance, categories like `music`, `sport`, `science`, `technology`, `economy and finance` should work out of the box.
+  The zero-shot classification can also be used for sentiment analysis, i.e., `positive`, `negative`, or `neutral` categories.
 
 * `vectorize` | `pkg/tasks/vectorizer`
 
