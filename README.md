@@ -12,7 +12,7 @@ A simple tool to collect and process quite a few web news from multiple sources.
 
 ## How it works
 
-`whatsnew` allows you to define custom pipelines for fetching and processing
+`whatsnew` allows you to define custom pipelines for fetching, processing and search 
 resources from the web - most notably, news articles.
 
 It comes in the form of both a library and a standalone program:
@@ -28,12 +28,14 @@ It comes in the form of both a library and a standalone program:
 
 The building blocks of `whatsnew` are **tasks**. A task is just a process which
 performs some operations and usually can read/write data from/to a centralized
-PostgreSQL database. The most common tasks generally fall in two categories:
+PostgreSQL database. The most common tasks generally fall in three categories:
 
 * fetching, downloading or crawling documents (or articles) from the web and
   storing them on the database;
 * performing some sort of analysis on one or more documents (from the database),
   eventually storing the results.
+* searching, extracting or filtering the stored results using _semantic_ technology 
+  by means of query written in natural language.
 
 Certain tasks might not require any specific input or event to be triggered;
 this is the case, among others, for tasks running some operations
@@ -156,6 +158,12 @@ commands and source code packages:
 
   Crawl web pages content, for example for feed items and GDELT articles.
 
+* `translate` | `pkg/tasks/translator`
+
+  Translate the web articles and tweets in a desired language via
+  [Translator](https://github.com/SpecializedGeneralist/spago), a simple 
+  self-hostable Machine Translation service, powered by spaGO.
+  
 * `zero-shot-classification` | `pkg/tasks/zeroshotclassification`
 
   Classify scraped news articles and tweets with a [spaGO](https://github.com/nlpodyssey/spago)
