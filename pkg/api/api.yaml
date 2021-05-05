@@ -362,8 +362,6 @@ components:
           type: array
           items:
             $ref: '#/components/schemas/NewFeed'
-        errors:
-          $ref: '#/components/schemas/ResponseErrors'
       additionalProperties: false
     CreateFeedsResponse:
       type: object
@@ -429,9 +427,7 @@ components:
       type: object
       properties:
         feed:
-          type: array
-          items:
-            $ref: '#/components/schemas/Feed'
+          $ref: '#/components/schemas/Feed'
       additionalProperties: false
     UpdatedFeed:
       type: object
@@ -496,8 +492,6 @@ components:
           type: array
           items:
             $ref: '#/components/schemas/NewUserTwitterSource'
-        errors:
-          $ref: '#/components/schemas/ResponseErrors'
       additionalProperties: false
     CreateUserTwitterSourcesResponse:
       type: object
@@ -547,9 +541,7 @@ components:
       type: object
       properties:
         user_twitter_source:
-          type: array
-          items:
-            $ref: '#/components/schemas/UserTwitterSource'
+          $ref: '#/components/schemas/UserTwitterSource'
       additionalProperties: false
     UpdatedUserTwitterSource:
       type: object
@@ -610,8 +602,6 @@ components:
           type: array
           items:
             $ref: '#/components/schemas/NewQueryTwitterSource'
-        errors:
-          $ref: '#/components/schemas/ResponseErrors'
       additionalProperties: false
     CreateQueryTwitterSourcesResponse:
       type: object
@@ -661,9 +651,7 @@ components:
       type: object
       properties:
         query_twitter_source:
-          type: array
-          items:
-            $ref: '#/components/schemas/QueryTwitterSource'
+          $ref: '#/components/schemas/QueryTwitterSource'
       additionalProperties: false
     UpdatedQueryTwitterSource:
       type: object
@@ -708,6 +696,10 @@ components:
           type: string
         url:
           type: string
+        created_at:
+          type: string
+        updated_at:
+          type: string
         deleted_at:
           type: string
         last_retrieved_at:
@@ -720,6 +712,10 @@ components:
       properties:
         id:
           type: string
+        created_at:
+          type: string
+        updated_at:
+          type: string
         username:
           type: string
         last_retrieved_at:
@@ -729,6 +725,10 @@ components:
       type: object
       properties:
         id:
+          type: string
+        created_at:
+          type: string
+        updated_at:
           type: string
         query:
           type: string

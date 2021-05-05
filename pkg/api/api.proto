@@ -19,8 +19,6 @@ message ResponseError {
 
 message NewFeeds {
   repeated NewFeed feeds = 1;
-
-  ResponseErrors errors = 2;
 }
 
 message CreateFeedsResponse {
@@ -64,7 +62,7 @@ message GetFeedResponse {
 }
 
 message GetFeedData {
-  repeated Feed feed = 1;
+  Feed feed = 1;
 }
 
 message UpdatedFeed {
@@ -109,8 +107,6 @@ message GetUserTwitterSourcesData {
 
 message NewUserTwitterSources {
   repeated NewUserTwitterSource user_twitter_sources = 1;
-
-  ResponseErrors errors = 2;
 }
 
 message CreateUserTwitterSourcesResponse {
@@ -144,7 +140,7 @@ message GetUserTwitterSourceResponse {
 }
 
 message GetUserTwitterSourceData {
-  repeated UserTwitterSource user_twitter_source = 1;
+  UserTwitterSource user_twitter_source = 1;
 }
 
 message UpdatedUserTwitterSource {
@@ -185,8 +181,6 @@ message GetQueryTwitterSourcesData {
 
 message NewQueryTwitterSources {
   repeated NewQueryTwitterSource query_twitter_sources = 1;
-
-  ResponseErrors errors = 2;
 }
 
 message CreateQueryTwitterSourcesResponse {
@@ -220,7 +214,7 @@ message GetQueryTwitterSourceResponse {
 }
 
 message GetQueryTwitterSourceData {
-  repeated QueryTwitterSource query_twitter_source = 1;
+  QueryTwitterSource query_twitter_source = 1;
 }
 
 message UpdatedQueryTwitterSource {
@@ -254,27 +248,39 @@ message Feed {
 
   string url = 2;
 
-  string deleted_at = 3;
+  string created_at = 3;
 
-  string last_retrieved_at = 4;
+  string updated_at = 4;
 
-  int64 failures_count = 5;
+  string deleted_at = 5;
+
+  string last_retrieved_at = 6;
+
+  int64 failures_count = 7;
 }
 
 message UserTwitterSource {
   string id = 1;
 
-  string username = 2;
+  string created_at = 2;
 
-  string last_retrieved_at = 3;
+  string updated_at = 3;
+
+  string username = 4;
+
+  string last_retrieved_at = 5;
 }
 
 message QueryTwitterSource {
   string id = 1;
 
-  string query = 2;
+  string created_at = 2;
 
-  string last_retrieved_at = 3;
+  string updated_at = 3;
+
+  string query = 4;
+
+  string last_retrieved_at = 5;
 }
 
 //GetFeedsParameters holds parameters to GetFeeds
