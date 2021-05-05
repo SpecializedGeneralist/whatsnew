@@ -56,4 +56,9 @@ zero_shot_classification:
   hypothesis_template: 'This text is about {}.'
   possible_labels: ['sport', 'economy', 'science']
   multi_class: true
+server:
+  address: 0.0.0.0:10000
+  tls_enabled: false
+  tls_cert:
+  tls_key:
 supported_languages: [ 'en', 'es' ]

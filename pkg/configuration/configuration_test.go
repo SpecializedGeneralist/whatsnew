@@ -93,6 +93,12 @@ func TestFromYAMLFile(t *testing.T) {
 				PossibleLabels:      []string{"sport", "economy", "science"},
 				MultiClass:          true,
 			},
+			Server: ServerConfiguration{
+				Address:    "0.0.0.0:10000",
+				TLSEnabled: false,
+				TLSCert:    "",
+				TLSKey:     "",
+			},
 			SupportedLanguages: []string{"en", "es"},
 		}
 

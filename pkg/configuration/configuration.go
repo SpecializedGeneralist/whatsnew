@@ -16,9 +16,9 @@ import (
 
 // Configuration provides app-wide settings.
 type Configuration struct {
-	LogLevel               LogLevel `yaml:"log_level"`
-	DB                     DBConfiguration
-	RabbitMQ               RabbitMQConfiguration
+	LogLevel               LogLevel                            `yaml:"log_level"`
+	DB                     DBConfiguration                     `yaml:"db"`
+	RabbitMQ               RabbitMQConfiguration               `yaml:"rabbitmq"`
 	FeedsFetching          FeedsFetchingConfiguration          `yaml:"feeds_fetching"`
 	GDELTFetching          GDELTFetchingConfiguration          `yaml:"gdelt_fetching"`
 	TweetsFetching         TweetsFetchingConfiguration         `yaml:"tweets_fetching"`
@@ -26,6 +26,7 @@ type Configuration struct {
 	DuplicateDetector      DuplicateDetectorConfiguration      `yaml:"duplicate_detector"`
 	Vectorizer             VectorizerConfiguration             `yaml:"vectorizer"`
 	ZeroShotClassification ZeroShotClassificationConfiguration `yaml:"zero_shot_classification"`
+	Server                 ServerConfiguration                 `yaml:"server"`
 	SupportedLanguages     []string                            `yaml:"supported_languages"`
 }
 
@@ -116,6 +117,14 @@ type ZeroShotClassificationConfiguration struct {
 	HypothesisTemplate  string   `yaml:"hypothesis_template"`
 	PossibleLabels      []string `yaml:"possible_labels"`
 	MultiClass          bool     `yaml:"multi_class"`
+}
+
+// ServerConfiguration provides specific settings for the API server.
+type ServerConfiguration struct {
+	Address    string `yaml:"address"`
+	TLSEnabled bool   `yaml:"tls_enabled"`
+	TLSCert    string `yaml:"tls_cert"`
+	TLSKey     string `yaml:"tls_key"`
 }
 
 func (c *Configuration) LanguageIsSupported(code string) bool {
