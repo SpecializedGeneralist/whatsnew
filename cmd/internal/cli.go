@@ -103,6 +103,7 @@ func (app *CLIApp) commands() []*cli.Command {
 		app.migrateDB(),
 		app.addFeeds(),
 		app.addTwitterSources(),
+		app.runServer(),
 		app.fetchFeeds(),
 		app.fetchGDELT(),
 		app.fetchTweets(),
