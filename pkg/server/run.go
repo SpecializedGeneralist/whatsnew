@@ -10,6 +10,7 @@ import (
 	"fmt"
 	"github.com/SpecializedGeneralist/whatsnew/pkg/api"
 	"github.com/grpc-ecosystem/grpc-gateway/v2/runtime"
+	"github.com/rs/cors"
 	"golang.org/x/net/http2"
 	"golang.org/x/net/http2/h2c"
 	"google.golang.org/grpc"
@@ -40,7 +41,8 @@ func (s *Server) Run() error {
 		return fmt.Errorf("TCP listen error: %w", err)
 	}
 
-	handler := handlerFunc(grpcServer, mux)
+	handler := cors.New(s.corsOptions()).Handler(mux)
+	handler = handlerFunc(grpcServer, handler)
 
 	if s.config.TLSEnabled {
 		return s.serveTLS(listener, handler)
@@ -92,6 +94,12 @@ func handlerFunc(grpcServer *grpc.Server, otherHandler http.Handler) http.Handle
 			otherHandler.ServeHTTP(w, r)
 		}
 	})
+}
+
+func (s *Server) corsOptions() cors.Options {
+	return cors.Options{
+		AllowedOrigins: s.config.AllowedOrigins,
+	}
 }
 
 func isGRPCRequest(r *http.Request) bool {
