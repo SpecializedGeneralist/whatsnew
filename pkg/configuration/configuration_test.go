@@ -94,10 +94,11 @@ func TestFromYAMLFile(t *testing.T) {
 				MultiClass:          true,
 			},
 			Server: ServerConfiguration{
-				Address:    "0.0.0.0:10000",
-				TLSEnabled: false,
-				TLSCert:    "",
-				TLSKey:     "",
+				Address:        "0.0.0.0:10000",
+				TLSEnabled:     false,
+				TLSCert:        "",
+				TLSKey:         "",
+				AllowedOrigins: []string{"*"},
 			},
 			SupportedLanguages: []string{"en", "es"},
 		}

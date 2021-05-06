@@ -121,10 +121,11 @@ type ZeroShotClassificationConfiguration struct {
 
 // ServerConfiguration provides specific settings for the API server.
 type ServerConfiguration struct {
-	Address    string `yaml:"address"`
-	TLSEnabled bool   `yaml:"tls_enabled"`
-	TLSCert    string `yaml:"tls_cert"`
-	TLSKey     string `yaml:"tls_key"`
+	Address        string   `yaml:"address"`
+	TLSEnabled     bool     `yaml:"tls_enabled"`
+	TLSCert        string   `yaml:"tls_cert"`
+	TLSKey         string   `yaml:"tls_key"`
+	AllowedOrigins []string `yaml:"allowed_origins"`
 }
 
 func (c *Configuration) LanguageIsSupported(code string) bool {

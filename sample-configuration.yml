@@ -61,4 +61,5 @@ server:
   tls_enabled: false
   tls_cert:
   tls_key:
+  allowed_origins: ['*']
 supported_languages: [ 'en', 'es' ]
