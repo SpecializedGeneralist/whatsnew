@@ -23,6 +23,7 @@ require (
 	github.com/nlpodyssey/spago v0.5.2
 	github.com/olekukonko/tablewriter v0.0.4 // indirect
 	github.com/pkg/errors v0.9.1
+	github.com/rs/cors v1.7.0
 	github.com/rs/zerolog v1.20.0
 	github.com/specializedgeneralist/gdelt v0.0.0-20201201000611-1d387c3a4d70
 	github.com/streadway/amqp v1.0.0
