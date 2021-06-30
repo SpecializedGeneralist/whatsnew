@@ -1,0 +1,25 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://raw.githubusercontent.com/SpecializedGeneralist/whatsnew/main/pkg/config/schema.json",
+  "title": "WhatsNew Configuration",
+  "description": "Configuration settings for WhatsNew",
+  "type": "object",
+  "properties": {
+    "db": {
+      "description": "Settings for connecting to the Postgres database.",
+      "type": "object",
+      "properties": {
+        "dsn": {
+          "description": "Connection Data Source Name (DSN). The database name MUST NOT be included.",
+          "type": "string"
+        },
+        "dbname": {
+          "description": "Name of the Postgres database.",
+          "type": "string"
+        }
+      },
+      "required": ["dsn", "dbname"]
+    }
+  },
+  "required": ["db"]
+}
