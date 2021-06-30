@@ -1,0 +1,3 @@
+db:
+  dsn: 'host=localhost port=5432 user=postgres password=postgres sslmode=disable statement_cache_mode=describe'
+  dbname: whatsnew
