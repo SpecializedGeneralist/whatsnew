@@ -7,6 +7,7 @@ package config
 import (
 	"fmt"
 	"gopkg.in/yaml.v3"
+	gormlogger "gorm.io/gorm/logger"
 	"os"
 	"strings"
 )
@@ -19,8 +20,31 @@ type Config struct {
 // DB holds database settings.
 type DB struct {
 	// DSN, dbname excluded.
-	DSN    string `yaml:"dsn"`
-	DBName string `yaml:"dbname"`
+	DSN      string     `yaml:"dsn"`
+	DBName   string     `yaml:"dbname"`
+	LogLevel DBLogLevel `yaml:"loglevel"`
+}
+
+// DBLogLevel is a redefinition of GORM logger.LogLevel which satisfies
+// encoding.TextUnmarshaler, to be conveniently parsed from YAML.
+type DBLogLevel gormlogger.LogLevel
+
+var dbLogLevels = map[string]DBLogLevel{
+	"silent": DBLogLevel(gormlogger.Silent),
+	"error":  DBLogLevel(gormlogger.Error),
+	"warn":   DBLogLevel(gormlogger.Warn),
+	"info":   DBLogLevel(gormlogger.Info),
+}
+
+// UnmarshalText satisfies the encoding.TextUnmarshaler interface.
+func (l *DBLogLevel) UnmarshalText(text []byte) error {
+	s := string(text)
+	level, ok := dbLogLevels[s]
+	if !ok {
+		return fmt.Errorf("invalid DB log level: %#v", s)
+	}
+	*l = level
+	return nil
 }
 
 // FromYAMLFile reads a Config object from a YAML file.

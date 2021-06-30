@@ -5,9 +5,11 @@
 package config_test
 
 import (
+	"fmt"
 	"github.com/SpecializedGeneralist/whatsnew/pkg/config"
 	"github.com/stretchr/testify/assert"
 	"github.com/stretchr/testify/require"
+	gormlogger "gorm.io/gorm/logger"
 	"path/filepath"
 	"runtime"
 	"testing"
@@ -52,11 +54,52 @@ func TestFromYAMLFile(t *testing.T) {
 		require.NotNil(t, conf)
 		expected := config.Config{
 			DB: config.DB{
-				DSN:    "host=localhost port=5432 user=postgres password=postgres sslmode=disable statement_cache_mode=describe",
-				DBName: "whatsnew",
+				DSN:      "host=localhost port=5432 user=postgres password=postgres sslmode=disable statement_cache_mode=describe",
+				DBName:   "whatsnew",
+				LogLevel: config.DBLogLevel(gormlogger.Warn),
 			},
 		}
 		assert.Equal(t, expected, *conf)
+	})
+}
+
+func TestDBLogLevel_UnmarshalText(t *testing.T) {
+	t.Parallel()
+
+	t.Run("positive cases", func(t *testing.T) {
+		t.Parallel()
+		testCases := []struct {
+			text     string
+			expected config.DBLogLevel
+		}{
+			{"silent", config.DBLogLevel(gormlogger.Silent)},
+			{"error", config.DBLogLevel(gormlogger.Error)},
+			{"warn", config.DBLogLevel(gormlogger.Warn)},
+			{"info", config.DBLogLevel(gormlogger.Info)},
+		}
+		for _, tc := range testCases {
+			t.Run(tc.text, func(t *testing.T) {
+				l := new(config.DBLogLevel)
+				err := l.UnmarshalText([]byte(tc.text))
+				assert.NoError(t, err)
+				assert.Equal(t, tc.expected, *l)
+			})
+		}
+	})
+
+	t.Run("negative cases", func(t *testing.T) {
+		t.Parallel()
+		testCases := []string{
+			"",
+			"foo",
+		}
+		for _, tc := range testCases {
+			t.Run(fmt.Sprintf("%#v", tc), func(t *testing.T) {
+				l := new(config.DBLogLevel)
+				err := l.UnmarshalText([]byte(tc))
+				assert.Error(t, err)
+			})
+		}
 	})
 }
 

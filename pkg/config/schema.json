@@ -16,9 +16,14 @@
         "dbname": {
           "description": "Name of the Postgres database.",
           "type": "string"
+        },
+        "loglevel": {
+          "description": "Log level considered exclusively for database operations.",
+          "type": "string",
+          "enum": ["silent", "error", "warn", "info"]
         }
       },
-      "required": ["dsn", "dbname"]
+      "required": ["dsn", "dbname", "loglevel"]
     }
   },
   "required": ["db"]
