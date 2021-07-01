@@ -13,6 +13,7 @@ import (
 	"github.com/SpecializedGeneralist/whatsnew/pkg/cli/command/fetchfeeds"
 	"github.com/SpecializedGeneralist/whatsnew/pkg/cli/command/fetchgdelt"
 	"github.com/SpecializedGeneralist/whatsnew/pkg/cli/command/fetchtweets"
+	"github.com/SpecializedGeneralist/whatsnew/pkg/cli/command/schedulefeeds"
 	"github.com/SpecializedGeneralist/whatsnew/pkg/cli/command/scrapeweb"
 	"github.com/SpecializedGeneralist/whatsnew/pkg/cli/command/server"
 	"github.com/SpecializedGeneralist/whatsnew/pkg/cli/command/vectorize"
@@ -30,6 +31,7 @@ var (
 	commands = []*command.Command{
 		db.CmdDB,
 		server.CmdServer,
+		schedulefeeds.CmdScheduleFeeds,
 		fetchfeeds.CmdFetchFeeds,
 		fetchgdelt.CmdFetchGDELT,
 		fetchtweets.CmdFetchTweets,
