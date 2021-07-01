@@ -7,6 +7,8 @@ module github.com/SpecializedGeneralist/whatsnew
 go 1.16
 
 require (
+	github.com/contribsys/faktory v1.5.1
+	github.com/contribsys/faktory_worker_go v1.4.2
 	github.com/jackc/pgproto3/v2 v2.1.0 // indirect
 	github.com/lib/pq v1.6.0 // indirect
 	github.com/stretchr/testify v1.7.0
