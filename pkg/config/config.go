@@ -14,7 +14,8 @@ import (
 
 // Config holds whatsnew application-wide configuration settings.
 type Config struct {
-	DB DB `yaml:"db"`
+	DB      DB      `yaml:"db"`
+	Faktory Faktory `yaml:"faktory"`
 }
 
 // DB holds database settings.
@@ -23,6 +24,12 @@ type DB struct {
 	DSN      string     `yaml:"dsn"`
 	DBName   string     `yaml:"dbname"`
 	LogLevel DBLogLevel `yaml:"loglevel"`
+}
+
+// Faktory holds Faktory settings and generic workers properties.
+type Faktory struct {
+	URL    string   `yaml:"url"`
+	Queues []string `yaml:"queues"`
 }
 
 // DBLogLevel is a redefinition of GORM logger.LogLevel which satisfies

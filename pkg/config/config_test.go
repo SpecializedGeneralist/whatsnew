@@ -58,6 +58,10 @@ func TestFromYAMLFile(t *testing.T) {
 				DBName:   "whatsnew",
 				LogLevel: config.DBLogLevel(gormlogger.Warn),
 			},
+			Faktory: config.Faktory{
+				URL:    "tcp://faktory:faktory@localhost:7419",
+				Queues: []string{"default"},
+			},
 		}
 		assert.Equal(t, expected, *conf)
 	})
