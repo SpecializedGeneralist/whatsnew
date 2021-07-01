@@ -9,6 +9,6 @@ import "time"
 // Model is the basic struct embedded into all GORM models.
 type Model struct {
 	ID        uint      `gorm:"primaryKey"`
-	CreatedAt time.Time `gorm:"not null"`
-	UpdatedAt time.Time `gorm:"not null"`
+	CreatedAt time.Time `gorm:"not null;default:now()"`
+	UpdatedAt time.Time `gorm:"not null;default:now()"`
 }
