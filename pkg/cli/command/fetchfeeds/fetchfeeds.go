@@ -9,8 +9,8 @@ import (
 	"github.com/SpecializedGeneralist/whatsnew/pkg/config"
 )
 
-// CmdSFetchFeeds implements the command "whatsnew fetch-feeds".
-var CmdSFetchFeeds = &command.Command{
+// CmdFetchFeeds implements the command "whatsnew fetch-feeds".
+var CmdFetchFeeds = &command.Command{
 	Name:      "fetch-feeds",
 	UsageLine: "fetch-feeds",
 	Short:     "fetch all feeds and get new feed items",

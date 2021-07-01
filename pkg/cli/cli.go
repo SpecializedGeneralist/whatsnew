@@ -30,7 +30,7 @@ var (
 	commands = []*command.Command{
 		db.CmdDB,
 		server.CmdServer,
-		fetchfeeds.CmdSFetchFeeds,
+		fetchfeeds.CmdFetchFeeds,
 		fetchgdelt.CmdFetchGDELT,
 		fetchtweets.CmdFetchTweets,
 		scrapeweb.CmdScrapeWeb,
