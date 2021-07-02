@@ -96,6 +96,7 @@ func TestDBLogLevel_UnmarshalText(t *testing.T) {
 		t.Parallel()
 		testCases := []string{
 			"",
+			" ",
 			"foo",
 		}
 		for _, tc := range testCases {
