@@ -2,8 +2,9 @@
 // Use of this source code is governed by a BSD-style
 // license that can be found in the LICENSE file.
 
-// Package dbops provides useful functions for database operations.
-package dbops
+// Package database provides useful functions for database operations and
+// configuration.
+package database
 
 import (
 	"fmt"

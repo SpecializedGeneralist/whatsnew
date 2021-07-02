@@ -8,7 +8,7 @@ import (
 	"fmt"
 	"github.com/SpecializedGeneralist/whatsnew/pkg/cli/command"
 	"github.com/SpecializedGeneralist/whatsnew/pkg/config"
-	"github.com/SpecializedGeneralist/whatsnew/pkg/dbops"
+	"github.com/SpecializedGeneralist/whatsnew/pkg/database"
 	"github.com/SpecializedGeneralist/whatsnew/pkg/models"
 	"gorm.io/gorm"
 )
@@ -61,12 +61,12 @@ var operations = map[string]opFn{
 }
 
 func runCreate(conf *config.Config) (err error) {
-	db, err := dbops.OpenDBWithoutDBName(conf.DB)
+	db, err := database.OpenDBWithoutDBName(conf.DB)
 	if err != nil {
 		return err
 	}
 	defer func() {
-		if e := dbops.CloseDB(db); e != nil && err == nil {
+		if e := database.CloseDB(db); e != nil && err == nil {
 			err = e
 		}
 	}()
@@ -74,7 +74,7 @@ func runCreate(conf *config.Config) (err error) {
 	if err != nil {
 		return err
 	}
-	err = dbops.CloseDB(db)
+	err = database.CloseDB(db)
 	if err != nil {
 		return err
 	}
@@ -82,12 +82,12 @@ func runCreate(conf *config.Config) (err error) {
 }
 
 func runMigrate(conf *config.Config) (err error) {
-	db, err := dbops.OpenDB(conf.DB)
+	db, err := database.OpenDB(conf.DB)
 	if err != nil {
 		return err
 	}
 	defer func() {
-		if e := dbops.CloseDB(db); e != nil && err == nil {
+		if e := database.CloseDB(db); e != nil && err == nil {
 			err = e
 		}
 	}()
@@ -95,12 +95,12 @@ func runMigrate(conf *config.Config) (err error) {
 }
 
 func runDrop(conf *config.Config) (err error) {
-	db, err := dbops.OpenDBWithoutDBName(conf.DB)
+	db, err := database.OpenDBWithoutDBName(conf.DB)
 	if err != nil {
 		return err
 	}
 	defer func() {
-		if e := dbops.CloseDB(db); e != nil && err == nil {
+		if e := database.CloseDB(db); e != nil && err == nil {
 			err = e
 		}
 	}()
