@@ -6,6 +6,7 @@ package config
 
 import (
 	"fmt"
+	"github.com/rs/zerolog"
 	"gopkg.in/yaml.v3"
 	gormlogger "gorm.io/gorm/logger"
 	"os"
@@ -52,6 +53,22 @@ func (l *DBLogLevel) UnmarshalText(text []byte) error {
 		return fmt.Errorf("invalid DB log level: %#v", s)
 	}
 	*l = level
+	return nil
+}
+
+// LogLevel is a redefinition of zerolog.Level which satisfies
+// encoding.TextUnmarshaler, to be conveniently parsed from YAML.
+type LogLevel zerolog.Level
+
+// UnmarshalText satisfies the encoding.TextUnmarshaler interface, unmarshaling
+// the text to a LogLevel.
+func (l *LogLevel) UnmarshalText(text []byte) (err error) {
+	s := string(text)
+	zl, err := zerolog.ParseLevel(s)
+	if err != nil || zl == zerolog.NoLevel {
+		return fmt.Errorf("invalid log level: %#v", s)
+	}
+	*l = LogLevel(zl)
 	return nil
 }
 

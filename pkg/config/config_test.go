@@ -7,6 +7,7 @@ package config_test
 import (
 	"fmt"
 	"github.com/SpecializedGeneralist/whatsnew/pkg/config"
+	"github.com/rs/zerolog"
 	"github.com/stretchr/testify/assert"
 	"github.com/stretchr/testify/require"
 	gormlogger "gorm.io/gorm/logger"
@@ -100,6 +101,51 @@ func TestDBLogLevel_UnmarshalText(t *testing.T) {
 		for _, tc := range testCases {
 			t.Run(fmt.Sprintf("%#v", tc), func(t *testing.T) {
 				l := new(config.DBLogLevel)
+				err := l.UnmarshalText([]byte(tc))
+				assert.Error(t, err)
+			})
+		}
+	})
+}
+
+func TestLogLevel_UnmarshalText(t *testing.T) {
+	t.Parallel()
+
+	t.Run("positive cases", func(t *testing.T) {
+		t.Parallel()
+		testCases := []struct {
+			text     string
+			expected config.LogLevel
+		}{
+			{"trace", config.LogLevel(zerolog.TraceLevel)},
+			{"debug", config.LogLevel(zerolog.DebugLevel)},
+			{"info", config.LogLevel(zerolog.InfoLevel)},
+			{"warn", config.LogLevel(zerolog.WarnLevel)},
+			{"error", config.LogLevel(zerolog.ErrorLevel)},
+			{"fatal", config.LogLevel(zerolog.FatalLevel)},
+			{"panic", config.LogLevel(zerolog.PanicLevel)},
+			{"disabled", config.LogLevel(zerolog.Disabled)},
+		}
+		for _, tc := range testCases {
+			t.Run(tc.text, func(t *testing.T) {
+				l := new(config.LogLevel)
+				err := l.UnmarshalText([]byte(tc.text))
+				assert.NoError(t, err)
+				assert.Equal(t, tc.expected, *l)
+			})
+		}
+	})
+
+	t.Run("negative cases", func(t *testing.T) {
+		t.Parallel()
+		testCases := []string{
+			"",
+			" ",
+			"foo",
+		}
+		for _, tc := range testCases {
+			t.Run(fmt.Sprintf("%#v", tc), func(t *testing.T) {
+				l := new(config.LogLevel)
 				err := l.UnmarshalText([]byte(tc))
 				assert.Error(t, err)
 			})
