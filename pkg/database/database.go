@@ -12,8 +12,6 @@ import (
 	"gorm.io/driver/postgres"
 	"gorm.io/gorm"
 	gormlogger "gorm.io/gorm/logger"
-	"log"
-	"os"
 )
 
 // OpenDB initializes a database session, connecting to the specific database
@@ -54,17 +52,6 @@ func openDB(dsn string, logLevel config.DBLogLevel) (*gorm.DB, error) {
 
 func gormConfig(logLevel config.DBLogLevel) *gorm.Config {
 	return &gorm.Config{
-		Logger: gormLogger(logLevel),
+		Logger: NewGORMLogger().LogMode(gormlogger.LogLevel(logLevel)),
 	}
-}
-
-func gormLogger(logLevel config.DBLogLevel) gormlogger.Interface {
-	writer := log.New(os.Stderr, "", log.LstdFlags)
-	conf := gormlogger.Config{
-		SlowThreshold:             0,
-		Colorful:                  false,
-		IgnoreRecordNotFoundError: false,
-		LogLevel:                  gormlogger.LogLevel(logLevel),
-	}
-	return gormlogger.New(writer, conf)
 }
