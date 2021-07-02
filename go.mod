@@ -11,6 +11,7 @@ require (
 	github.com/contribsys/faktory_worker_go v1.4.2
 	github.com/jackc/pgproto3/v2 v2.1.0 // indirect
 	github.com/lib/pq v1.6.0 // indirect
+	github.com/rs/zerolog v1.23.0
 	github.com/stretchr/testify v1.7.0
 	golang.org/x/crypto v0.0.0-20210616213533-5ff15b29337e // indirect
 	golang.org/x/text v0.3.6 // indirect
