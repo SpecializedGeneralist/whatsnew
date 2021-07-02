@@ -43,7 +43,8 @@ var dbLogLevels = map[string]DBLogLevel{
 	"info":   DBLogLevel(gormlogger.Info),
 }
 
-// UnmarshalText satisfies the encoding.TextUnmarshaler interface.
+// UnmarshalText satisfies the encoding.TextUnmarshaler interface, unmarshaling
+// the text to a DBLogLevel.
 func (l *DBLogLevel) UnmarshalText(text []byte) error {
 	s := string(text)
 	level, ok := dbLogLevels[s]
