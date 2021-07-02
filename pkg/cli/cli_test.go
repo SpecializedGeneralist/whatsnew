@@ -5,6 +5,7 @@
 package cli_test
 
 import (
+	"context"
 	"github.com/SpecializedGeneralist/whatsnew/pkg/cli"
 	"github.com/stretchr/testify/assert"
 	"github.com/stretchr/testify/require"
@@ -16,10 +17,12 @@ import (
 )
 
 func TestRun(t *testing.T) {
+	ctx := context.Background()
+
 	t.Run("no arguments", func(t *testing.T) {
 		var err error
 		stdOut, stdErr := captureOutput(t, func() {
-			err = cli.Run("whatsnew-test", nil)
+			err = cli.Run(ctx, "whatsnew-test", nil)
 		})
 		assert.Error(t, err)
 		assert.Empty(t, stdOut)
@@ -30,7 +33,7 @@ func TestRun(t *testing.T) {
 	t.Run("invalid command without config", func(t *testing.T) {
 		var err error
 		stdOut, stdErr := captureOutput(t, func() {
-			err = cli.Run("whatsnew-test", []string{"foo"})
+			err = cli.Run(ctx, "whatsnew-test", []string{"foo"})
 		})
 		assert.Error(t, err)
 		assert.Empty(t, stdOut)
@@ -41,7 +44,7 @@ func TestRun(t *testing.T) {
 	t.Run("invalid command with config", func(t *testing.T) {
 		var err error
 		stdOut, stdErr := captureOutput(t, func() {
-			err = cli.Run("whatsnew-test", []string{"-config", sampleConfigFile(), "foo"})
+			err = cli.Run(ctx, "whatsnew-test", []string{"-config", sampleConfigFile(), "foo"})
 		})
 		assert.Error(t, err)
 		assert.Empty(t, stdOut)
@@ -52,7 +55,7 @@ func TestRun(t *testing.T) {
 	t.Run("invalid flag", func(t *testing.T) {
 		var err error
 		stdOut, stdErr := captureOutput(t, func() {
-			err = cli.Run("whatsnew-test", []string{"-foo"})
+			err = cli.Run(ctx, "whatsnew-test", []string{"-foo"})
 		})
 		assert.Error(t, err)
 		assert.Empty(t, stdOut)
@@ -63,7 +66,7 @@ func TestRun(t *testing.T) {
 	t.Run("valid command without config", func(t *testing.T) {
 		var err error
 		stdOut, stdErr := captureOutput(t, func() {
-			err = cli.Run("whatsnew-test", []string{"db", "migrate"})
+			err = cli.Run(ctx, "whatsnew-test", []string{"db", "migrate"})
 		})
 		assert.Error(t, err)
 		assert.Empty(t, stdOut)
@@ -74,7 +77,7 @@ func TestRun(t *testing.T) {
 	t.Run("help", func(t *testing.T) {
 		var err error
 		stdOut, stdErr := captureOutput(t, func() {
-			err = cli.Run("whatsnew-test", []string{"help"})
+			err = cli.Run(ctx, "whatsnew-test", []string{"help"})
 		})
 		assert.NoError(t, err)
 		assert.Contains(t, stdOut, "whatsnew-test -config")
@@ -84,7 +87,7 @@ func TestRun(t *testing.T) {
 	t.Run("-h", func(t *testing.T) {
 		var err error
 		stdOut, stdErr := captureOutput(t, func() {
-			err = cli.Run("whatsnew-test", []string{"-h"})
+			err = cli.Run(ctx, "whatsnew-test", []string{"-h"})
 		})
 		assert.NoError(t, err)
 		assert.Empty(t, stdOut)
@@ -94,7 +97,7 @@ func TestRun(t *testing.T) {
 	t.Run("-help", func(t *testing.T) {
 		var err error
 		stdOut, stdErr := captureOutput(t, func() {
-			err = cli.Run("whatsnew-test", []string{"-help"})
+			err = cli.Run(ctx, "whatsnew-test", []string{"-help"})
 		})
 		assert.NoError(t, err)
 		assert.Empty(t, stdOut)
@@ -104,7 +107,7 @@ func TestRun(t *testing.T) {
 	t.Run("help command", func(t *testing.T) {
 		var err error
 		stdOut, stdErr := captureOutput(t, func() {
-			err = cli.Run("whatsnew-test", []string{"help", "db"})
+			err = cli.Run(ctx, "whatsnew-test", []string{"help", "db"})
 		})
 		assert.NoError(t, err)
 		assert.Contains(t, stdOut, "whatsnew-test -config=<filename> db (create | migrate | delete)")
@@ -114,7 +117,7 @@ func TestRun(t *testing.T) {
 	t.Run("help with invalid flag", func(t *testing.T) {
 		var err error
 		stdOut, stdErr := captureOutput(t, func() {
-			err = cli.Run("whatsnew-test", []string{"help", "-foo"})
+			err = cli.Run(ctx, "whatsnew-test", []string{"help", "-foo"})
 		})
 		assert.Error(t, err)
 		assert.Empty(t, stdOut)
@@ -125,7 +128,7 @@ func TestRun(t *testing.T) {
 	t.Run("help with invalid command", func(t *testing.T) {
 		var err error
 		stdOut, stdErr := captureOutput(t, func() {
-			err = cli.Run("whatsnew-test", []string{"help", "foo"})
+			err = cli.Run(ctx, "whatsnew-test", []string{"help", "foo"})
 		})
 		assert.Error(t, err)
 		assert.Empty(t, stdOut)
@@ -136,7 +139,7 @@ func TestRun(t *testing.T) {
 	t.Run("help command with other invalid arguments", func(t *testing.T) {
 		var err error
 		stdOut, stdErr := captureOutput(t, func() {
-			err = cli.Run("whatsnew-test", []string{"help", "db", "foo"})
+			err = cli.Run(ctx, "whatsnew-test", []string{"help", "db", "foo"})
 		})
 		assert.Error(t, err)
 		assert.Empty(t, stdOut)
@@ -147,7 +150,7 @@ func TestRun(t *testing.T) {
 	t.Run("invalid command arguments", func(t *testing.T) {
 		var err error
 		stdOut, stdErr := captureOutput(t, func() {
-			err = cli.Run("whatsnew-test", []string{"--config", sampleConfigFile(), "db", "foo"})
+			err = cli.Run(ctx, "whatsnew-test", []string{"--config", sampleConfigFile(), "db", "foo"})
 		})
 		assert.Error(t, err)
 		assert.Empty(t, stdOut)
@@ -161,7 +164,7 @@ func TestRun(t *testing.T) {
 
 		var err error
 		stdOut, stdErr := captureOutput(t, func() {
-			err = cli.Run("whatsnew-test", []string{"-config", missingFilename, "foo"})
+			err = cli.Run(ctx, "whatsnew-test", []string{"-config", missingFilename, "foo"})
 		})
 		assert.Error(t, err)
 		assert.Empty(t, stdOut)

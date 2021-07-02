@@ -5,6 +5,7 @@
 package db
 
 import (
+	"context"
 	"fmt"
 	"github.com/SpecializedGeneralist/whatsnew/pkg/cli/command"
 	"github.com/SpecializedGeneralist/whatsnew/pkg/config"
@@ -41,7 +42,7 @@ perform. The supported operations are:
 }
 
 // Run runs the command "whatsnew db".
-func Run(conf *config.Config, args []string) error {
+func Run(_ context.Context, conf *config.Config, args []string) error {
 	if len(args) != 1 {
 		return command.ErrInvalidArguments
 	}

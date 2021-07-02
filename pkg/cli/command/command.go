@@ -5,6 +5,7 @@
 package command
 
 import (
+	"context"
 	"errors"
 	"github.com/SpecializedGeneralist/whatsnew/pkg/config"
 )
@@ -27,7 +28,7 @@ type Command struct {
 	// Run runs the command.
 	//
 	// The args are the arguments after the command name.
-	Run func(conf *config.Config, args []string) error
+	Run func(ctx context.Context, conf *config.Config, args []string) error
 }
 
 // InvalidArguments is an error type generally indicating incorrect or missing

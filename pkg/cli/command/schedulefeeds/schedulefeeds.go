@@ -5,6 +5,7 @@
 package schedulefeeds
 
 import (
+	"context"
 	"github.com/SpecializedGeneralist/whatsnew/pkg/cli/command"
 	"github.com/SpecializedGeneralist/whatsnew/pkg/config"
 )
@@ -19,6 +20,6 @@ var CmdScheduleFeeds = &command.Command{
 }
 
 // Run runs the command "whatsnew schedule-feeds".
-func Run(conf *config.Config, args []string) error {
+func Run(ctx context.Context, conf *config.Config, args []string) error {
 	panic("not implemented")
 }

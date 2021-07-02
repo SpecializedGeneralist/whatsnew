@@ -5,6 +5,7 @@
 package cli
 
 import (
+	"context"
 	"errors"
 	"flag"
 	"github.com/SpecializedGeneralist/whatsnew/pkg/cli/command"
@@ -46,7 +47,7 @@ var (
 //
 // It accepts the name of the program, which is used for help messages, and a
 // list of arguments.
-func Run(name string, arguments []string) error {
+func Run(ctx context.Context, name string, arguments []string) error {
 	fs := flag.NewFlagSet(name, flag.ContinueOnError)
 	fs.Usage = func() { printMainUsage(os.Stderr, fs) }
 	configFilename := fs.String("config", "", "")
@@ -80,7 +81,7 @@ func Run(name string, arguments []string) error {
 		if cmd.Name != cmdName {
 			continue
 		}
-		err = cmd.Run(conf, cmdArgs)
+		err = cmd.Run(ctx, conf, cmdArgs)
 		if err != nil {
 			printErrorAndCommandUsage(err, fs, cmd)
 		}

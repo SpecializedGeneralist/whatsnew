@@ -5,6 +5,7 @@
 package main
 
 import (
+	"context"
 	"github.com/SpecializedGeneralist/whatsnew/pkg/cli"
 	"github.com/rs/zerolog"
 	"github.com/rs/zerolog/log"
@@ -14,7 +15,9 @@ import (
 
 func main() {
 	initLogger()
-	err := cli.Run(os.Args[0], os.Args[1:])
+	ctx := context.Background()
+
+	err := cli.Run(ctx, os.Args[0], os.Args[1:])
 	if err != nil {
 		os.Exit(1)
 	}
