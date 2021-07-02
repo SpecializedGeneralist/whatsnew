@@ -10,12 +10,15 @@ import (
 	"github.com/rs/zerolog"
 	"github.com/rs/zerolog/log"
 	"os"
+	"os/signal"
 	"time"
 )
 
 func main() {
+	ctx, stop := signal.NotifyContext(context.Background(), os.Interrupt, os.Kill)
+	defer stop()
+
 	initLogger()
-	ctx := context.Background()
 
 	err := cli.Run(ctx, os.Args[0], os.Args[1:])
 	if err != nil {
