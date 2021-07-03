@@ -11,12 +11,14 @@ import (
 	gormlogger "gorm.io/gorm/logger"
 	"os"
 	"strings"
+	"time"
 )
 
 // Config holds whatsnew application-wide configuration settings.
 type Config struct {
-	DB      DB      `yaml:"db"`
-	Faktory Faktory `yaml:"faktory"`
+	DB              DB              `yaml:"db"`
+	Faktory         Faktory         `yaml:"faktory"`
+	FeedsScheduling FeedsScheduling `yaml:"feeds_scheduling"`
 }
 
 // DB holds database settings.
@@ -31,6 +33,13 @@ type DB struct {
 type Faktory struct {
 	URL    string   `yaml:"url"`
 	Queues []string `yaml:"queues"`
+}
+
+// FeedsScheduling holds settings for scheduling feeds for further processing.
+type FeedsScheduling struct {
+	TimeInterval time.Duration `yaml:"time_interval"`
+	Jobs         []string      `yaml:"jobs"`
+	LogLevel     LogLevel      `yaml:"loglevel"`
 }
 
 // DBLogLevel is a redefinition of GORM logger.LogLevel which satisfies

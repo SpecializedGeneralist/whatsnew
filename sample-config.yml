@@ -5,3 +5,7 @@ db:
 faktory:
   url: 'tcp://faktory:faktory@localhost:7419'
   queues: ['default']
+feeds_scheduling:
+  time_interval: '5m'
+  jobs: ['FetchFeed']
+  loglevel: 'info'

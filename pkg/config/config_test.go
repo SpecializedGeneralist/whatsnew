@@ -14,6 +14,7 @@ import (
 	"path/filepath"
 	"runtime"
 	"testing"
+	"time"
 )
 
 func TestFromYAMLFile(t *testing.T) {
@@ -62,6 +63,11 @@ func TestFromYAMLFile(t *testing.T) {
 			Faktory: config.Faktory{
 				URL:    "tcp://faktory:faktory@localhost:7419",
 				Queues: []string{"default"},
+			},
+			FeedsScheduling: config.FeedsScheduling{
+				TimeInterval: 5 * time.Minute,
+				Jobs:         []string{"FetchFeed"},
+				LogLevel:     config.LogLevel(zerolog.InfoLevel),
 			},
 		}
 		assert.Equal(t, expected, *conf)

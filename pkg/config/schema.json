@@ -18,7 +18,7 @@
           "type": "string"
         },
         "loglevel": {
-          "description": "Log level considered exclusively for database operations.",
+          "description": "Log level considered exclusively for database operations. The value is compatible with GORM logger.LogLevel.",
           "type": "string",
           "enum": ["silent", "error", "warn", "info"]
         }
@@ -42,7 +42,44 @@
         }
       },
       "required": ["url", "queues"]
+    },
+    "feeds_scheduling": {
+      "description": "Settings for periodic scheduling of jobs for processing all feeds.",
+      "type": "object",
+      "properties": {
+        "time_interval": {
+          "description": "How frequently the 'jobs' should be scheduled, for each enabled feed. The value must be compatible with Go time.Duration.",
+          "type": "string"
+        },
+        "jobs": {
+          "description": "List of each job type to be periodically scheduled.",
+          "type": "array",
+          "items": {
+            "type": "string"
+          }
+        },
+        "loglevel": {
+          "$ref": "#/definitions/loglevel"
+        }
+      },
+      "required": ["time_interval", "jobs", "loglevel"]
     }
   },
-  "required": ["db", "faktory"]
+  "required": ["db", "faktory", "feeds_scheduling"],
+  "definitions": {
+    "loglevel": {
+      "description": "Log level. The value is compatible with zerolog.Level.",
+      "type": "string",
+      "enum": [
+        "trace",
+        "debug",
+        "info",
+        "warn",
+        "error",
+        "fatal",
+        "panic",
+        "disabled"
+      ]
+    }
+  }
 }
