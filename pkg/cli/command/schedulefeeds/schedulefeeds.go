@@ -8,6 +8,9 @@ import (
 	"context"
 	"github.com/SpecializedGeneralist/whatsnew/pkg/cli/command"
 	"github.com/SpecializedGeneralist/whatsnew/pkg/config"
+	"github.com/SpecializedGeneralist/whatsnew/pkg/database"
+	"github.com/SpecializedGeneralist/whatsnew/pkg/feedscheduling"
+	"github.com/SpecializedGeneralist/whatsnew/pkg/workers"
 )
 
 // CmdScheduleFeeds implements the command "whatsnew schedule-feeds".
@@ -20,6 +23,31 @@ var CmdScheduleFeeds = &command.Command{
 }
 
 // Run runs the command "whatsnew schedule-feeds".
-func Run(ctx context.Context, conf *config.Config, args []string) error {
-	panic("not implemented")
+func Run(ctx context.Context, conf *config.Config, args []string) (err error) {
+	if len(args) != 0 {
+		return command.ErrInvalidArguments
+	}
+
+	db, err := database.OpenDB(conf.DB)
+	if err != nil {
+		return err
+	}
+	defer func() {
+		if e := database.CloseDB(db); e != nil && err == nil {
+			err = e
+		}
+	}()
+
+	fk, err := workers.NewClient(conf.Faktory)
+	if err != nil {
+		return err
+	}
+	defer func() {
+		if e := fk.Close(); e != nil && err == nil {
+			err = e
+		}
+	}()
+
+	fs := feedscheduling.New(conf.FeedsScheduling, db, fk)
+	return fs.Run(ctx)
 }
