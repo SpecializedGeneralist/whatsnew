@@ -74,7 +74,11 @@ func TestFromYAMLFile(t *testing.T) {
 				FeedFetcher: config.FeedFetcher{
 					Concurrency:        10,
 					NewWebResourceJobs: []string{"WebScraper"},
-					LogLevel:           config.LogLevel(zerolog.InfoLevel),
+					OmitItemsPublishedBefore: config.OmitItemsPublishedBefore{
+						Enabled: true,
+						Time:    time.Date(2021, time.July, 1, 0, 0, 0, 0, time.UTC),
+					},
+					LogLevel: config.LogLevel(zerolog.InfoLevel),
 				},
 			},
 		}

@@ -51,9 +51,16 @@ type Workers struct {
 
 // FeedFetcher holds settings for the FeedFetcher worker.
 type FeedFetcher struct {
-	Concurrency        int      `yaml:"concurrency"`
-	NewWebResourceJobs []string `yaml:"new_web_resource_jobs"`
-	LogLevel           LogLevel `yaml:"loglevel"`
+	Concurrency              int                      `yaml:"concurrency"`
+	NewWebResourceJobs       []string                 `yaml:"new_web_resource_jobs"`
+	OmitItemsPublishedBefore OmitItemsPublishedBefore `yaml:"omit_items_published_before"`
+	LogLevel                 LogLevel                 `yaml:"loglevel"`
+}
+
+// OmitItemsPublishedBefore is part of FeedFetcher settings.
+type OmitItemsPublishedBefore struct {
+	Enabled bool      `yaml:"enabled"`
+	Time    time.Time `yaml:"time"`
 }
 
 // DBLogLevel is a redefinition of GORM logger.LogLevel which satisfies

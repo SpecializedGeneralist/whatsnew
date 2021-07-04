@@ -84,11 +84,23 @@
                 "type": "string"
               }
             },
+            "omit_items_published_before": {
+              "type": "object",
+              "properties": {
+                "enabled": {
+                  "type": "boolean"
+                },
+                "time": {
+                  "type": "string"
+                }
+              },
+              "required": ["enabled", "time"]
+            },
             "loglevel": {
               "$ref": "#/definitions/loglevel"
             }
           },
-          "required": ["concurrency", "new_web_resource_jobs", "loglevel"]
+          "required": ["concurrency", "new_web_resource_jobs", "omit_items_published_before", "loglevel"]
         }
       },
       "required": ["feed_fetcher"]

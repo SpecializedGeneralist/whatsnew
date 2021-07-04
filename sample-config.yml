@@ -14,4 +14,7 @@ workers:
   feed_fetcher:
     concurrency: 10
     new_web_resource_jobs: ['WebScraper']
+    omit_items_published_before:
+      enabled: true
+      time: '2021-07-01T00:00:00Z'
     loglevel: 'info'
