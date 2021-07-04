@@ -7,5 +7,5 @@ faktory:
   queues: ['default']
 feeds_scheduling:
   time_interval: '5m'
-  jobs: ['FetchFeed']
+  jobs: ['FeedFetcher']
   loglevel: 'info'
