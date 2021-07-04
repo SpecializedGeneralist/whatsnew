@@ -39,9 +39,12 @@
           "items": {
             "type": "string"
           }
+        },
+        "loglevel": {
+          "$ref": "#/definitions/loglevel"
         }
       },
-      "required": ["url", "queues"]
+      "required": ["url", "queues", "loglevel"]
     },
     "feeds_scheduling": {
       "description": "Settings for periodic scheduling of jobs for processing all feeds.",

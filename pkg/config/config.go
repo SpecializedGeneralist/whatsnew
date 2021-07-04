@@ -31,8 +31,9 @@ type DB struct {
 
 // Faktory holds Faktory settings and generic workers properties.
 type Faktory struct {
-	URL    string   `yaml:"url"`
-	Queues []string `yaml:"queues"`
+	URL      string   `yaml:"url"`
+	Queues   []string `yaml:"queues"`
+	LogLevel LogLevel `yaml:"loglevel"`
 }
 
 // FeedsScheduling holds settings for scheduling feeds for further processing.

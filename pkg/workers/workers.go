@@ -5,6 +5,7 @@ import (
 	"github.com/SpecializedGeneralist/whatsnew/pkg/config"
 	"github.com/contribsys/faktory/client"
 	"github.com/contribsys/faktory_worker_go"
+	"github.com/rs/zerolog"
 	"os"
 )
 
@@ -20,6 +21,7 @@ func NewManager(conf config.Faktory) (*faktory_worker.Manager, error) {
 	}
 	mgr := faktory_worker.NewManager()
 	mgr.ProcessStrictPriorityQueues(conf.Queues...)
+	mgr.Logger = NewFaktoryLogger(zerolog.Level(conf.LogLevel))
 	return mgr, nil
 }
 

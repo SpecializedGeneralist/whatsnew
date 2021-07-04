@@ -61,8 +61,9 @@ func TestFromYAMLFile(t *testing.T) {
 				LogLevel: config.DBLogLevel(gormlogger.Warn),
 			},
 			Faktory: config.Faktory{
-				URL:    "tcp://faktory:faktory@localhost:7419",
-				Queues: []string{"default"},
+				URL:      "tcp://faktory:faktory@localhost:7419",
+				Queues:   []string{"default"},
+				LogLevel: config.LogLevel(zerolog.InfoLevel),
 			},
 			FeedsScheduling: config.FeedsScheduling{
 				TimeInterval: 5 * time.Minute,
