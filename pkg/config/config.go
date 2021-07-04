@@ -54,6 +54,7 @@ type FeedFetcher struct {
 	Concurrency              int                      `yaml:"concurrency"`
 	NewWebResourceJobs       []string                 `yaml:"new_web_resource_jobs"`
 	OmitItemsPublishedBefore OmitItemsPublishedBefore `yaml:"omit_items_published_before"`
+	LanguageFilter           []string                 `yaml:"language_filter"`
 	LogLevel                 LogLevel                 `yaml:"loglevel"`
 }
 

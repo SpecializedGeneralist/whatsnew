@@ -17,4 +17,5 @@ workers:
     omit_items_published_before:
       enabled: true
       time: '2021-07-01T00:00:00Z'
+    language_filter: ['en', 'es']
     loglevel: 'info'

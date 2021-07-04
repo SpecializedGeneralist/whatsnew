@@ -78,7 +78,8 @@ func TestFromYAMLFile(t *testing.T) {
 						Enabled: true,
 						Time:    time.Date(2021, time.July, 1, 0, 0, 0, 0, time.UTC),
 					},
-					LogLevel: config.LogLevel(zerolog.InfoLevel),
+					LanguageFilter: []string{"en", "es"},
+					LogLevel:       config.LogLevel(zerolog.InfoLevel),
 				},
 			},
 		}

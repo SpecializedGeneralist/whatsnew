@@ -96,11 +96,17 @@
               },
               "required": ["enabled", "time"]
             },
+            "language_filter": {
+              "type": "array",
+              "items": {
+                "type": "string"
+              }
+            },
             "loglevel": {
               "$ref": "#/definitions/loglevel"
             }
           },
-          "required": ["concurrency", "new_web_resource_jobs", "omit_items_published_before", "loglevel"]
+          "required": ["concurrency", "new_web_resource_jobs", "language_filter", "omit_items_published_before", "loglevel"]
         }
       },
       "required": ["feed_fetcher"]
