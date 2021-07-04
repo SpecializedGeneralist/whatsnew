@@ -66,9 +66,35 @@
         }
       },
       "required": ["time_interval", "jobs", "loglevel"]
+    },
+    "workers": {
+      "description": "Settings for specific workers.",
+      "type": "object",
+      "properties": {
+        "feed_fetcher": {
+          "description": "Settings for the feed-fetcher worker.",
+          "type": "object",
+          "properties": {
+            "concurrency": {
+              "type": "integer"
+            },
+            "new_web_resource_jobs": {
+              "type": "array",
+              "items": {
+                "type": "string"
+              }
+            },
+            "loglevel": {
+              "$ref": "#/definitions/loglevel"
+            }
+          },
+          "required": ["concurrency", "new_web_resource_jobs", "loglevel"]
+        }
+      },
+      "required": ["feed_fetcher"]
     }
   },
-  "required": ["db", "faktory", "feeds_scheduling"],
+  "required": ["db", "faktory", "feeds_scheduling", "workers"],
   "definitions": {
     "loglevel": {
       "description": "Log level. The value is compatible with zerolog.Level.",

@@ -19,6 +19,7 @@ type Config struct {
 	DB              DB              `yaml:"db"`
 	Faktory         Faktory         `yaml:"faktory"`
 	FeedsScheduling FeedsScheduling `yaml:"feeds_scheduling"`
+	Workers         Workers         `yaml:"workers"`
 }
 
 // DB holds database settings.
@@ -41,6 +42,18 @@ type FeedsScheduling struct {
 	TimeInterval time.Duration `yaml:"time_interval"`
 	Jobs         []string      `yaml:"jobs"`
 	LogLevel     LogLevel      `yaml:"loglevel"`
+}
+
+// Workers holds settings for the various workers.
+type Workers struct {
+	FeedFetcher FeedFetcher `yaml:"feed_fetcher"`
+}
+
+// FeedFetcher holds settings for the FeedFetcher worker.
+type FeedFetcher struct {
+	Concurrency        int      `yaml:"concurrency"`
+	NewWebResourceJobs []string `yaml:"new_web_resource_jobs"`
+	LogLevel           LogLevel `yaml:"loglevel"`
 }
 
 // DBLogLevel is a redefinition of GORM logger.LogLevel which satisfies

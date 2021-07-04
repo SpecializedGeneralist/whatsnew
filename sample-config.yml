@@ -10,3 +10,8 @@ feeds_scheduling:
   time_interval: '5m'
   jobs: ['FeedFetcher']
   loglevel: 'info'
+workers:
+  feed_fetcher:
+    concurrency: 10
+    new_web_resource_jobs: ['WebScraper']
+    loglevel: 'info'

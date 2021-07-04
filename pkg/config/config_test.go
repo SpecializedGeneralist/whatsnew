@@ -70,6 +70,13 @@ func TestFromYAMLFile(t *testing.T) {
 				Jobs:         []string{"FeedFetcher"},
 				LogLevel:     config.LogLevel(zerolog.InfoLevel),
 			},
+			Workers: config.Workers{
+				FeedFetcher: config.FeedFetcher{
+					Concurrency:        10,
+					NewWebResourceJobs: []string{"WebScraper"},
+					LogLevel:           config.LogLevel(zerolog.InfoLevel),
+				},
+			},
 		}
 		assert.Equal(t, expected, *conf)
 	})
