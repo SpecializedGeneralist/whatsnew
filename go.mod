@@ -12,6 +12,7 @@ require (
 	github.com/andybalholm/cascadia v1.2.0 // indirect
 	github.com/contribsys/faktory v1.5.1
 	github.com/contribsys/faktory_worker_go v1.4.2
+	github.com/jackc/pgconn v1.8.1
 	github.com/jackc/pgproto3/v2 v2.1.0 // indirect
 	github.com/json-iterator/go v1.1.11 // indirect
 	github.com/lib/pq v1.6.0 // indirect
