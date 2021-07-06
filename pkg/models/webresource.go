@@ -13,5 +13,5 @@ type WebResource struct {
 	URL string `gorm:"not null;uniqueIndex"`
 
 	// FeedItem allows the has-one relation with a models.FeedItem.
-	FeedItem FeedItem
+	FeedItem *FeedItem
 }
