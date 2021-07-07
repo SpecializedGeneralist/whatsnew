@@ -10,7 +10,7 @@ import (
 	"fmt"
 	"github.com/SpecializedGeneralist/whatsnew/pkg/config"
 	"github.com/SpecializedGeneralist/whatsnew/pkg/models"
-	"github.com/contribsys/faktory/client"
+	faktory "github.com/contribsys/faktory/client"
 	"github.com/rs/zerolog"
 	"github.com/rs/zerolog/log"
 	"gorm.io/gorm"
@@ -22,12 +22,12 @@ import (
 type FeedsScheduling struct {
 	conf config.FeedsScheduling
 	db   *gorm.DB
-	fk   *client.Client
+	fk   *faktory.Client
 	log  zerolog.Logger
 }
 
 // New creates a new FeedsScheduling.
-func New(conf config.FeedsScheduling, db *gorm.DB, fk *client.Client) *FeedsScheduling {
+func New(conf config.FeedsScheduling, db *gorm.DB, fk *faktory.Client) *FeedsScheduling {
 	return &FeedsScheduling{
 		conf: conf,
 		db:   db,
@@ -107,7 +107,7 @@ func (fs *FeedsScheduling) scheduleFeedJobs(feed *models.Feed) error {
 	// is canceled in the meanwhile.
 
 	for _, jobType := range fs.conf.Jobs {
-		job := client.NewJob(jobType, feed.ID)
+		job := faktory.NewJob(jobType, feed.ID)
 		job.Retry = 0 // No retries, since it will be called periodically
 
 		fs.log.Trace().Interface("job", job).Msg("schedule new job")

@@ -3,7 +3,7 @@ package workers
 import (
 	"fmt"
 	"github.com/SpecializedGeneralist/whatsnew/pkg/config"
-	"github.com/contribsys/faktory/client"
+	faktory "github.com/contribsys/faktory/client"
 	"github.com/contribsys/faktory_worker_go"
 	"github.com/rs/zerolog"
 	"os"
@@ -30,12 +30,12 @@ func NewManager(conf config.Faktory) (*faktory_worker.Manager, error) {
 // It sets the FAKTORY_URL variable globally: for this reason, you cannot
 // create multiple faktory managers or clients pointing to different servers
 // from the same instance of the program.
-func NewClient(conf config.Faktory) (*client.Client, error) {
+func NewClient(conf config.Faktory) (*faktory.Client, error) {
 	err := setFaktoryURL(conf.URL)
 	if err != nil {
 		return nil, err
 	}
-	cl, err := client.Open()
+	cl, err := faktory.Open()
 	if err != nil {
 		return nil, fmt.Errorf("error opening faktory client: %w", err)
 	}
