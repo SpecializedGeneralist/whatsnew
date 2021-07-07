@@ -11,6 +11,7 @@ var allModels = []interface{}{
 	WebResource{},
 	Feed{},
 	FeedItem{},
+	PendingJob{},
 }
 
 // AutoMigrate performs the automatic migration of all GORM models.
