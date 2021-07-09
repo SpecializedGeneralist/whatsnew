@@ -18,8 +18,11 @@ var CmdScheduleFeeds = &command.Command{
 	Name:      "schedule-feeds",
 	UsageLine: "schedule-feeds",
 	Short:     "periodically schedule all feeds for fetching",
-	Long:      "", // TODO: ...
-	Run:       Run,
+	Long: `
+The command "schedule-feeds" starts a process which periodically fetches
+all enabled Feeds from the database and schedules new jobs for each of them.
+`,
+	Run: Run,
 }
 
 // Run runs the command "whatsnew schedule-feeds".
