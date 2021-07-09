@@ -16,7 +16,7 @@ type FeedItem struct {
 	FeedID uint `gorm:"not null"`
 
 	// WebResourceID allows the has-one relation with a WebResource.
-	WebResourceID uint `gorm:"not null;uniqueIndex;constraint:OnDelete:CASCADE"`
+	WebResourceID uint `gorm:"not null;uniqueIndex"`
 
 	Title       string `gorm:"not null"`
 	Description string `gorm:"not null"`
