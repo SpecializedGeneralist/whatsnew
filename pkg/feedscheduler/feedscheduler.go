@@ -2,7 +2,7 @@
 // Use of this source code is governed by a BSD-style
 // license that can be found in the LICENSE file.
 
-package feedscheduling
+package feedscheduler
 
 import (
 	"context"
@@ -17,18 +17,18 @@ import (
 	"time"
 )
 
-// FeedsScheduling implements the mechanism for periodically fetching all
+// FeedScheduler implements the mechanism for periodically fetching all
 // enabled Feeds and scheduling a set of jobs for each Feed.
-type FeedsScheduling struct {
-	conf config.FeedsScheduling
+type FeedScheduler struct {
+	conf config.FeedScheduler
 	db   *gorm.DB
 	fk   *faktory.Client
 	log  zerolog.Logger
 }
 
-// New creates a new FeedsScheduling.
-func New(conf config.FeedsScheduling, db *gorm.DB, fk *faktory.Client) *FeedsScheduling {
-	return &FeedsScheduling{
+// New creates a new FeedScheduler.
+func New(conf config.FeedScheduler, db *gorm.DB, fk *faktory.Client) *FeedScheduler {
+	return &FeedScheduler{
 		conf: conf,
 		db:   db,
 		fk:   fk,
@@ -40,12 +40,12 @@ const batchSize = 100
 
 var errStop = errors.New("stop")
 
-// Run starts the feeds scheduling process.
+// Run starts the feed scheduling process.
 //
 // This function should ideally run forever, unless an error is encountered
 // or the context is done.
-func (fs *FeedsScheduling) Run(ctx context.Context) (err error) {
-	fs.log.Info().Msg("feeds scheduling starts")
+func (fs *FeedScheduler) Run(ctx context.Context) (err error) {
+	fs.log.Info().Msg("feed scheduling starts")
 
 Loop:
 	for {
@@ -64,15 +64,15 @@ Loop:
 	}
 
 	if err != nil && err != errStop {
-		fs.log.Err(err).Msg("feeds scheduling ends with error")
+		fs.log.Err(err).Msg("feed scheduling ends with error")
 		return err
 	}
 
-	fs.log.Info().Msg("feeds scheduling ends")
+	fs.log.Info().Msg("feed scheduling ends")
 	return nil
 }
 
-func (fs *FeedsScheduling) findAndScheduleFeeds(ctx context.Context) error {
+func (fs *FeedScheduler) findAndScheduleFeeds(ctx context.Context) error {
 	fs.log.Info().Msg("scheduling all feeds")
 
 	query := fs.db.WithContext(ctx).
@@ -87,7 +87,7 @@ func (fs *FeedsScheduling) findAndScheduleFeeds(ctx context.Context) error {
 	return res.Error
 }
 
-func (fs *FeedsScheduling) processBatch(ctx context.Context, feeds []*models.Feed) error {
+func (fs *FeedScheduler) processBatch(ctx context.Context, feeds []*models.Feed) error {
 	for _, feed := range feeds {
 		if ctxIsDone(ctx) {
 			fs.log.Warn().Msg("context done")
@@ -101,7 +101,7 @@ func (fs *FeedsScheduling) processBatch(ctx context.Context, feeds []*models.Fee
 	return nil
 }
 
-func (fs *FeedsScheduling) scheduleFeedJobs(feed *models.Feed) error {
+func (fs *FeedScheduler) scheduleFeedJobs(feed *models.Feed) error {
 	// The Context is ignored on purpose here, so that it is more likely that
 	// the full set of jobs is scheduled for each feed, even if the context
 	// is canceled in the meanwhile.

@@ -9,7 +9,7 @@ import (
 	"github.com/SpecializedGeneralist/whatsnew/pkg/cli/command"
 	"github.com/SpecializedGeneralist/whatsnew/pkg/config"
 	"github.com/SpecializedGeneralist/whatsnew/pkg/database"
-	"github.com/SpecializedGeneralist/whatsnew/pkg/feedscheduling"
+	"github.com/SpecializedGeneralist/whatsnew/pkg/feedscheduler"
 	"github.com/SpecializedGeneralist/whatsnew/pkg/workers"
 )
 
@@ -51,6 +51,6 @@ func Run(ctx context.Context, conf *config.Config, args []string) (err error) {
 		}
 	}()
 
-	fs := feedscheduling.New(conf.FeedsScheduling, db, fk)
+	fs := feedscheduler.New(conf.FeedScheduler, db, fk)
 	return fs.Run(ctx)
 }

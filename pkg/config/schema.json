@@ -46,7 +46,7 @@
       },
       "required": ["url", "queues", "loglevel"]
     },
-    "feeds_scheduling": {
+    "feed_scheduler": {
       "description": "Settings for periodic scheduling of jobs for processing all feeds.",
       "type": "object",
       "properties": {
@@ -115,7 +115,7 @@
       "required": ["feed_fetcher"]
     }
   },
-  "required": ["db", "faktory", "feeds_scheduling", "workers"],
+  "required": ["db", "faktory", "feed_scheduler", "workers"],
   "definitions": {
     "loglevel": {
       "description": "Log level. The value is compatible with zerolog.Level.",

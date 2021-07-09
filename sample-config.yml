@@ -6,7 +6,7 @@ faktory:
   url: 'tcp://faktory:faktory@localhost:7419'
   queues: ['default']
   loglevel: 'info'
-feeds_scheduling:
+feed_scheduler:
   time_interval: '5m'
   jobs: ['FeedFetcher']
   loglevel: 'info'

@@ -65,7 +65,7 @@ func TestFromYAMLFile(t *testing.T) {
 				Queues:   []string{"default"},
 				LogLevel: config.LogLevel(zerolog.InfoLevel),
 			},
-			FeedsScheduling: config.FeedsScheduling{
+			FeedScheduler: config.FeedScheduler{
 				TimeInterval: 5 * time.Minute,
 				Jobs:         []string{"FeedFetcher"},
 				LogLevel:     config.LogLevel(zerolog.InfoLevel),

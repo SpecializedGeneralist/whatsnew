@@ -16,10 +16,10 @@ import (
 
 // Config holds whatsnew application-wide configuration settings.
 type Config struct {
-	DB              DB              `yaml:"db"`
-	Faktory         Faktory         `yaml:"faktory"`
-	FeedsScheduling FeedsScheduling `yaml:"feeds_scheduling"`
-	Workers         Workers         `yaml:"workers"`
+	DB            DB            `yaml:"db"`
+	Faktory       Faktory       `yaml:"faktory"`
+	FeedScheduler FeedScheduler `yaml:"feed_scheduler"`
+	Workers       Workers       `yaml:"workers"`
 }
 
 // DB holds database settings.
@@ -37,8 +37,8 @@ type Faktory struct {
 	LogLevel LogLevel `yaml:"loglevel"`
 }
 
-// FeedsScheduling holds settings for scheduling feeds for further processing.
-type FeedsScheduling struct {
+// FeedScheduler holds settings for scheduling feeds for further processing.
+type FeedScheduler struct {
 	TimeInterval time.Duration `yaml:"time_interval"`
 	Jobs         []string      `yaml:"jobs"`
 	LogLevel     LogLevel      `yaml:"loglevel"`
