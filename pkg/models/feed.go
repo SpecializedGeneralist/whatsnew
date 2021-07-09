@@ -25,6 +25,10 @@ type Feed struct {
 	// Counter of consecutive fetching failures.
 	FailuresCount int `gorm:"not null;default:0"`
 
+	// When FailuresCount is not 0, this field should contain the error message
+	// that caused the last failure. It is mostly useful for manual inspection.
+	LastError sql.NullString
+
 	// A Feed has many models.FeedItem models.
 	FeedItems []FeedItem `gorm:"constraint:OnDelete:CASCADE"`
 }
