@@ -53,6 +53,7 @@ type Workers struct {
 type FeedFetcher struct {
 	Concurrency              int                      `yaml:"concurrency"`
 	NewWebResourceJobs       []string                 `yaml:"new_web_resource_jobs"`
+	MaxAllowedFailures       int                      `yaml:"max_allowed_failures"`
 	OmitItemsPublishedBefore OmitItemsPublishedBefore `yaml:"omit_items_published_before"`
 	LanguageFilter           []string                 `yaml:"language_filter"`
 	LogLevel                 LogLevel                 `yaml:"loglevel"`

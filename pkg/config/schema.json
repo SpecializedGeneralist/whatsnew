@@ -84,6 +84,9 @@
                 "type": "string"
               }
             },
+            "max_allowed_failures": {
+              "type": "integer"
+            },
             "omit_items_published_before": {
               "type": "object",
               "properties": {
@@ -106,7 +109,7 @@
               "$ref": "#/definitions/loglevel"
             }
           },
-          "required": ["concurrency", "new_web_resource_jobs", "language_filter", "omit_items_published_before", "loglevel"]
+          "required": ["concurrency", "new_web_resource_jobs", "language_filter", "max_allowed_failures", "omit_items_published_before", "loglevel"]
         }
       },
       "required": ["feed_fetcher"]
