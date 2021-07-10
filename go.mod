@@ -14,6 +14,7 @@ require (
 	github.com/contribsys/faktory v1.5.1
 	github.com/contribsys/faktory_worker_go v1.4.2
 	github.com/jackc/pgconn v1.9.0
+	github.com/jackc/pgtype v1.8.0
 	github.com/jackc/pgx/v4 v4.12.0 // indirect
 	github.com/json-iterator/go v1.1.11 // indirect
 	github.com/mmcdole/gofeed v1.1.3
