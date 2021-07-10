@@ -14,4 +14,7 @@ type WebResource struct {
 
 	// FeedItem allows the has-one relation with a models.FeedItem.
 	FeedItem *FeedItem `gorm:"constraint:OnDelete:CASCADE"`
+
+	// GDELTEvent allows the has-one relation with a models.GDELTEvent.
+	GDELTEvent *GDELTEvent `gorm:"constraint:OnDelete:CASCADE"`
 }

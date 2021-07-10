@@ -11,6 +11,7 @@ var allModels = []interface{}{
 	WebResource{},
 	Feed{},
 	FeedItem{},
+	GDELTEvent{},
 	PendingJob{},
 }
 
