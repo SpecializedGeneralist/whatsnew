@@ -10,6 +10,11 @@ feed_scheduler:
   time_interval: '5m'
   jobs: ['FeedFetcher']
   loglevel: 'info'
+gdelt_fetcher:
+  time_interval: '5m'
+  event_root_code_whitelist: []
+  new_web_resource_jobs: ['WebScraper']
+  loglevel: 'info'
 workers:
   feed_fetcher:
     concurrency: 10

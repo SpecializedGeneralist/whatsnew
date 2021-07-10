@@ -19,6 +19,7 @@ type Config struct {
 	DB            DB            `yaml:"db"`
 	Faktory       Faktory       `yaml:"faktory"`
 	FeedScheduler FeedScheduler `yaml:"feed_scheduler"`
+	GDELTFetcher  GDELTFetcher  `yaml:"gdelt_fetcher"`
 	Workers       Workers       `yaml:"workers"`
 }
 
@@ -42,6 +43,15 @@ type FeedScheduler struct {
 	TimeInterval time.Duration `yaml:"time_interval"`
 	Jobs         []string      `yaml:"jobs"`
 	LogLevel     LogLevel      `yaml:"loglevel"`
+}
+
+// GDELTFetcher holds settings for fetching GDELT events and extracting news
+// report URLs for further processing.
+type GDELTFetcher struct {
+	TimeInterval           time.Duration `yaml:"time_interval"`
+	EventRootCodeWhitelist []string      `yaml:"event_root_code_whitelist"`
+	NewWebResourceJobs     []string      `yaml:"new_web_resource_jobs"`
+	LogLevel               LogLevel      `yaml:"loglevel"`
 }
 
 // Workers holds settings for the various workers.

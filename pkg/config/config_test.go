@@ -70,6 +70,12 @@ func TestFromYAMLFile(t *testing.T) {
 				Jobs:         []string{"FeedFetcher"},
 				LogLevel:     config.LogLevel(zerolog.InfoLevel),
 			},
+			GDELTFetcher: config.GDELTFetcher{
+				TimeInterval:           5 * time.Minute,
+				EventRootCodeWhitelist: make([]string, 0),
+				NewWebResourceJobs:     []string{"WebScraper"},
+				LogLevel:               config.LogLevel(zerolog.InfoLevel),
+			},
 			Workers: config.Workers{
 				FeedFetcher: config.FeedFetcher{
 					Concurrency:        10,
