@@ -12,6 +12,8 @@ var allModels = []interface{}{
 	Feed{},
 	FeedItem{},
 	GDELTEvent{},
+	TwitterSource{},
+	Tweet{},
 	PendingJob{},
 }
 

@@ -17,4 +17,7 @@ type WebResource struct {
 
 	// GDELTEvent allows the has-one relation with a models.GDELTEvent.
 	GDELTEvent *GDELTEvent `gorm:"constraint:OnDelete:CASCADE"`
+
+	// Tweet allows the has-one relation with a models.Tweet.
+	Tweet *Tweet `gorm:"constraint:OnDelete:CASCADE"`
 }
