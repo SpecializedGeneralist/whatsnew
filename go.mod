@@ -7,10 +7,9 @@ module github.com/SpecializedGeneralist/whatsnew
 go 1.16
 
 require (
-	github.com/PuerkitoBio/goquery v1.7.0 // indirect
+	github.com/PuerkitoBio/goquery v1.7.1 // indirect
 	github.com/SpecializedGeneralist/gdelt v0.3.0
 	github.com/abadojack/whatlanggo v1.0.1
-	github.com/andybalholm/cascadia v1.2.0 // indirect
 	github.com/contribsys/faktory v1.5.1
 	github.com/contribsys/faktory_worker_go v1.4.2
 	github.com/jackc/pgconn v1.9.0
@@ -22,7 +21,7 @@ require (
 	github.com/n0madic/twitter-scraper v0.0.0-20210702115549-ff8eeef173b8
 	github.com/rs/zerolog v1.23.0
 	github.com/stretchr/testify v1.7.0
-	golang.org/x/net v0.0.0-20210614182718-04defd469f4e // indirect
+	golang.org/x/crypto v0.0.0-20210711020723-a769d52b0f97 // indirect
 	gopkg.in/yaml.v3 v3.0.0-20210107192922-496545a6307b
 	gorm.io/datatypes v1.0.1
 	gorm.io/driver/postgres v1.1.0
