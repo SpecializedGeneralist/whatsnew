@@ -10,6 +10,10 @@ feed_scheduler:
   time_interval: '5m'
   jobs: ['FeedFetcher']
   loglevel: 'info'
+twitter_scheduler:
+  time_interval: '5m'
+  jobs: ['TwitterScraper']
+  loglevel: 'info'
 gdelt_fetcher:
   time_interval: '5m'
   event_root_code_whitelist: []

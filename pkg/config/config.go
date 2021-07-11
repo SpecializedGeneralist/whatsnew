@@ -16,11 +16,12 @@ import (
 
 // Config holds whatsnew application-wide configuration settings.
 type Config struct {
-	DB            DB            `yaml:"db"`
-	Faktory       Faktory       `yaml:"faktory"`
-	FeedScheduler FeedScheduler `yaml:"feed_scheduler"`
-	GDELTFetcher  GDELTFetcher  `yaml:"gdelt_fetcher"`
-	Workers       Workers       `yaml:"workers"`
+	DB               DB               `yaml:"db"`
+	Faktory          Faktory          `yaml:"faktory"`
+	FeedScheduler    FeedScheduler    `yaml:"feed_scheduler"`
+	TwitterScheduler TwitterScheduler `yaml:"twitter_scheduler"`
+	GDELTFetcher     GDELTFetcher     `yaml:"gdelt_fetcher"`
+	Workers          Workers          `yaml:"workers"`
 }
 
 // DB holds database settings.
@@ -40,6 +41,14 @@ type Faktory struct {
 
 // FeedScheduler holds settings for scheduling feeds for further processing.
 type FeedScheduler struct {
+	TimeInterval time.Duration `yaml:"time_interval"`
+	Jobs         []string      `yaml:"jobs"`
+	LogLevel     LogLevel      `yaml:"loglevel"`
+}
+
+// TwitterScheduler holds settings for scheduling twitter sources for further
+// processing.
+type TwitterScheduler struct {
 	TimeInterval time.Duration `yaml:"time_interval"`
 	Jobs         []string      `yaml:"jobs"`
 	LogLevel     LogLevel      `yaml:"loglevel"`

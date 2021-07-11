@@ -70,6 +70,11 @@ func TestFromYAMLFile(t *testing.T) {
 				Jobs:         []string{"FeedFetcher"},
 				LogLevel:     config.LogLevel(zerolog.InfoLevel),
 			},
+			TwitterScheduler: config.TwitterScheduler{
+				TimeInterval: 5 * time.Minute,
+				Jobs:         []string{"TwitterScraper"},
+				LogLevel:     config.LogLevel(zerolog.InfoLevel),
+			},
 			GDELTFetcher: config.GDELTFetcher{
 				TimeInterval:           5 * time.Minute,
 				EventRootCodeWhitelist: make([]string, 0),

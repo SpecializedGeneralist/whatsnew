@@ -67,6 +67,27 @@
       },
       "required": ["time_interval", "jobs", "loglevel"]
     },
+    "twitter_scheduler": {
+      "description": "Settings for periodic scheduling of jobs for processing all twitter sources.",
+      "type": "object",
+      "properties": {
+        "time_interval": {
+          "description": "How frequently the 'jobs' should be scheduled, for each enabled twitter source. The value must be compatible with Go time.Duration.",
+          "type": "string"
+        },
+        "jobs": {
+          "description": "List of each job type to be periodically scheduled.",
+          "type": "array",
+          "items": {
+            "type": "string"
+          }
+        },
+        "loglevel": {
+          "$ref": "#/definitions/loglevel"
+        }
+      },
+      "required": ["time_interval", "jobs", "loglevel"]
+    },
     "gdelt_fetcher": {
       "description": "Settings for periodic fetching of GDELT events and news reports extraction for further processing.",
       "type": "object",
@@ -142,7 +163,7 @@
       "required": ["feed_fetcher"]
     }
   },
-  "required": ["db", "faktory", "feed_scheduler", "gdelt_fetcher", "workers"],
+  "required": ["db", "faktory", "feed_scheduler", "twitter_scheduler", "gdelt_fetcher", "workers"],
   "definitions": {
     "loglevel": {
       "description": "Log level. The value is compatible with zerolog.Level.",
