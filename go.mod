@@ -19,6 +19,7 @@ require (
 	github.com/json-iterator/go v1.1.11 // indirect
 	github.com/mmcdole/gofeed v1.1.3
 	github.com/mmcdole/goxpp v0.0.0-20200921145534-2f3784f67354 // indirect
+	github.com/n0madic/twitter-scraper v0.0.0-20210702115549-ff8eeef173b8
 	github.com/rs/zerolog v1.23.0
 	github.com/stretchr/testify v1.7.0
 	golang.org/x/net v0.0.0-20210614182718-04defd469f4e // indirect
