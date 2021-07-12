@@ -93,6 +93,17 @@ func TestFromYAMLFile(t *testing.T) {
 					LanguageFilter: []string{"en", "es"},
 					LogLevel:       config.LogLevel(zerolog.InfoLevel),
 				},
+				TwitterScraper: config.TwitterScraper{
+					Concurrency:       10,
+					MaxTweetsNumber:   1000,
+					NewWebArticleJobs: []string{"Vectorizer"},
+					OmitTweetsPublishedBefore: config.OmitItemsPublishedBefore{
+						Enabled: true,
+						Time:    time.Date(2021, time.July, 1, 0, 0, 0, 0, time.UTC),
+					},
+					LanguageFilter: []string{"en", "es"},
+					LogLevel:       config.LogLevel(zerolog.InfoLevel),
+				},
 			},
 		}
 		assert.Equal(t, expected, *conf)

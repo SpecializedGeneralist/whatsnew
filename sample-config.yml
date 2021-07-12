@@ -29,3 +29,12 @@ workers:
       time: '2021-07-01T00:00:00Z'
     language_filter: ['en', 'es']
     loglevel: 'info'
+  twitter_scraper:
+    concurrency: 10
+    max_tweets_number: 1000
+    new_web_article_jobs: ['Vectorizer']
+    omit_tweets_published_before:
+      enabled: true
+      time: '2021-07-01T00:00:00Z'
+    language_filter: ['en', 'es']
+    loglevel: 'info'

@@ -65,7 +65,8 @@ type GDELTFetcher struct {
 
 // Workers holds settings for the various workers.
 type Workers struct {
-	FeedFetcher FeedFetcher `yaml:"feed_fetcher"`
+	FeedFetcher    FeedFetcher    `yaml:"feed_fetcher"`
+	TwitterScraper TwitterScraper `yaml:"twitter_scraper"`
 }
 
 // FeedFetcher holds settings for the FeedFetcher worker.
@@ -76,6 +77,16 @@ type FeedFetcher struct {
 	OmitItemsPublishedBefore OmitItemsPublishedBefore `yaml:"omit_items_published_before"`
 	LanguageFilter           []string                 `yaml:"language_filter"`
 	LogLevel                 LogLevel                 `yaml:"loglevel"`
+}
+
+// TwitterScraper holds settings for the TwitterScraper worker.
+type TwitterScraper struct {
+	Concurrency               int                      `yaml:"concurrency"`
+	MaxTweetsNumber           int                      `yaml:"max_tweets_number"`
+	NewWebArticleJobs         []string                 `yaml:"new_web_article_jobs"`
+	OmitTweetsPublishedBefore OmitItemsPublishedBefore `yaml:"omit_tweets_published_before"`
+	LanguageFilter            []string                 `yaml:"language_filter"`
+	LogLevel                  LogLevel                 `yaml:"loglevel"`
 }
 
 // OmitItemsPublishedBefore is part of FeedFetcher settings.
