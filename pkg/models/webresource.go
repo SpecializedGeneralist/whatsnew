@@ -12,6 +12,9 @@ type WebResource struct {
 	// The unique URL of the web resource.
 	URL string `gorm:"not null;uniqueIndex"`
 
+	// A WebArticle extends the WebResource with the scraped content.
+	WebArticle *WebArticle `gorm:"constraint:OnDelete:CASCADE"`
+
 	// FeedItem allows the has-one relation with a models.FeedItem.
 	FeedItem *FeedItem `gorm:"constraint:OnDelete:CASCADE"`
 

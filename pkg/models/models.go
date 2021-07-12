@@ -9,6 +9,7 @@ import "gorm.io/gorm"
 // allModels is the list of all GORM models, used for auto-migration.
 var allModels = []interface{}{
 	WebResource{},
+	WebArticle{},
 	Feed{},
 	FeedItem{},
 	GDELTEvent{},
