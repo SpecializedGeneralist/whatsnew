@@ -100,7 +100,7 @@ func (gf *GDELTFetcher) fetchAndProcessEvents(ctx context.Context) error {
 		return js.CreatePendingJobs(tx)
 	})
 	if err != nil {
-		return nil
+		return err
 	}
 
 	return js.PushJobsWithClientAndDeletePendingJobs(gf.fk, gf.db)
