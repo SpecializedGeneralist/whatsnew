@@ -104,6 +104,14 @@ func TestFromYAMLFile(t *testing.T) {
 					LanguageFilter: []string{"en", "es"},
 					LogLevel:       config.LogLevel(zerolog.InfoLevel),
 				},
+				WebScraper: config.WebScraper{
+					Concurrency:       10,
+					NewWebArticleJobs: []string{"Vectorizer"},
+					LanguageFilter:    []string{"en", "es"},
+					RequestTimeout:    30 * time.Second,
+					UserAgent:         "WhatsNew/0.0.0",
+					LogLevel:          config.LogLevel(zerolog.InfoLevel),
+				},
 			},
 		}
 		assert.Equal(t, expected, *conf)

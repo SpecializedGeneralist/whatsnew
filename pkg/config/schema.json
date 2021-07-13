@@ -198,9 +198,40 @@
             }
           },
           "required": ["concurrency", "max_tweets_number", "new_web_article_jobs", "language_filter", "omit_tweets_published_before", "loglevel"]
+        },
+        "web_scraper": {
+          "description": "Settings for the web-scraper worker.",
+          "type": "object",
+          "properties": {
+            "concurrency": {
+              "type": "integer"
+            },
+            "new_web_article_jobs": {
+              "type": "array",
+              "items": {
+                "type": "string"
+              }
+            },
+            "language_filter": {
+              "type": "array",
+              "items": {
+                "type": "string"
+              }
+            },
+            "request_timeout": {
+              "type": "string"
+            },
+            "user_agent": {
+              "type": "string"
+            },
+            "loglevel": {
+              "$ref": "#/definitions/loglevel"
+            }
+          },
+          "required": ["concurrency", "new_web_article_jobs", "language_filter", "request_timeout", "user_agent", "loglevel"]
         }
       },
-      "required": ["feed_fetcher", "twitter_scraper"]
+      "required": ["feed_fetcher", "twitter_scraper", "web_scraper"]
     }
   },
   "required": ["db", "faktory", "feed_scheduler", "twitter_scheduler", "gdelt_fetcher", "workers"],
