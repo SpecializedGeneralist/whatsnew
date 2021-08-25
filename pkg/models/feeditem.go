@@ -13,7 +13,7 @@ type FeedItem struct {
 	Model
 
 	// Association to the Feed this item belongs to.
-	FeedID uint `gorm:"not null"`
+	FeedID uint `gorm:"not null;index"`
 
 	// WebResourceID allows the has-one relation with a WebResource.
 	WebResourceID uint `gorm:"not null;uniqueIndex"`
