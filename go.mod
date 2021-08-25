@@ -4,7 +4,7 @@
 
 module github.com/SpecializedGeneralist/whatsnew
 
-go 1.16
+go 1.17
 
 require (
 	github.com/PuerkitoBio/goquery v1.7.1 // indirect
