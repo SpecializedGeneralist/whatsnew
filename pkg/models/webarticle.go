@@ -21,4 +21,9 @@ type WebArticle struct {
 	ScrapedPublishDate sql.NullTime
 	Language           string    `gorm:"not null"`
 	PublishDate        time.Time `gorm:"not null"`
+
+	// HasVector reports whether this WebArticle is successfully vectorized,
+	// having an associated vector stored on a separate system (in the
+	// default implementation, an HNSW server).
+	HasVector bool `gorm:"not null;default:false"`
 }
