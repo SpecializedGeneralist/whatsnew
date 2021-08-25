@@ -229,9 +229,43 @@
             }
           },
           "required": ["concurrency", "new_web_article_jobs", "language_filter", "request_timeout", "user_agent", "loglevel"]
+        },
+        "zero_shot_classifier": {
+          "description": "Settings for the zero-shot classifier worker.",
+          "type": "object",
+          "properties": {
+            "concurrency": {
+              "type": "integer"
+            },
+            "classified_web_article_jobs": {
+              "type": "array",
+              "items": {
+                "type": "string"
+              }
+            },
+            "spago_bart_server": {
+              "$ref": "#/definitions/grpc_server"
+            },
+            "hypothesis_template": {
+              "type": "string"
+            },
+            "possible_labels": {
+              "type": "array",
+              "items": {
+                "type": "string"
+              }
+            },
+            "multi_class": {
+              "type": "boolean"
+            },
+            "loglevel": {
+              "$ref": "#/definitions/loglevel"
+            }
+          },
+          "required": ["concurrency", "classified_web_article_jobs", "spago_bart_server", "hypothesis_template", "possible_labels", "multi_class", "loglevel"]
         }
       },
-      "required": ["feed_fetcher", "twitter_scraper", "web_scraper"]
+      "required": ["feed_fetcher", "twitter_scraper", "web_scraper", "zero_shot_classifier"]
     }
   },
   "required": ["db", "faktory", "feed_scheduler", "twitter_scheduler", "gdelt_fetcher", "workers"],
@@ -249,6 +283,15 @@
         "panic",
         "disabled"
       ]
+    },
+    "grpc_server": {
+      "description": "Common settings for connecting to a gRPC server.",
+      "type": "object",
+      "properties": {
+        "target": { "type": "string" },
+        "tls_enabled": { "type": "boolean" }
+      },
+      "required": ["target", "tls_enabled"]
     }
   }
 }

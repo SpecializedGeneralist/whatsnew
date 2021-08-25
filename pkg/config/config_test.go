@@ -112,6 +112,18 @@ func TestFromYAMLFile(t *testing.T) {
 					UserAgent:         "WhatsNew/0.0.0",
 					LogLevel:          config.LogLevel(zerolog.InfoLevel),
 				},
+				ZeroShotClassifier: config.ZeroShotClassifier{
+					Concurrency:              4,
+					ClassifiedWebArticleJobs: []string{"Vectorizer"},
+					SpagoBARTServer: config.GRPCServer{
+						Target:     "127.0.0.1:4001",
+						TLSEnabled: false,
+					},
+					HypothesisTemplate: "This text is about {}.",
+					PossibleLabels:     []string{"sport", "economy", "science"},
+					MultiClass:         true,
+					LogLevel:           config.LogLevel(zerolog.InfoLevel),
+				},
 			},
 		}
 		assert.Equal(t, expected, *conf)

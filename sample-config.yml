@@ -45,3 +45,13 @@ workers:
     request_timeout: '30s'
     user_agent: 'WhatsNew/0.0.0'
     loglevel: 'info'
+  zero_shot_classifier:
+    concurrency: 4
+    classified_web_article_jobs: ['Vectorizer']
+    spago_bart_server:
+      target: '127.0.0.1:4001'
+      tls_enabled: false
+    hypothesis_template: 'This text is about {}.'
+    possible_labels: ['sport', 'economy', 'science']
+    multi_class: true
+    loglevel: 'info'

@@ -65,9 +65,10 @@ type GDELTFetcher struct {
 
 // Workers holds settings for the various workers.
 type Workers struct {
-	FeedFetcher    FeedFetcher    `yaml:"feed_fetcher"`
-	TwitterScraper TwitterScraper `yaml:"twitter_scraper"`
-	WebScraper     WebScraper     `yaml:"web_scraper"`
+	FeedFetcher        FeedFetcher        `yaml:"feed_fetcher"`
+	TwitterScraper     TwitterScraper     `yaml:"twitter_scraper"`
+	WebScraper         WebScraper         `yaml:"web_scraper"`
+	ZeroShotClassifier ZeroShotClassifier `yaml:"zero_shot_classifier"`
 }
 
 // FeedFetcher holds settings for the FeedFetcher worker.
@@ -100,10 +101,27 @@ type WebScraper struct {
 	LogLevel          LogLevel      `yaml:"loglevel"`
 }
 
+// ZeroShotClassifier holds settings for the zero-shot classifier worker.
+type ZeroShotClassifier struct {
+	Concurrency              int        `yaml:"concurrency"`
+	ClassifiedWebArticleJobs []string   `yaml:"classified_web_article_jobs"`
+	SpagoBARTServer          GRPCServer `yaml:"spago_bart_server"`
+	HypothesisTemplate       string     `yaml:"hypothesis_template"`
+	PossibleLabels           []string   `yaml:"possible_labels"`
+	MultiClass               bool       `yaml:"multi_class"`
+	LogLevel                 LogLevel   `yaml:"loglevel"`
+}
+
 // OmitItemsPublishedBefore is part of FeedFetcher settings.
 type OmitItemsPublishedBefore struct {
 	Enabled bool      `yaml:"enabled"`
 	Time    time.Time `yaml:"time"`
+}
+
+// GRPCServer holds common settings for connecting to a gRPC server.
+type GRPCServer struct {
+	Target     string `yaml:"target"`
+	TLSEnabled bool   `yaml:"tls_enabled"`
 }
 
 // DBLogLevel is a redefinition of GORM logger.LogLevel which satisfies
