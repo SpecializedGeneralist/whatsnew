@@ -55,3 +55,10 @@ workers:
     possible_labels: ['sport', 'economy', 'science']
     multi_class: true
     loglevel: 'info'
+  vectorizer:
+    concurrency: 4
+    vectorized_web_article_jobs: ['DuplicateDetector']
+    spago_bert_server:
+      target: '127.0.0.1:1976'
+      tls_enabled: false
+    loglevel: 'info'

@@ -263,9 +263,31 @@
             }
           },
           "required": ["concurrency", "classified_web_article_jobs", "spago_bart_server", "hypothesis_template", "possible_labels", "multi_class", "loglevel"]
+        },
+        "vectorizer": {
+          "description": "Settings for the vectorizer worker.",
+          "type": "object",
+          "properties": {
+            "concurrency": {
+              "type": "integer"
+            },
+            "vectorized_web_article_jobs": {
+              "type": "array",
+              "items": {
+                "type": "string"
+              }
+            },
+            "spago_bert_server": {
+              "$ref": "#/definitions/grpc_server"
+            },
+            "loglevel": {
+              "$ref": "#/definitions/loglevel"
+            }
+          },
+          "required": ["concurrency", "vectorized_web_article_jobs", "spago_bert_server", "loglevel"]
         }
       },
-      "required": ["feed_fetcher", "twitter_scraper", "web_scraper", "zero_shot_classifier"]
+      "required": ["feed_fetcher", "twitter_scraper", "web_scraper", "zero_shot_classifier", "vectorizer"]
     }
   },
   "required": ["db", "faktory", "feed_scheduler", "twitter_scheduler", "gdelt_fetcher", "workers"],

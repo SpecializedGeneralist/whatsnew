@@ -124,6 +124,15 @@ func TestFromYAMLFile(t *testing.T) {
 					MultiClass:         true,
 					LogLevel:           config.LogLevel(zerolog.InfoLevel),
 				},
+				Vectorizer: config.Vectorizer{
+					Concurrency:              4,
+					VectorizedWebArticleJobs: []string{"DuplicateDetector"},
+					SpagoBERTServer: config.GRPCServer{
+						Target:     "127.0.0.1:1976",
+						TLSEnabled: false,
+					},
+					LogLevel: config.LogLevel(zerolog.InfoLevel),
+				},
 			},
 		}
 		assert.Equal(t, expected, *conf)

@@ -69,6 +69,7 @@ type Workers struct {
 	TwitterScraper     TwitterScraper     `yaml:"twitter_scraper"`
 	WebScraper         WebScraper         `yaml:"web_scraper"`
 	ZeroShotClassifier ZeroShotClassifier `yaml:"zero_shot_classifier"`
+	Vectorizer         Vectorizer         `yaml:"vectorizer"`
 }
 
 // FeedFetcher holds settings for the FeedFetcher worker.
@@ -109,6 +110,14 @@ type ZeroShotClassifier struct {
 	HypothesisTemplate       string     `yaml:"hypothesis_template"`
 	PossibleLabels           []string   `yaml:"possible_labels"`
 	MultiClass               bool       `yaml:"multi_class"`
+	LogLevel                 LogLevel   `yaml:"loglevel"`
+}
+
+// Vectorizer holds settings for the Vectorizer worker.
+type Vectorizer struct {
+	Concurrency              int        `yaml:"concurrency"`
+	VectorizedWebArticleJobs []string   `yaml:"vectorized_web_article_jobs"`
+	SpagoBERTServer          GRPCServer `yaml:"spago_bert_server"`
 	LogLevel                 LogLevel   `yaml:"loglevel"`
 }
 
