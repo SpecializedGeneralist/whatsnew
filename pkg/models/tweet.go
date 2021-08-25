@@ -11,7 +11,7 @@ type Tweet struct {
 	Model
 
 	// TwitterSourceID is the association to the TwitterSource this item belongs to.
-	TwitterSourceID uint `gorm:"not null"`
+	TwitterSourceID uint `gorm:"not null;index"`
 
 	// WebResourceID allows the has-one relation with a WebResource.
 	WebResourceID uint `gorm:"not null;uniqueIndex"`
