@@ -22,10 +22,10 @@ const (
 type TwitterSource struct {
 	Model
 
-	Type TwitterSourceType `gorm:"not null;index:idx_twitter_sources_type_text,unique"`
+	Type TwitterSourceType `gorm:"not null;index:idx_twitter_source_type_text,unique"`
 
 	// Text is either a username or a search term, depending on the Type.
-	Text string `gorm:"not null;index:idx_twitter_sources_type_text,unique"`
+	Text string `gorm:"not null;index:idx_twitter_source_type_text,unique"`
 
 	// The system will look for new tweets from this source only when it is
 	// Enabled. Otherwise, the twitter source is simply ignored.
