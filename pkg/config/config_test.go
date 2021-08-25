@@ -96,7 +96,7 @@ func TestFromYAMLFile(t *testing.T) {
 				TwitterScraper: config.TwitterScraper{
 					Concurrency:       10,
 					MaxTweetsNumber:   1000,
-					NewWebArticleJobs: []string{"Vectorizer"},
+					NewWebArticleJobs: []string{"ZeroShotClassifier"},
 					OmitTweetsPublishedBefore: config.OmitItemsPublishedBefore{
 						Enabled: true,
 						Time:    time.Date(2021, time.July, 1, 0, 0, 0, 0, time.UTC),
@@ -106,7 +106,7 @@ func TestFromYAMLFile(t *testing.T) {
 				},
 				WebScraper: config.WebScraper{
 					Concurrency:       10,
-					NewWebArticleJobs: []string{"Vectorizer"},
+					NewWebArticleJobs: []string{"ZeroShotClassifier"},
 					LanguageFilter:    []string{"en", "es"},
 					RequestTimeout:    30 * time.Second,
 					UserAgent:         "WhatsNew/0.0.0",
