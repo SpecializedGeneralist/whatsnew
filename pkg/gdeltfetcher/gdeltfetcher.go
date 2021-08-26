@@ -14,6 +14,7 @@ import (
 	"github.com/SpecializedGeneralist/whatsnew/pkg/database"
 	"github.com/SpecializedGeneralist/whatsnew/pkg/jobscheduler"
 	"github.com/SpecializedGeneralist/whatsnew/pkg/models"
+	"github.com/SpecializedGeneralist/whatsnew/pkg/sets"
 	faktory "github.com/contribsys/faktory/client"
 	"github.com/jackc/pgtype"
 	"github.com/rs/zerolog"
@@ -84,13 +85,13 @@ func (gf *GDELTFetcher) fetchAndProcessEvents(ctx context.Context) error {
 	js := jobscheduler.New()
 
 	err = gf.db.WithContext(ctx).Transaction(func(tx *gorm.DB) error {
-		visitedURLs := make(map[string]struct{}, len(evs))
+		visitedURLs := sets.NewStringSetWithSize(len(evs))
 
 		for _, ev := range evs {
-			if _, visited := visitedURLs[ev.SourceURL]; visited {
+			if visitedURLs.Has(ev.SourceURL) {
 				continue
 			}
-			visitedURLs[ev.SourceURL] = struct{}{}
+			visitedURLs.Add(ev.SourceURL)
 
 			err = gf.processEvent(tx, ev, js)
 			if err != nil {
