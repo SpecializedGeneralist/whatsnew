@@ -46,6 +46,42 @@
       },
       "required": ["url", "queues", "loglevel"]
     },
+    "hnsw": {
+      "description": "Settings for connecting to HNSW server and handling vector indices.",
+      "type": "object",
+      "properties": {
+        "server": {
+          "$ref": "#/definitions/grpc_server"
+        },
+        "index_name_prefix": {
+          "type": "string"
+        },
+        "dim": {
+          "type": "integer"
+        },
+        "ef_construction": {
+          "type": "integer"
+        },
+        "m": {
+          "type": "integer"
+        },
+        "max_elements": {
+          "type": "integer"
+        },
+        "seed": {
+          "type": "integer"
+        },
+        "space_type": {
+          "type": "string",
+          "enum": [
+            "L2",
+            "IP",
+            "COSINE"
+          ]
+        }
+      },
+      "required": ["server", "index_name_prefix", "dim", "ef_construction", "m", "max_elements", "seed", "space_type"]
+    },
     "feed_scheduler": {
       "description": "Settings for periodic scheduling of jobs for processing all feeds.",
       "type": "object",
@@ -290,7 +326,7 @@
       "required": ["feed_fetcher", "twitter_scraper", "web_scraper", "zero_shot_classifier", "vectorizer"]
     }
   },
-  "required": ["db", "faktory", "feed_scheduler", "twitter_scheduler", "gdelt_fetcher", "workers"],
+  "required": ["db", "faktory", "hnsw", "feed_scheduler", "twitter_scheduler", "gdelt_fetcher", "workers"],
   "definitions": {
     "loglevel": {
       "description": "Log level. The value is compatible with zerolog.Level.",

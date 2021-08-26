@@ -6,6 +6,7 @@ package config_test
 
 import (
 	"fmt"
+	hnsw_grpcapi "github.com/SpecializedGeneralist/hnsw-grpc-server/pkg/grpcapi"
 	"github.com/SpecializedGeneralist/whatsnew/pkg/config"
 	"github.com/rs/zerolog"
 	"github.com/stretchr/testify/assert"
@@ -64,6 +65,19 @@ func TestFromYAMLFile(t *testing.T) {
 				URL:      "tcp://faktory:faktory@localhost:7419",
 				Queues:   []string{"default"},
 				LogLevel: config.LogLevel(zerolog.InfoLevel),
+			},
+			HNSW: config.HNSW{
+				Server: config.GRPCServer{
+					Target:     "127.0.0.1:19530",
+					TLSEnabled: false,
+				},
+				IndexNamePrefix: "whatsnew_",
+				Dim:             768,
+				EfConstruction:  200,
+				M:               48,
+				MaxElements:     100000,
+				Seed:            42,
+				SpaceType:       config.HNSWSpaceType(hnsw_grpcapi.CreateIndexRequest_COSINE),
 			},
 			FeedScheduler: config.FeedScheduler{
 				TimeInterval: 5 * time.Minute,

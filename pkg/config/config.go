@@ -6,6 +6,7 @@ package config
 
 import (
 	"fmt"
+	hnsw_grpcapi "github.com/SpecializedGeneralist/hnsw-grpc-server/pkg/grpcapi"
 	"github.com/rs/zerolog"
 	"gopkg.in/yaml.v3"
 	gormlogger "gorm.io/gorm/logger"
@@ -18,6 +19,7 @@ import (
 type Config struct {
 	DB               DB               `yaml:"db"`
 	Faktory          Faktory          `yaml:"faktory"`
+	HNSW             HNSW             `yaml:"hnsw"`
 	FeedScheduler    FeedScheduler    `yaml:"feed_scheduler"`
 	TwitterScheduler TwitterScheduler `yaml:"twitter_scheduler"`
 	GDELTFetcher     GDELTFetcher     `yaml:"gdelt_fetcher"`
@@ -37,6 +39,18 @@ type Faktory struct {
 	URL      string   `yaml:"url"`
 	Queues   []string `yaml:"queues"`
 	LogLevel LogLevel `yaml:"loglevel"`
+}
+
+// HNSW holds settings for connecting to HNSW server and handling vector indices.
+type HNSW struct {
+	Server          GRPCServer    `yaml:"server"`
+	IndexNamePrefix string        `yaml:"index_name_prefix"`
+	Dim             int           `yaml:"dim"`
+	EfConstruction  int           `yaml:"ef_construction"`
+	M               int           `yaml:"m"`
+	MaxElements     int           `yaml:"max_elements"`
+	Seed            int           `yaml:"seed"`
+	SpaceType       HNSWSpaceType `yaml:"space_type"`
 }
 
 // FeedScheduler holds settings for scheduling feeds for further processing.
@@ -169,6 +183,22 @@ func (l *LogLevel) UnmarshalText(text []byte) (err error) {
 		return fmt.Errorf("invalid log level: %#v", s)
 	}
 	*l = LogLevel(zl)
+	return nil
+}
+
+// HNSWSpaceType is a redefinition of HNSW gRPC API CreateIndexRequest_SpaceType
+// which satisfies encoding.TextUnmarshaler, to be conveniently parsed from YAML.
+type HNSWSpaceType hnsw_grpcapi.CreateIndexRequest_SpaceType
+
+// UnmarshalText satisfies the encoding.TextUnmarshaler interface, unmarshaling
+// the text to an HNSW gRPC API CreateIndexRequest_SpaceType.
+func (hst *HNSWSpaceType) UnmarshalText(text []byte) (err error) {
+	s := string(text)
+	st, ok := hnsw_grpcapi.CreateIndexRequest_SpaceType_value[s]
+	if !ok {
+		return fmt.Errorf("invalid HNSW space type: %#v", s)
+	}
+	*hst = HNSWSpaceType(st)
 	return nil
 }
 
