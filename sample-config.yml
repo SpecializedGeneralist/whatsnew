@@ -10,13 +10,14 @@ hnsw:
   server:
     target: '127.0.0.1:19530'
     tls_enabled: false
-  index_name_prefix: 'whatsnew_'
-  dim: 768
-  ef_construction: 200
-  m: 48
-  max_elements: 100000
-  seed: 42
-  space_type: 'COSINE'
+  index:
+    name_prefix: 'whatsnew_'
+    dim: 768
+    ef_construction: 200
+    m: 48
+    max_elements: 100000
+    seed: 42
+    space_type: 'COSINE'
 feed_scheduler:
   time_interval: '5m'
   jobs: ['FeedFetcher']

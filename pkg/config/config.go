@@ -43,14 +43,19 @@ type Faktory struct {
 
 // HNSW holds settings for connecting to HNSW server and handling vector indices.
 type HNSW struct {
-	Server          GRPCServer    `yaml:"server"`
-	IndexNamePrefix string        `yaml:"index_name_prefix"`
-	Dim             int           `yaml:"dim"`
-	EfConstruction  int           `yaml:"ef_construction"`
-	M               int           `yaml:"m"`
-	MaxElements     int           `yaml:"max_elements"`
-	Seed            int           `yaml:"seed"`
-	SpaceType       HNSWSpaceType `yaml:"space_type"`
+	Server GRPCServer `yaml:"server"`
+	Index  HNSWIndex  `yaml:"index"`
+}
+
+// HNSWIndex holds settings for HNSW vector indices.
+type HNSWIndex struct {
+	NamePrefix     string        `yaml:"name_prefix"`
+	Dim            int32         `yaml:"dim"`
+	EfConstruction int32         `yaml:"ef_construction"`
+	M              int32         `yaml:"m"`
+	MaxElements    int32         `yaml:"max_elements"`
+	Seed           int32         `yaml:"seed"`
+	SpaceType      HNSWSpaceType `yaml:"space_type"`
 }
 
 // FeedScheduler holds settings for scheduling feeds for further processing.

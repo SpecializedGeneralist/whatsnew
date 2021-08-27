@@ -53,34 +53,40 @@
         "server": {
           "$ref": "#/definitions/grpc_server"
         },
-        "index_name_prefix": {
-          "type": "string"
-        },
-        "dim": {
-          "type": "integer"
-        },
-        "ef_construction": {
-          "type": "integer"
-        },
-        "m": {
-          "type": "integer"
-        },
-        "max_elements": {
-          "type": "integer"
-        },
-        "seed": {
-          "type": "integer"
-        },
-        "space_type": {
-          "type": "string",
-          "enum": [
-            "L2",
-            "IP",
-            "COSINE"
-          ]
+        "index": {
+          "type": "object",
+          "properties": {
+            "name_prefix": {
+              "type": "string"
+            },
+            "dim": {
+              "type": "integer"
+            },
+            "ef_construction": {
+              "type": "integer"
+            },
+            "m": {
+              "type": "integer"
+            },
+            "max_elements": {
+              "type": "integer"
+            },
+            "seed": {
+              "type": "integer"
+            },
+            "space_type": {
+              "type": "string",
+              "enum": [
+                "L2",
+                "IP",
+                "COSINE"
+              ]
+            }
+          },
+          "required": ["name_prefix", "dim", "ef_construction", "m", "max_elements", "seed", "space_type"]
         }
       },
-      "required": ["server", "index_name_prefix", "dim", "ef_construction", "m", "max_elements", "seed", "space_type"]
+      "required": ["server", "index"]
     },
     "feed_scheduler": {
       "description": "Settings for periodic scheduling of jobs for processing all feeds.",
