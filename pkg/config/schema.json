@@ -327,9 +327,37 @@
             }
           },
           "required": ["concurrency", "vectorized_web_article_jobs", "spago_bert_server", "loglevel"]
+        },
+        "duplicate_detector": {
+          "description": "Settings for the duplicate detector worker.",
+          "type": "object",
+          "properties": {
+            "timeframe_days": {
+              "type": "integer"
+            },
+            "similarity_threshold": {
+              "type": "number"
+            },
+            "non_duplicate_web_article_jobs": {
+              "type": "array",
+              "items": {
+                "type": "string"
+              }
+            },
+            "duplicate_web_article_jobs": {
+              "type": "array",
+              "items": {
+                "type": "string"
+              }
+            },
+            "loglevel": {
+              "$ref": "#/definitions/loglevel"
+            }
+          },
+          "required": ["timeframe_days", "similarity_threshold", "non_duplicate_web_article_jobs", "duplicate_web_article_jobs", "loglevel"]
         }
       },
-      "required": ["feed_fetcher", "twitter_scraper", "web_scraper", "zero_shot_classifier", "vectorizer"]
+      "required": ["feed_fetcher", "twitter_scraper", "web_scraper", "zero_shot_classifier", "vectorizer", "duplicate_detector"]
     }
   },
   "required": ["db", "faktory", "hnsw", "feed_scheduler", "twitter_scheduler", "gdelt_fetcher", "workers"],

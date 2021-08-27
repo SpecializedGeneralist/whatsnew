@@ -74,3 +74,9 @@ workers:
       target: '127.0.0.1:1976'
       tls_enabled: false
     loglevel: 'info'
+  duplicate_detector:
+    timeframe_days: 3
+    similarity_threshold: 0.7
+    non_duplicate_web_article_jobs: []
+    duplicate_web_article_jobs: []
+    loglevel: 'info'

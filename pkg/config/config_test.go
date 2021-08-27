@@ -149,6 +149,13 @@ func TestFromYAMLFile(t *testing.T) {
 					},
 					LogLevel: config.LogLevel(zerolog.InfoLevel),
 				},
+				DuplicateDetector: config.DuplicateDetector{
+					TimeframeDays:              3,
+					SimilarityThreshold:        0.7,
+					NonDuplicateWebArticleJobs: []string{},
+					DuplicateWebArticleJobs:    []string{},
+					LogLevel:                   config.LogLevel(zerolog.InfoLevel),
+				},
 			},
 		}
 		assert.Equal(t, expected, *conf)

@@ -89,6 +89,7 @@ type Workers struct {
 	WebScraper         WebScraper         `yaml:"web_scraper"`
 	ZeroShotClassifier ZeroShotClassifier `yaml:"zero_shot_classifier"`
 	Vectorizer         Vectorizer         `yaml:"vectorizer"`
+	DuplicateDetector  DuplicateDetector  `yaml:"duplicate_detector"`
 }
 
 // FeedFetcher holds settings for the FeedFetcher worker.
@@ -138,6 +139,15 @@ type Vectorizer struct {
 	VectorizedWebArticleJobs []string   `yaml:"vectorized_web_article_jobs"`
 	SpagoBERTServer          GRPCServer `yaml:"spago_bert_server"`
 	LogLevel                 LogLevel   `yaml:"loglevel"`
+}
+
+// DuplicateDetector holds settings for the duplicate detector worker.
+type DuplicateDetector struct {
+	TimeframeDays              int      `yaml:"timeframe_days"`
+	SimilarityThreshold        float32  `yaml:"similarity_threshold"`
+	NonDuplicateWebArticleJobs []string `yaml:"non_duplicate_web_article_jobs"`
+	DuplicateWebArticleJobs    []string `yaml:"duplicate_web_article_jobs"`
+	LogLevel                   LogLevel `yaml:"loglevel"`
 }
 
 // OmitItemsPublishedBefore is part of FeedFetcher settings.
