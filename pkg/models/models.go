@@ -17,6 +17,7 @@ var allModels = []interface{}{
 	Tweet{},
 	PendingJob{},
 	ZeroShotClass{},
+	Vector{},
 }
 
 // AutoMigrate performs the automatic migration of all GORM models.

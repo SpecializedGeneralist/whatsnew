@@ -13,6 +13,7 @@ import (
 	"github.com/SpecializedGeneralist/whatsnew/pkg/models"
 	"github.com/SpecializedGeneralist/whatsnew/pkg/workers/basemodelworker"
 	"github.com/contribsys/faktory_worker_go"
+	"github.com/jackc/pgtype"
 	"github.com/nlpodyssey/spago/pkg/mat32"
 	bert_grpcapi "github.com/nlpodyssey/spago/pkg/nlp/transformers/bert/grpcapi"
 	"github.com/rs/zerolog"
@@ -75,7 +76,7 @@ func (v *Vectorizer) perform(ctx context.Context, webArticleID uint) error {
 
 func getLockedWebArticle(tx *gorm.DB, id uint) (*models.WebArticle, error) {
 	var wa *models.WebArticle
-	res := tx.Clauses(clause.Locking{Strength: "UPDATE"}).First(&wa, id)
+	res := tx.Clauses(clause.Locking{Strength: "UPDATE"}).Preload("Vector").First(&wa, id)
 	if res.Error != nil {
 		return nil, fmt.Errorf("error fetching WebArticle %d: %w", id, res.Error)
 	}
@@ -85,7 +86,7 @@ func getLockedWebArticle(tx *gorm.DB, id uint) (*models.WebArticle, error) {
 func (v *Vectorizer) processWebArticle(ctx context.Context, tx *gorm.DB, wa *models.WebArticle, js *jobscheduler.JobScheduler) error {
 	logger := v.Log.With().Uint("WebArticle", wa.ID).Logger()
 
-	if wa.HasVector {
+	if wa.Vector != nil {
 		logger.Warn().Msg("this WebArticle already has a vector")
 		return nil
 	}
@@ -106,10 +107,18 @@ func (v *Vectorizer) processWebArticle(ctx context.Context, tx *gorm.DB, wa *mod
 		return err
 	}
 
-	wa.HasVector = true
-	res := tx.Save(wa)
+	vectorModel := &models.Vector{
+		WebArticleID: wa.ID,
+		Data:         new(pgtype.Float4Array),
+	}
+	err = vectorModel.Data.Set(vector)
+	if err != nil {
+		return fmt.Errorf("error setting Vector data: %w", err)
+	}
+
+	res := tx.Save(vectorModel)
 	if res.Error != nil {
-		return fmt.Errorf("error saving WebArticle: %w", res.Error)
+		return fmt.Errorf("error saving Vector: %w", res.Error)
 	}
 
 	return js.AddJobs(v.conf.VectorizedWebArticleJobs, wa.ID)

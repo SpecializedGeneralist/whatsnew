@@ -22,11 +22,9 @@ type WebArticle struct {
 	Language           string    `gorm:"not null"`
 	PublishDate        time.Time `gorm:"not null"`
 
-	// HasVector reports whether this WebArticle is successfully vectorized,
-	// having an associated vector stored on a separate system (in the
-	// default implementation, an HNSW server).
-	HasVector bool `gorm:"not null;default:false"`
-
 	// A WebArticle has many models.ZeroShotClass models.
 	ZeroShotClasses []ZeroShotClass `gorm:"constraint:OnDelete:CASCADE"`
+
+	// A WebArticle has one Vector.
+	Vector *Vector `gorm:"constraint:OnDelete:CASCADE"`
 }
