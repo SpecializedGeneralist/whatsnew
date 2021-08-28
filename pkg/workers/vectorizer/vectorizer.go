@@ -116,7 +116,7 @@ func (v *Vectorizer) processWebArticle(ctx context.Context, tx *gorm.DB, wa *mod
 		return fmt.Errorf("error setting Vector data: %w", err)
 	}
 
-	res := tx.Save(vectorModel)
+	res := tx.Create(vectorModel)
 	if res.Error != nil {
 		return fmt.Errorf("error saving Vector: %w", res.Error)
 	}

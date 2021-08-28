@@ -118,7 +118,7 @@ func (zsc *ZeroShotClassifier) processWebArticle(ctx context.Context, tx *gorm.D
 		}
 	}
 
-	res := tx.Save(classes)
+	res := tx.Create(classes)
 	if res.Error != nil {
 		return fmt.Errorf("error saving new ZeroShotClasses: %w", res.Error)
 	}
