@@ -4,7 +4,10 @@
 
 package models
 
-import "github.com/jackc/pgtype"
+import (
+	"fmt"
+	"github.com/jackc/pgtype"
+)
 
 // Vector is a vector representation of a WebArticle.
 type Vector struct {
@@ -14,4 +17,13 @@ type Vector struct {
 	WebArticleID uint `gorm:"not null;uniqueIndex"`
 
 	Data *pgtype.Float4Array `gorm:"type:float4[];not null"`
+}
+
+func (v Vector) DataAsFloat32Slice() ([]float32, error) {
+	var vec []float32
+	err := v.Data.AssignTo(&vec)
+	if err != nil {
+		return nil, fmt.Errorf("error converting Vector.Data to []float32: %w", err)
+	}
+	return vec, nil
 }
