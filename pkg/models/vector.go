@@ -19,6 +19,7 @@ type Vector struct {
 	Data *pgtype.Float4Array `gorm:"type:float4[];not null"`
 }
 
+// DataAsFloat32Slice converts Vector.Data to []float32.
 func (v Vector) DataAsFloat32Slice() ([]float32, error) {
 	var vec []float32
 	err := v.Data.AssignTo(&vec)
