@@ -156,7 +156,7 @@ func filterAndConvertHits(grpcHits []*grpcapi.Hit, distanceThreshold float32) (H
 			return nil, err
 		}
 		hits = append(hits, Hit{
-			ID:       uint(id),
+			ID:       id,
 			Distance: hit.Distance,
 		})
 	}
