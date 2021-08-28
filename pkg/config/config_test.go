@@ -97,6 +97,11 @@ func TestFromYAMLFile(t *testing.T) {
 				NewWebResourceJobs:     []string{"WebScraper"},
 				LogLevel:               config.LogLevel(zerolog.InfoLevel),
 			},
+			JobsRecoverer: config.JobsRecoverer{
+				TimeInterval: time.Minute,
+				LeewayTime:   time.Minute,
+				LogLevel:     config.LogLevel(zerolog.InfoLevel),
+			},
 			Workers: config.Workers{
 				FeedFetcher: config.FeedFetcher{
 					Concurrency:        10,

@@ -157,6 +157,24 @@
       },
       "required": ["time_interval", "new_web_resource_jobs", "event_root_code_whitelist", "loglevel"]
     },
+    "jobs_recoverer": {
+      "description": "Settings for periodic recovering of pending jobs.",
+      "type": "object",
+      "properties": {
+        "time_interval": {
+          "description": "How frequently the recovery process must run. The value must be compatible with Go time.Duration.",
+          "type": "string"
+        },
+        "leeway_time": {
+          "description": "Leeway time duration to exclude from recovery pending jobs created too recently. The value must be compatible with Go time.Duration.",
+          "type": "string"
+        },
+        "loglevel": {
+          "$ref": "#/definitions/loglevel"
+        }
+      },
+      "required": ["time_interval", "leeway_time", "loglevel"]
+    },
     "workers": {
       "description": "Settings for specific workers.",
       "type": "object",
@@ -360,7 +378,7 @@
       "required": ["feed_fetcher", "twitter_scraper", "web_scraper", "zero_shot_classifier", "vectorizer", "duplicate_detector"]
     }
   },
-  "required": ["db", "faktory", "hnsw", "feed_scheduler", "twitter_scheduler", "gdelt_fetcher", "workers"],
+  "required": ["db", "faktory", "hnsw", "feed_scheduler", "twitter_scheduler", "gdelt_fetcher", "jobs_recoverer", "workers"],
   "definitions": {
     "loglevel": {
       "description": "Log level. The value is compatible with zerolog.Level.",

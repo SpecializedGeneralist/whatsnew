@@ -31,6 +31,10 @@ gdelt_fetcher:
   event_root_code_whitelist: []
   new_web_resource_jobs: ['WebScraper']
   loglevel: 'info'
+jobs_recoverer:
+  time_interval: '1m'
+  leeway_time: '1m'
+  loglevel: 'info'
 workers:
   feed_fetcher:
     concurrency: 10

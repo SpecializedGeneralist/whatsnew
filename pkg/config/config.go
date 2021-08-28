@@ -23,6 +23,7 @@ type Config struct {
 	FeedScheduler    FeedScheduler    `yaml:"feed_scheduler"`
 	TwitterScheduler TwitterScheduler `yaml:"twitter_scheduler"`
 	GDELTFetcher     GDELTFetcher     `yaml:"gdelt_fetcher"`
+	JobsRecoverer    JobsRecoverer    `yaml:"jobs_recoverer"`
 	Workers          Workers          `yaml:"workers"`
 }
 
@@ -80,6 +81,14 @@ type GDELTFetcher struct {
 	EventRootCodeWhitelist []string      `yaml:"event_root_code_whitelist"`
 	NewWebResourceJobs     []string      `yaml:"new_web_resource_jobs"`
 	LogLevel               LogLevel      `yaml:"loglevel"`
+}
+
+// JobsRecoverer holds settings for the periodic recovery process of
+// pending jobs.
+type JobsRecoverer struct {
+	TimeInterval time.Duration `yaml:"time_interval"`
+	LeewayTime   time.Duration `yaml:"leeway_time"`
+	LogLevel     LogLevel      `yaml:"loglevel"`
 }
 
 // Workers holds settings for the various workers.
