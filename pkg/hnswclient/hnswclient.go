@@ -18,17 +18,71 @@ import (
 	"time"
 )
 
+// Client acts as a client to the HNSW service and contains essential
+// functionalities for managing indices, and inserting and searching vectors.
+//
+// This client is designed to handle vectors related to WebArticle models.
+//
+// Inserting Vectors
+//
+// New vectors can be inserted calling Client.Insert.
+//
+// The given ID is explicitly assigned to the stored vector (the HNSW service's
+// auto-ID feature is always disabled).
+//
+// Each vector must be associated to a specific datetime which, in
+// the default implementation, corresponds to WebArticle.PublishDate.
+//
+// At insertion time, this datetime is converted to UTC and truncated (rounded
+// down) to the UTC day. The resulting formatted date "YYYY-MM-DD" is appended
+// to the configuration's NamePrefix and used as destination index name.
+//
+// If an index with this final name does not exist, a new one is created
+// using the given configuration settings.
+//
+// The index is always flushed after each insertion.
+//
+// Searching for Similar Vectors
+//
+// Given a reference vector, the function Client.SearchKNN allows searching
+// for similar or duplicate vectors across one or more indices.
+//
+// SearchParams.From and To datetimes are converted to UTC and truncated
+// to the UTC day (just as already described above). The resulting range of
+// UTC days, leading and trailing dates included, is used to generate the set
+// of names of indices among which similar vectors must be searched (once again,
+// each day-date is formatted as "YYYY-MM-DD" and appended to the prefix).
+//
+// If an index in that range does not exist, it is considered as an empty index,
+// just not producing any matching result (hit).
+//
+// The raw hits from each existing index (if any) are filtered, keeping only
+// the ones whose Distance from the initial vector is less than or equal to
+// the specified SearchParams.DistanceThreshold.
+//
+// The full set of filtered results is finally converted to a sorted list of
+// hits and returned.
+//
+// Indices Cache
+//
+// Existing index names are cached locally to reduce the number of requests.
+// If you modify the remote HNSW indices, manually or with other tools, be sure
+// to restart the processes which are using this Client to prevent errors.
 type Client struct {
 	cli          grpcapi.ServerClient
 	conf         config.HNSWIndex
 	indicesCache sets.StringSet
 }
 
+// Hit is a single search result.
 type Hit struct {
 	ID       uint
 	Distance float32
 }
 
+// LessThan reports whether h has a smaller Distance value than other.
+// If the two distances are identical, the ID values are compared instead,
+// in order to preserve stability for sorting operations (see Hits).
 func (h Hit) LessThan(other Hit) bool {
 	if h.Distance == other.Distance {
 		return h.ID < other.ID
@@ -36,12 +90,26 @@ func (h Hit) LessThan(other Hit) bool {
 	return h.Distance < other.Distance
 }
 
+// Hits is a sortable list of Hit.
 type Hits []Hit
 
-func (h Hits) Len() int           { return len(h) }
-func (h Hits) Less(i, j int) bool { return h[i].LessThan(h[j]) }
-func (h Hits) Swap(i, j int)      { h[i], h[j] = h[j], h[i] }
+// Len is the number of elements in the collection.
+func (h Hits) Len() int {
+	return len(h)
+}
 
+// Less reports whether the element with index i must sort before the element
+// with index j.
+func (h Hits) Less(i, j int) bool {
+	return h[i].LessThan(h[j])
+}
+
+// Swap swaps the elements with indexes i and j.
+func (h Hits) Swap(i, j int) {
+	h[i], h[j] = h[j], h[i]
+}
+
+// SearchParams provides parameters for Client.SearchKNN.
 type SearchParams struct {
 	From              time.Time
 	To                time.Time
@@ -52,6 +120,7 @@ type SearchParams struct {
 const indexNameTimeLayout = "2006-01-02"
 const day = 24 * time.Hour
 
+// New creates a new Client.
 func New(conn *grpc.ClientConn, conf config.HNSWIndex) *Client {
 	return &Client{
 		cli:          grpcapi.NewServerClient(conn),
@@ -60,6 +129,7 @@ func New(conn *grpc.ClientConn, conf config.HNSWIndex) *Client {
 	}
 }
 
+// Insert inserts a new vector.
 func (c *Client) Insert(ctx context.Context, id uint, t time.Time, vec []float32) error {
 	indexName := c.dailyIndexName(t)
 
@@ -84,6 +154,8 @@ func (c *Client) Insert(ctx context.Context, id uint, t time.Time, vec []float32
 	return nil
 }
 
+// SearchKNN performs k-nearest-neighbors search over one or more indices,
+// filtering, merging and sorting all results.
 func (c *Client) SearchKNN(ctx context.Context, params SearchParams) (Hits, error) {
 	cacheUpdated := false
 	hits := make(Hits, 0)
