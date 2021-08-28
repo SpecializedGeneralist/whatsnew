@@ -27,4 +27,7 @@ type WebArticle struct {
 
 	// A WebArticle has one Vector.
 	Vector *Vector `gorm:"constraint:OnDelete:CASCADE"`
+
+	// A WebArticle has one SimilarityInfo.
+	SimilarityInfo *SimilarityInfo `gorm:"constraint:OnDelete:CASCADE"`
 }
