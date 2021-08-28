@@ -335,7 +335,7 @@
             "timeframe_days": {
               "type": "integer"
             },
-            "similarity_threshold": {
+            "distance_threshold": {
               "type": "number"
             },
             "non_duplicate_web_article_jobs": {
@@ -354,7 +354,7 @@
               "$ref": "#/definitions/loglevel"
             }
           },
-          "required": ["timeframe_days", "similarity_threshold", "non_duplicate_web_article_jobs", "duplicate_web_article_jobs", "loglevel"]
+          "required": ["timeframe_days", "distance_threshold", "non_duplicate_web_article_jobs", "duplicate_web_article_jobs", "loglevel"]
         }
       },
       "required": ["feed_fetcher", "twitter_scraper", "web_scraper", "zero_shot_classifier", "vectorizer", "duplicate_detector"]

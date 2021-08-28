@@ -144,7 +144,7 @@ type Vectorizer struct {
 // DuplicateDetector holds settings for the duplicate detector worker.
 type DuplicateDetector struct {
 	TimeframeDays              int      `yaml:"timeframe_days"`
-	SimilarityThreshold        float32  `yaml:"similarity_threshold"`
+	DistanceThreshold          float32  `yaml:"distance_threshold"`
 	NonDuplicateWebArticleJobs []string `yaml:"non_duplicate_web_article_jobs"`
 	DuplicateWebArticleJobs    []string `yaml:"duplicate_web_article_jobs"`
 	LogLevel                   LogLevel `yaml:"loglevel"`

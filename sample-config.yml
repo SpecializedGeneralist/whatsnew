@@ -76,7 +76,7 @@ workers:
     loglevel: 'info'
   duplicate_detector:
     timeframe_days: 3
-    similarity_threshold: 0.7
+    distance_threshold: 0.3
     non_duplicate_web_article_jobs: []
     duplicate_web_article_jobs: []
     loglevel: 'info'

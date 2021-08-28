@@ -151,7 +151,7 @@ func TestFromYAMLFile(t *testing.T) {
 				},
 				DuplicateDetector: config.DuplicateDetector{
 					TimeframeDays:              3,
-					SimilarityThreshold:        0.7,
+					DistanceThreshold:          0.3,
 					NonDuplicateWebArticleJobs: []string{},
 					DuplicateWebArticleJobs:    []string{},
 					LogLevel:                   config.LogLevel(zerolog.InfoLevel),
