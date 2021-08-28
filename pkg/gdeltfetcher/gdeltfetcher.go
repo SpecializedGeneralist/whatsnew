@@ -111,12 +111,12 @@ func (gf *GDELTFetcher) processEvent(tx *gorm.DB, ev *events.Event, js *jobsched
 	logger := gf.log.With().Uint64("GlobalEventID", ev.GlobalEventID).Logger()
 
 	if len(ev.SourceURL) == 0 {
-		logger.Trace().Msg("no source URL: skipping event")
+		logger.Debug().Msg("no source URL: skipping event")
 		return nil
 	}
 
 	if !gf.eventRootCodeIsAllowed(ev.EventRootCode) {
-		logger.Trace().Msgf("event root code %#v is not allowed: skipping event", ev.EventRootCode)
+		logger.Debug().Msgf("event root code %#v is not allowed: skipping event", ev.EventRootCode)
 		return nil
 	}
 
@@ -134,7 +134,7 @@ func (gf *GDELTFetcher) processEvent(tx *gorm.DB, ev *events.Event, js *jobsched
 		logger = logger.With().Uint("WebResource", webResource.ID).Logger()
 
 		if webResource.GDELTEvent != nil {
-			logger.Info().Uint("GDELTEvent", webResource.GDELTEvent.ID).Msg("a GDELT event already exists")
+			logger.Warn().Uint("GDELTEvent", webResource.GDELTEvent.ID).Msg("a GDELT event already exists")
 			return nil
 		}
 

@@ -93,13 +93,13 @@ func (ts *TwitterScraper) processTwitterSource(ctx context.Context, tx *gorm.DB,
 		ch = ts.scraper.SearchTweets(ctx, src.Text, ts.conf.MaxTweetsNumber)
 	default:
 		err := fmt.Errorf("unexpected twitter-source type %#v", src.Type)
-		ts.Log.Error().Err(err).Msgf("error reading TwitterSource %d", src.ID)
+		ts.Log.Err(err).Msgf("error reading TwitterSource %d", src.ID)
 		return ts.markSourceWithError(tx, src, err)
 	}
 
 	for tr := range ch {
 		if tr.Error != nil {
-			ts.Log.Error().Err(tr.Error).Msgf("error reading TwitterSource %d results", src.ID)
+			ts.Log.Err(tr.Error).Msgf("error reading TwitterSource %d results", src.ID)
 			return ts.markSourceWithError(tx, src, tr.Error)
 		}
 		err := ts.processTweet(tx, src, tr.Tweet, js)
@@ -121,7 +121,7 @@ func (ts *TwitterScraper) processTweet(tx *gorm.DB, src *models.TwitterSource, s
 
 	lang, langOk := languagerecognition.RecognizeLanguage(scrapedTweet.Text)
 	if !langOk {
-		logger.Debug().Str("Text", scrapedTweet.Text).Msg("failed to detect language")
+		logger.Warn().Str("Text", scrapedTweet.Text).Msg("failed to detect language")
 		return nil
 	}
 	if !ts.languageIsAllowed(lang) {
@@ -141,7 +141,7 @@ func (ts *TwitterScraper) processTweet(tx *gorm.DB, src *models.TwitterSource, s
 		logger = logger.With().Uint("WebResource", webResource.ID).Logger()
 
 		if webResource.Tweet != nil {
-			logger.Debug().Uint("Tweet", webResource.Tweet.ID).Msg("a Tweet already exists")
+			logger.Warn().Uint("Tweet", webResource.Tweet.ID).Msg("a Tweet already exists")
 		} else {
 			tweet.WebResourceID = webResource.ID
 			err = createTweet(tx, logger, tweet)
@@ -151,7 +151,7 @@ func (ts *TwitterScraper) processTweet(tx *gorm.DB, src *models.TwitterSource, s
 		}
 
 		if webResource.WebArticle != nil {
-			logger.Debug().Uint("WebArticle", webResource.WebArticle.ID).Msg("a WebArticle already exists")
+			logger.Warn().Uint("WebArticle", webResource.WebArticle.ID).Msg("a WebArticle already exists")
 			return nil
 		}
 

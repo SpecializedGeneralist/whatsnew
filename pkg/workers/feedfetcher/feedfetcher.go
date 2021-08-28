@@ -110,17 +110,17 @@ func (ff *FeedFetcher) processParsedFeedItem(tx *gorm.DB, feed *models.Feed, ite
 	logger := ff.Log.With().Uint("Feed", feed.ID).Str("Link", item.Link).Logger()
 
 	if ff.itemIsTooOld(item) {
-		logger.Info().Time("PublishedParsed", *item.PublishedParsed).Msg("item is too old")
+		logger.Debug().Time("PublishedParsed", *item.PublishedParsed).Msg("item is too old")
 		return nil
 	}
 
 	lang, langOk := languagerecognition.RecognizeLanguage(item.Title)
 	if !langOk {
-		logger.Info().Str("Title", item.Title).Msg("failed to detect language")
+		logger.Warn().Str("Title", item.Title).Msg("failed to detect language")
 		return nil
 	}
 	if !ff.languageIsAllowed(lang) {
-		logger.Info().Str("Title", item.Title).Str("Lang", lang).Msg("language is not allowed")
+		logger.Debug().Str("Title", item.Title).Str("Lang", lang).Msg("language is not allowed")
 		return nil
 	}
 
@@ -142,7 +142,7 @@ func (ff *FeedFetcher) processParsedFeedItem(tx *gorm.DB, feed *models.Feed, ite
 		logger = logger.With().Uint("WebResource", webResource.ID).Logger()
 
 		if webResource.FeedItem != nil {
-			logger.Info().Uint("FeedItem", webResource.FeedItem.ID).Msg("a feed item already exists")
+			logger.Warn().Uint("FeedItem", webResource.FeedItem.ID).Msg("a feed item already exists")
 			return nil
 		}
 

@@ -103,7 +103,7 @@ func (jr *JobsRecoverer) processBatch(ctx context.Context, pjs []*models.Pending
 
 func (jr *JobsRecoverer) recoverJob(pj *models.PendingJob) error {
 	logger := jr.log.With().Str("JID", pj.ID).Logger()
-	logger.Info().Msg("recovering job")
+	logger.Debug().Msg("recovering job")
 
 	var job *faktory.Job
 	err := json.Unmarshal(pj.Data, &job)

@@ -161,7 +161,7 @@ func (ws *WebScraper) processWebResource(ctx context.Context, tx *gorm.DB, wr *m
 
 	lang, langOk := resolveOrDetectLanguage(wr, article)
 	if !langOk {
-		logger.Debug().Str("Title", article.Title).Msg("failed to detect language")
+		logger.Warn().Str("Title", article.Title).Msg("failed to detect language")
 		return nil
 	}
 	if !ws.languageIsAllowed(lang) {
