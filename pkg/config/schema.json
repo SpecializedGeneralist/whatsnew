@@ -33,18 +33,11 @@
           "description": "Faktory URL, internally exposed as environment variable FAKTORY_URL.",
           "type": "string"
         },
-        "queues": {
-          "description": "List of queues in order of precedence. This value is passed to Manager.ProcessStrictPriorityQueues().",
-          "type": "array",
-          "items": {
-            "type": "string"
-          }
-        },
         "loglevel": {
           "$ref": "#/definitions/loglevel"
         }
       },
-      "required": ["url", "queues", "loglevel"]
+      "required": ["url", "loglevel"]
     },
     "hnsw": {
       "description": "Settings for connecting to HNSW server and handling vector indices.",

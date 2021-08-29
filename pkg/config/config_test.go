@@ -63,7 +63,6 @@ func TestFromYAMLFile(t *testing.T) {
 			},
 			Faktory: config.Faktory{
 				URL:      "tcp://faktory:faktory@localhost:7419",
-				Queues:   []string{"default"},
 				LogLevel: config.LogLevel(zerolog.InfoLevel),
 			},
 			HNSW: config.HNSW{

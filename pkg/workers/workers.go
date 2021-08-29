@@ -24,7 +24,7 @@ func NewManager(conf config.Faktory) (*faktory_worker.Manager, error) {
 		return nil, err
 	}
 	mgr := faktory_worker.NewManager()
-	mgr.ProcessStrictPriorityQueues(conf.Queues...)
+	mgr.ProcessStrictPriorityQueues("default")
 	mgr.Logger = NewFaktoryLogger(zerolog.Level(conf.LogLevel))
 	return mgr, nil
 }
