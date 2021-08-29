@@ -72,8 +72,8 @@ github.com/cockroachdb/apd v1.1.0/go.mod h1:8Sl8LxpKi29FqWXR16WEFZRNSz3SoPzUzeMe
 github.com/cockroachdb/datadriven v0.0.0-20190809214429-80d97fb3cbaa/go.mod h1:zn76sxSg3SzpJ0PPJaLDCu+Bu0Lg3sKTORVIj19EIF8=
 github.com/codahale/hdrhistogram v0.0.0-20161010025455-3a0bb77429bd/go.mod h1:sE/e/2PUdi/liOCUjSTXgM1o87ZssimdTWN964YiIeI=
 github.com/contribsys/faktory v1.3.0-1/go.mod h1:qCp3bcPrIT7mb/aR5KendsK/Nyg7yE3JOg4sETojQN8=
-github.com/contribsys/faktory v1.5.3 h1:UkVv6X0prrMqaYcdr6Iz5K4t0DTXA45Uzcr54LniJbs=
-github.com/contribsys/faktory v1.5.3/go.mod h1:RF7l5m3+9VxzlWP1bpYEG/5BNfcY44WrbbmBa4EX5Ew=
+github.com/contribsys/faktory v1.5.2 h1:ZvGvKKQWbkHH3lGZHDG3VTMn6sdbJsKo+zw5xHRHMxo=
+github.com/contribsys/faktory v1.5.2/go.mod h1:RF7l5m3+9VxzlWP1bpYEG/5BNfcY44WrbbmBa4EX5Ew=
 github.com/contribsys/faktory_worker_go v1.4.2 h1:IJD4wGk6iZSOkLEOHX42s6R8YvnQI2gEzN6WeZO9BBg=
 github.com/contribsys/faktory_worker_go v1.4.2/go.mod h1:v53dJh0lrk18B/3zFJjAWM6/Lgq341sRricsBUZ/umc=
 github.com/coreos/etcd v3.3.10+incompatible/go.mod h1:uF7uidLiAD3TWHmW31ZFd/JWoc32PjwdhPthX9715RE=
