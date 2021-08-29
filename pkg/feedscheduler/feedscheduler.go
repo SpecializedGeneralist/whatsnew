@@ -106,15 +106,16 @@ func (fs *FeedScheduler) scheduleFeedJobs(feed *models.Feed) error {
 	// the full set of jobs is scheduled for each feed, even if the context
 	// is canceled in the meanwhile.
 
-	for _, jobType := range fs.conf.Jobs {
-		job := faktory.NewJob(jobType, feed.ID)
+	for _, fj := range fs.conf.Jobs {
+		job := faktory.NewJob(fj.JobType, feed.ID)
+		job.Queue = fj.Queue
 		job.Retry = 0 // No retries, since it will be called periodically
 
 		fs.log.Trace().Interface("job", job).Msg("schedule new job")
 
 		err := fs.fk.Push(job)
 		if err != nil {
-			return fmt.Errorf("error pushing Job %s for feed %d: %w", jobType, feed.ID, err)
+			return fmt.Errorf("error pushing Job %+v for feed %d: %w", fj, feed.ID, err)
 		}
 	}
 	return nil

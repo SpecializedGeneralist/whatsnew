@@ -19,16 +19,22 @@ hnsw:
     space_type: 'COSINE'
 feed_scheduler:
   time_interval: '5m'
-  jobs: ['FeedFetcher']
+  jobs:
+    - job_type: 'FeedFetcher'
+      queue: 'wn_feed_fetcher'
   loglevel: 'info'
 twitter_scheduler:
   time_interval: '5m'
-  jobs: ['TwitterScraper']
+  jobs:
+    - job_type: 'TwitterScraper'
+      queue: 'wn_twitter_scraper'
   loglevel: 'info'
 gdelt_fetcher:
   time_interval: '5m'
   event_root_code_whitelist: []
-  new_web_resource_jobs: ['WebScraper']
+  new_web_resource_jobs:
+    - job_type: 'WebScraper'
+      queue: 'wn_web_scraper'
   loglevel: 'info'
 jobs_recoverer:
   time_interval: '1m'
@@ -38,7 +44,9 @@ workers:
   feed_fetcher:
     queues: ['wn_feed_fetcher']
     concurrency: 10
-    new_web_resource_jobs: ['WebScraper']
+    new_web_resource_jobs:
+      - job_type: 'WebScraper'
+        queue: 'wn_web_scraper'
     max_allowed_failures: 15
     omit_items_published_before:
       enabled: true
@@ -49,7 +57,9 @@ workers:
     queues: ['wn_twitter_scraper']
     concurrency: 10
     max_tweets_number: 1000
-    new_web_article_jobs: ['ZeroShotClassifier']
+    new_web_article_jobs:
+      - job_type: 'ZeroShotClassifier'
+        queue: 'wn_zero_shot_classifier'
     omit_tweets_published_before:
       enabled: true
       time: '2021-07-01T00:00:00Z'
@@ -58,7 +68,9 @@ workers:
   web_scraper:
     queues: ['wn_web_scraper']
     concurrency: 10
-    new_web_article_jobs: ['ZeroShotClassifier']
+    new_web_article_jobs:
+      - job_type: 'ZeroShotClassifier'
+        queue: 'wn_zero_shot_classifier'
     language_filter: ['en', 'es']
     request_timeout: '30s'
     user_agent: 'WhatsNew/0.0.0'
@@ -66,7 +78,9 @@ workers:
   zero_shot_classifier:
     queues: ['wn_zero_shot_classifier']
     concurrency: 4
-    classified_web_article_jobs: ['Vectorizer']
+    classified_web_article_jobs:
+      - job_type: 'Vectorizer'
+        queue: 'wn_vectorizer'
     spago_bart_server:
       target: '127.0.0.1:4001'
       tls_enabled: false
@@ -77,7 +91,9 @@ workers:
   vectorizer:
     queues: ['wn_vectorizer']
     concurrency: 4
-    vectorized_web_article_jobs: ['DuplicateDetector']
+    vectorized_web_article_jobs:
+      - job_type: 'DuplicateDetector'
+        queue: 'wn_duplicate_detector'
     spago_bert_server:
       target: '127.0.0.1:1976'
       tls_enabled: false

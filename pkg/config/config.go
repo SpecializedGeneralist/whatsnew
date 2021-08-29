@@ -61,7 +61,7 @@ type HNSWIndex struct {
 // FeedScheduler holds settings for scheduling feeds for further processing.
 type FeedScheduler struct {
 	TimeInterval time.Duration `yaml:"time_interval"`
-	Jobs         []string      `yaml:"jobs"`
+	Jobs         []FaktoryJob  `yaml:"jobs"`
 	LogLevel     LogLevel      `yaml:"loglevel"`
 }
 
@@ -69,7 +69,7 @@ type FeedScheduler struct {
 // processing.
 type TwitterScheduler struct {
 	TimeInterval time.Duration `yaml:"time_interval"`
-	Jobs         []string      `yaml:"jobs"`
+	Jobs         []FaktoryJob  `yaml:"jobs"`
 	LogLevel     LogLevel      `yaml:"loglevel"`
 }
 
@@ -78,7 +78,7 @@ type TwitterScheduler struct {
 type GDELTFetcher struct {
 	TimeInterval           time.Duration `yaml:"time_interval"`
 	EventRootCodeWhitelist []string      `yaml:"event_root_code_whitelist"`
-	NewWebResourceJobs     []string      `yaml:"new_web_resource_jobs"`
+	NewWebResourceJobs     []FaktoryJob  `yaml:"new_web_resource_jobs"`
 	LogLevel               LogLevel      `yaml:"loglevel"`
 }
 
@@ -104,7 +104,7 @@ type Workers struct {
 type FeedFetcher struct {
 	Queues                   []string                 `yaml:"queues"`
 	Concurrency              int                      `yaml:"concurrency"`
-	NewWebResourceJobs       []string                 `yaml:"new_web_resource_jobs"`
+	NewWebResourceJobs       []FaktoryJob             `yaml:"new_web_resource_jobs"`
 	MaxAllowedFailures       int                      `yaml:"max_allowed_failures"`
 	OmitItemsPublishedBefore OmitItemsPublishedBefore `yaml:"omit_items_published_before"`
 	LanguageFilter           []string                 `yaml:"language_filter"`
@@ -116,7 +116,7 @@ type TwitterScraper struct {
 	Queues                    []string                 `yaml:"queues"`
 	Concurrency               int                      `yaml:"concurrency"`
 	MaxTweetsNumber           int                      `yaml:"max_tweets_number"`
-	NewWebArticleJobs         []string                 `yaml:"new_web_article_jobs"`
+	NewWebArticleJobs         []FaktoryJob             `yaml:"new_web_article_jobs"`
 	OmitTweetsPublishedBefore OmitItemsPublishedBefore `yaml:"omit_tweets_published_before"`
 	LanguageFilter            []string                 `yaml:"language_filter"`
 	LogLevel                  LogLevel                 `yaml:"loglevel"`
@@ -126,7 +126,7 @@ type TwitterScraper struct {
 type WebScraper struct {
 	Queues            []string      `yaml:"queues"`
 	Concurrency       int           `yaml:"concurrency"`
-	NewWebArticleJobs []string      `yaml:"new_web_article_jobs"`
+	NewWebArticleJobs []FaktoryJob  `yaml:"new_web_article_jobs"`
 	LanguageFilter    []string      `yaml:"language_filter"`
 	RequestTimeout    time.Duration `yaml:"request_timeout"`
 	UserAgent         string        `yaml:"user_agent"`
@@ -135,33 +135,33 @@ type WebScraper struct {
 
 // ZeroShotClassifier holds settings for the zero-shot classifier worker.
 type ZeroShotClassifier struct {
-	Queues                   []string   `yaml:"queues"`
-	Concurrency              int        `yaml:"concurrency"`
-	ClassifiedWebArticleJobs []string   `yaml:"classified_web_article_jobs"`
-	SpagoBARTServer          GRPCServer `yaml:"spago_bart_server"`
-	HypothesisTemplate       string     `yaml:"hypothesis_template"`
-	PossibleLabels           []string   `yaml:"possible_labels"`
-	MultiClass               bool       `yaml:"multi_class"`
-	LogLevel                 LogLevel   `yaml:"loglevel"`
+	Queues                   []string     `yaml:"queues"`
+	Concurrency              int          `yaml:"concurrency"`
+	ClassifiedWebArticleJobs []FaktoryJob `yaml:"classified_web_article_jobs"`
+	SpagoBARTServer          GRPCServer   `yaml:"spago_bart_server"`
+	HypothesisTemplate       string       `yaml:"hypothesis_template"`
+	PossibleLabels           []string     `yaml:"possible_labels"`
+	MultiClass               bool         `yaml:"multi_class"`
+	LogLevel                 LogLevel     `yaml:"loglevel"`
 }
 
 // Vectorizer holds settings for the Vectorizer worker.
 type Vectorizer struct {
-	Queues                   []string   `yaml:"queues"`
-	Concurrency              int        `yaml:"concurrency"`
-	VectorizedWebArticleJobs []string   `yaml:"vectorized_web_article_jobs"`
-	SpagoBERTServer          GRPCServer `yaml:"spago_bert_server"`
-	LogLevel                 LogLevel   `yaml:"loglevel"`
+	Queues                   []string     `yaml:"queues"`
+	Concurrency              int          `yaml:"concurrency"`
+	VectorizedWebArticleJobs []FaktoryJob `yaml:"vectorized_web_article_jobs"`
+	SpagoBERTServer          GRPCServer   `yaml:"spago_bert_server"`
+	LogLevel                 LogLevel     `yaml:"loglevel"`
 }
 
 // DuplicateDetector holds settings for the duplicate detector worker.
 type DuplicateDetector struct {
-	Queues                     []string `yaml:"queues"`
-	TimeframeDays              int      `yaml:"timeframe_days"`
-	DistanceThreshold          float32  `yaml:"distance_threshold"`
-	NonDuplicateWebArticleJobs []string `yaml:"non_duplicate_web_article_jobs"`
-	DuplicateWebArticleJobs    []string `yaml:"duplicate_web_article_jobs"`
-	LogLevel                   LogLevel `yaml:"loglevel"`
+	Queues                     []string     `yaml:"queues"`
+	TimeframeDays              int          `yaml:"timeframe_days"`
+	DistanceThreshold          float32      `yaml:"distance_threshold"`
+	NonDuplicateWebArticleJobs []FaktoryJob `yaml:"non_duplicate_web_article_jobs"`
+	DuplicateWebArticleJobs    []FaktoryJob `yaml:"duplicate_web_article_jobs"`
+	LogLevel                   LogLevel     `yaml:"loglevel"`
 }
 
 // OmitItemsPublishedBefore is part of FeedFetcher settings.
@@ -229,6 +229,12 @@ func (hst *HNSWSpaceType) UnmarshalText(text []byte) (err error) {
 	}
 	*hst = HNSWSpaceType(st)
 	return nil
+}
+
+// FaktoryJob describes a Faktory job to be scheduled for execution.
+type FaktoryJob struct {
+	JobType string `yaml:"job_type"`
+	Queue   string `yaml:"queue"`
 }
 
 // FromYAMLFile reads a Config object from a YAML file.

@@ -106,15 +106,16 @@ func (fs *TwitterScheduler) scheduleSourceJobs(source *models.TwitterSource) err
 	// the full set of jobs is scheduled for each twitter-source, even if the
 	// context is canceled in the meanwhile.
 
-	for _, jobType := range fs.conf.Jobs {
-		job := faktory.NewJob(jobType, source.ID)
+	for _, fj := range fs.conf.Jobs {
+		job := faktory.NewJob(fj.JobType, source.ID)
+		job.Queue = fj.Queue
 		job.Retry = 0 // No retries, since it will be called periodically
 
 		fs.log.Trace().Interface("job", job).Msg("schedule new job")
 
 		err := fs.fk.Push(job)
 		if err != nil {
-			return fmt.Errorf("error pushing Job %s for TwitterSource %d: %w", jobType, source.ID, err)
+			return fmt.Errorf("error pushing Job %+v for TwitterSource %d: %w", fj, source.ID, err)
 		}
 	}
 	return nil

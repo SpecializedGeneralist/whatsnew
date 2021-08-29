@@ -91,10 +91,7 @@
         },
         "jobs": {
           "description": "List of each job type to be periodically scheduled.",
-          "type": "array",
-          "items": {
-            "type": "string"
-          }
+          "$ref": "#/definitions/faktory_jobs"
         },
         "loglevel": {
           "$ref": "#/definitions/loglevel"
@@ -112,10 +109,7 @@
         },
         "jobs": {
           "description": "List of each job type to be periodically scheduled.",
-          "type": "array",
-          "items": {
-            "type": "string"
-          }
+          "$ref": "#/definitions/faktory_jobs"
         },
         "loglevel": {
           "$ref": "#/definitions/loglevel"
@@ -139,10 +133,7 @@
         },
         "new_web_resource_jobs": {
           "description": "List of each job type to be scheduled for each piece of news.",
-          "type": "array",
-          "items": {
-            "type": "string"
-          }
+          "$ref": "#/definitions/faktory_jobs"
         },
         "loglevel": {
           "$ref": "#/definitions/loglevel"
@@ -186,10 +177,7 @@
               "type": "integer"
             },
             "new_web_resource_jobs": {
-              "type": "array",
-              "items": {
-                "type": "string"
-              }
+              "$ref": "#/definitions/faktory_jobs"
             },
             "max_allowed_failures": {
               "type": "integer"
@@ -235,10 +223,7 @@
               "type": "integer"
             },
             "new_web_article_jobs": {
-              "type": "array",
-              "items": {
-                "type": "string"
-              }
+              "$ref": "#/definitions/faktory_jobs"
             },
             "omit_tweets_published_before": {
               "type": "object",
@@ -278,10 +263,7 @@
               "type": "integer"
             },
             "new_web_article_jobs": {
-              "type": "array",
-              "items": {
-                "type": "string"
-              }
+              "$ref": "#/definitions/faktory_jobs"
             },
             "language_filter": {
               "type": "array",
@@ -315,10 +297,7 @@
               "type": "integer"
             },
             "classified_web_article_jobs": {
-              "type": "array",
-              "items": {
-                "type": "string"
-              }
+              "$ref": "#/definitions/faktory_jobs"
             },
             "spago_bart_server": {
               "$ref": "#/definitions/grpc_server"
@@ -355,10 +334,7 @@
               "type": "integer"
             },
             "vectorized_web_article_jobs": {
-              "type": "array",
-              "items": {
-                "type": "string"
-              }
+              "$ref": "#/definitions/faktory_jobs"
             },
             "spago_bert_server": {
               "$ref": "#/definitions/grpc_server"
@@ -386,16 +362,10 @@
               "type": "number"
             },
             "non_duplicate_web_article_jobs": {
-              "type": "array",
-              "items": {
-                "type": "string"
-              }
+              "$ref": "#/definitions/faktory_jobs"
             },
             "duplicate_web_article_jobs": {
-              "type": "array",
-              "items": {
-                "type": "string"
-              }
+              "$ref": "#/definitions/faktory_jobs"
             },
             "loglevel": {
               "$ref": "#/definitions/loglevel"
@@ -431,6 +401,21 @@
         "tls_enabled": { "type": "boolean" }
       },
       "required": ["target", "tls_enabled"]
+    },
+    "faktory_jobs": {
+      "type": "array",
+      "items": {
+        "$ref": "#/definitions/faktory_job"
+      }
+    },
+    "faktory_job": {
+      "description": "A Faktory job to be scheduled for execution.",
+      "type": "object",
+      "properties": {
+        "job_type": { "type": "string" },
+        "queue": { "type": "string" }
+      },
+      "required": ["job_type", "queue"]
     }
   }
 }

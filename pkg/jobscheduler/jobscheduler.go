@@ -7,6 +7,7 @@ package jobscheduler
 import (
 	"context"
 	"fmt"
+	"github.com/SpecializedGeneralist/whatsnew/pkg/config"
 	"github.com/SpecializedGeneralist/whatsnew/pkg/models"
 	faktory "github.com/contribsys/faktory/client"
 	"github.com/contribsys/faktory_worker_go"
@@ -124,8 +125,9 @@ func New() *JobScheduler {
 //
 // This function does not push the job to the server and does not create
 // a new record in the database.
-func (js *JobScheduler) AddJob(jobType string, args ...interface{}) error {
-	job := faktory.NewJob(jobType, args...)
+func (js *JobScheduler) AddJob(fj config.FaktoryJob, args ...interface{}) error {
+	job := faktory.NewJob(fj.JobType, args...)
+	job.Queue = fj.Queue
 
 	pj, err := models.NewPendingJob(job)
 	if err != nil {
@@ -139,9 +141,9 @@ func (js *JobScheduler) AddJob(jobType string, args ...interface{}) error {
 
 // AddJobs simply calls AddJob for each job type, using the same arguments for
 // all jobs.
-func (js *JobScheduler) AddJobs(jobTypes []string, args ...interface{}) error {
-	for _, jobType := range jobTypes {
-		err := js.AddJob(jobType, args...)
+func (js *JobScheduler) AddJobs(fjs []config.FaktoryJob, args ...interface{}) error {
+	for _, fj := range fjs {
+		err := js.AddJob(fj, args...)
 		if err != nil {
 			return err
 		}
