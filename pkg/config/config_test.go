@@ -103,6 +103,7 @@ func TestFromYAMLFile(t *testing.T) {
 			},
 			Workers: config.Workers{
 				FeedFetcher: config.FeedFetcher{
+					Queues:             []string{"wn_feed_fetcher"},
 					Concurrency:        10,
 					NewWebResourceJobs: []string{"WebScraper"},
 					MaxAllowedFailures: 15,
@@ -114,6 +115,7 @@ func TestFromYAMLFile(t *testing.T) {
 					LogLevel:       config.LogLevel(zerolog.InfoLevel),
 				},
 				TwitterScraper: config.TwitterScraper{
+					Queues:            []string{"wn_twitter_scraper"},
 					Concurrency:       10,
 					MaxTweetsNumber:   1000,
 					NewWebArticleJobs: []string{"ZeroShotClassifier"},
@@ -125,6 +127,7 @@ func TestFromYAMLFile(t *testing.T) {
 					LogLevel:       config.LogLevel(zerolog.InfoLevel),
 				},
 				WebScraper: config.WebScraper{
+					Queues:            []string{"wn_web_scraper"},
 					Concurrency:       10,
 					NewWebArticleJobs: []string{"ZeroShotClassifier"},
 					LanguageFilter:    []string{"en", "es"},
@@ -133,6 +136,7 @@ func TestFromYAMLFile(t *testing.T) {
 					LogLevel:          config.LogLevel(zerolog.InfoLevel),
 				},
 				ZeroShotClassifier: config.ZeroShotClassifier{
+					Queues:                   []string{"wn_zero_shot_classifier"},
 					Concurrency:              4,
 					ClassifiedWebArticleJobs: []string{"Vectorizer"},
 					SpagoBARTServer: config.GRPCServer{
@@ -145,6 +149,7 @@ func TestFromYAMLFile(t *testing.T) {
 					LogLevel:           config.LogLevel(zerolog.InfoLevel),
 				},
 				Vectorizer: config.Vectorizer{
+					Queues:                   []string{"wn_vectorizer"},
 					Concurrency:              4,
 					VectorizedWebArticleJobs: []string{"DuplicateDetector"},
 					SpagoBERTServer: config.GRPCServer{
@@ -154,6 +159,7 @@ func TestFromYAMLFile(t *testing.T) {
 					LogLevel: config.LogLevel(zerolog.InfoLevel),
 				},
 				DuplicateDetector: config.DuplicateDetector{
+					Queues:                     []string{"wn_duplicate_detector"},
 					TimeframeDays:              3,
 					DistanceThreshold:          0.3,
 					NonDuplicateWebArticleJobs: []string{},

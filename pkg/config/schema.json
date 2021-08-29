@@ -176,6 +176,12 @@
           "description": "Settings for the feed-fetcher worker.",
           "type": "object",
           "properties": {
+            "queues": {
+              "type": "array",
+              "items": {
+                "type": "string"
+              }
+            },
             "concurrency": {
               "type": "integer"
             },
@@ -210,12 +216,18 @@
               "$ref": "#/definitions/loglevel"
             }
           },
-          "required": ["concurrency", "new_web_resource_jobs", "language_filter", "max_allowed_failures", "omit_items_published_before", "loglevel"]
+          "required": ["queues", "concurrency", "new_web_resource_jobs", "language_filter", "max_allowed_failures", "omit_items_published_before", "loglevel"]
         },
         "twitter_scraper": {
           "description": "Settings for the twitter-scraper worker.",
           "type": "object",
           "properties": {
+            "queues": {
+              "type": "array",
+              "items": {
+                "type": "string"
+              }
+            },
             "concurrency": {
               "type": "integer"
             },
@@ -250,12 +262,18 @@
               "$ref": "#/definitions/loglevel"
             }
           },
-          "required": ["concurrency", "max_tweets_number", "new_web_article_jobs", "language_filter", "omit_tweets_published_before", "loglevel"]
+          "required": ["queues", "concurrency", "max_tweets_number", "new_web_article_jobs", "language_filter", "omit_tweets_published_before", "loglevel"]
         },
         "web_scraper": {
           "description": "Settings for the web-scraper worker.",
           "type": "object",
           "properties": {
+            "queues": {
+              "type": "array",
+              "items": {
+                "type": "string"
+              }
+            },
             "concurrency": {
               "type": "integer"
             },
@@ -281,12 +299,18 @@
               "$ref": "#/definitions/loglevel"
             }
           },
-          "required": ["concurrency", "new_web_article_jobs", "language_filter", "request_timeout", "user_agent", "loglevel"]
+          "required": ["queues", "concurrency", "new_web_article_jobs", "language_filter", "request_timeout", "user_agent", "loglevel"]
         },
         "zero_shot_classifier": {
           "description": "Settings for the zero-shot classifier worker.",
           "type": "object",
           "properties": {
+            "queues": {
+              "type": "array",
+              "items": {
+                "type": "string"
+              }
+            },
             "concurrency": {
               "type": "integer"
             },
@@ -315,12 +339,18 @@
               "$ref": "#/definitions/loglevel"
             }
           },
-          "required": ["concurrency", "classified_web_article_jobs", "spago_bart_server", "hypothesis_template", "possible_labels", "multi_class", "loglevel"]
+          "required": ["queues", "concurrency", "classified_web_article_jobs", "spago_bart_server", "hypothesis_template", "possible_labels", "multi_class", "loglevel"]
         },
         "vectorizer": {
           "description": "Settings for the vectorizer worker.",
           "type": "object",
           "properties": {
+            "queues": {
+              "type": "array",
+              "items": {
+                "type": "string"
+              }
+            },
             "concurrency": {
               "type": "integer"
             },
@@ -337,12 +367,18 @@
               "$ref": "#/definitions/loglevel"
             }
           },
-          "required": ["concurrency", "vectorized_web_article_jobs", "spago_bert_server", "loglevel"]
+          "required": ["queues", "concurrency", "vectorized_web_article_jobs", "spago_bert_server", "loglevel"]
         },
         "duplicate_detector": {
           "description": "Settings for the duplicate detector worker.",
           "type": "object",
           "properties": {
+            "queues": {
+              "type": "array",
+              "items": {
+                "type": "string"
+              }
+            },
             "timeframe_days": {
               "type": "integer"
             },
@@ -365,7 +401,7 @@
               "$ref": "#/definitions/loglevel"
             }
           },
-          "required": ["timeframe_days", "distance_threshold", "non_duplicate_web_article_jobs", "duplicate_web_article_jobs", "loglevel"]
+          "required": ["queues", "timeframe_days", "distance_threshold", "non_duplicate_web_article_jobs", "duplicate_web_article_jobs", "loglevel"]
         }
       },
       "required": ["feed_fetcher", "twitter_scraper", "web_scraper", "zero_shot_classifier", "vectorizer", "duplicate_detector"]

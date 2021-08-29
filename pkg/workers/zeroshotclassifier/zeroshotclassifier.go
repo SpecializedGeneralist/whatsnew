@@ -42,6 +42,7 @@ func New(conf config.ZeroShotClassifier, db *gorm.DB, bartConn *grpc.ClientConn,
 		FK:          fk,
 		Log:         log.Logger.Level(zerolog.Level(conf.LogLevel)),
 		Concurrency: conf.Concurrency,
+		Queues:      conf.Queues,
 		Perform:     zsc.perform,
 	}
 	return zsc

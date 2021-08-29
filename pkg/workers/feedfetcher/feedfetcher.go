@@ -43,6 +43,7 @@ func New(conf config.FeedFetcher, db *gorm.DB, fk *faktory_worker.Manager) *Feed
 		FK:          fk,
 		Log:         log.Logger.Level(zerolog.Level(conf.LogLevel)),
 		Concurrency: conf.Concurrency,
+		Queues:      conf.Queues,
 		Perform:     ff.perform,
 	}
 	return ff

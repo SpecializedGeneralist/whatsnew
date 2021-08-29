@@ -102,6 +102,7 @@ type Workers struct {
 
 // FeedFetcher holds settings for the FeedFetcher worker.
 type FeedFetcher struct {
+	Queues                   []string                 `yaml:"queues"`
 	Concurrency              int                      `yaml:"concurrency"`
 	NewWebResourceJobs       []string                 `yaml:"new_web_resource_jobs"`
 	MaxAllowedFailures       int                      `yaml:"max_allowed_failures"`
@@ -112,6 +113,7 @@ type FeedFetcher struct {
 
 // TwitterScraper holds settings for the TwitterScraper worker.
 type TwitterScraper struct {
+	Queues                    []string                 `yaml:"queues"`
 	Concurrency               int                      `yaml:"concurrency"`
 	MaxTweetsNumber           int                      `yaml:"max_tweets_number"`
 	NewWebArticleJobs         []string                 `yaml:"new_web_article_jobs"`
@@ -122,6 +124,7 @@ type TwitterScraper struct {
 
 // WebScraper holds settings for the WebScraper worker.
 type WebScraper struct {
+	Queues            []string      `yaml:"queues"`
 	Concurrency       int           `yaml:"concurrency"`
 	NewWebArticleJobs []string      `yaml:"new_web_article_jobs"`
 	LanguageFilter    []string      `yaml:"language_filter"`
@@ -132,6 +135,7 @@ type WebScraper struct {
 
 // ZeroShotClassifier holds settings for the zero-shot classifier worker.
 type ZeroShotClassifier struct {
+	Queues                   []string   `yaml:"queues"`
 	Concurrency              int        `yaml:"concurrency"`
 	ClassifiedWebArticleJobs []string   `yaml:"classified_web_article_jobs"`
 	SpagoBARTServer          GRPCServer `yaml:"spago_bart_server"`
@@ -143,6 +147,7 @@ type ZeroShotClassifier struct {
 
 // Vectorizer holds settings for the Vectorizer worker.
 type Vectorizer struct {
+	Queues                   []string   `yaml:"queues"`
 	Concurrency              int        `yaml:"concurrency"`
 	VectorizedWebArticleJobs []string   `yaml:"vectorized_web_article_jobs"`
 	SpagoBERTServer          GRPCServer `yaml:"spago_bert_server"`
@@ -151,6 +156,7 @@ type Vectorizer struct {
 
 // DuplicateDetector holds settings for the duplicate detector worker.
 type DuplicateDetector struct {
+	Queues                     []string `yaml:"queues"`
 	TimeframeDays              int      `yaml:"timeframe_days"`
 	DistanceThreshold          float32  `yaml:"distance_threshold"`
 	NonDuplicateWebArticleJobs []string `yaml:"non_duplicate_web_article_jobs"`

@@ -46,6 +46,7 @@ func New(conf config.Vectorizer, db *gorm.DB, bertConn *grpc.ClientConn, hnswCli
 		FK:          fk,
 		Log:         log.Logger.Level(zerolog.Level(conf.LogLevel)),
 		Concurrency: conf.Concurrency,
+		Queues:      conf.Queues,
 		Perform:     v.perform,
 	}
 	return v

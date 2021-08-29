@@ -58,6 +58,7 @@ func New(conf config.WebScraper, db *gorm.DB, fk *faktory_worker.Manager) *WebSc
 		FK:          fk,
 		Log:         log.Logger.Level(zerolog.Level(conf.LogLevel)),
 		Concurrency: conf.Concurrency,
+		Queues:      conf.Queues,
 		Perform:     ws.perform,
 	}
 	return ws

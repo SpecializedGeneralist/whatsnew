@@ -36,6 +36,7 @@ jobs_recoverer:
   loglevel: 'info'
 workers:
   feed_fetcher:
+    queues: ['wn_feed_fetcher']
     concurrency: 10
     new_web_resource_jobs: ['WebScraper']
     max_allowed_failures: 15
@@ -45,6 +46,7 @@ workers:
     language_filter: ['en', 'es']
     loglevel: 'info'
   twitter_scraper:
+    queues: ['wn_twitter_scraper']
     concurrency: 10
     max_tweets_number: 1000
     new_web_article_jobs: ['ZeroShotClassifier']
@@ -54,6 +56,7 @@ workers:
     language_filter: ['en', 'es']
     loglevel: 'info'
   web_scraper:
+    queues: ['wn_web_scraper']
     concurrency: 10
     new_web_article_jobs: ['ZeroShotClassifier']
     language_filter: ['en', 'es']
@@ -61,6 +64,7 @@ workers:
     user_agent: 'WhatsNew/0.0.0'
     loglevel: 'info'
   zero_shot_classifier:
+    queues: ['wn_zero_shot_classifier']
     concurrency: 4
     classified_web_article_jobs: ['Vectorizer']
     spago_bart_server:
@@ -71,6 +75,7 @@ workers:
     multi_class: true
     loglevel: 'info'
   vectorizer:
+    queues: ['wn_vectorizer']
     concurrency: 4
     vectorized_web_article_jobs: ['DuplicateDetector']
     spago_bert_server:
@@ -78,6 +83,7 @@ workers:
       tls_enabled: false
     loglevel: 'info'
   duplicate_detector:
+    queues: ['wn_duplicate_detector']
     timeframe_days: 3
     distance_threshold: 0.3
     non_duplicate_web_article_jobs: []

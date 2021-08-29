@@ -76,6 +76,7 @@ func New(conf config.DuplicateDetector, db *gorm.DB, hnswClient *hnswclient.Clie
 		FK:          fk,
 		Log:         log.Logger.Level(zerolog.Level(conf.LogLevel)),
 		Concurrency: 1,
+		Queues:      conf.Queues,
 		Perform:     v.perform,
 	}
 	return v

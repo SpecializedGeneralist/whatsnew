@@ -42,6 +42,7 @@ func New(conf config.TwitterScraper, db *gorm.DB, fk *faktory_worker.Manager) *T
 		FK:          fk,
 		Log:         log.Logger.Level(zerolog.Level(conf.LogLevel)),
 		Concurrency: conf.Concurrency,
+		Queues:      conf.Queues,
 		Perform:     ts.perform,
 	}
 	return ts

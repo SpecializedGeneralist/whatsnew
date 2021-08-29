@@ -20,6 +20,7 @@ type Worker struct {
 	FK          *faktory_worker.Manager
 	Log         zerolog.Logger
 	Concurrency int
+	Queues      []string
 	Perform     Perform
 }
 
@@ -32,6 +33,7 @@ type Perform func(ctx context.Context, modelID uint) error
 func (w Worker) Run() {
 	w.FK.Concurrency = w.Concurrency
 	w.FK.Register(w.Name, w.faktoryPerform)
+	w.FK.ProcessStrictPriorityQueues(w.Queues...)
 	w.FK.Run()
 }
 
