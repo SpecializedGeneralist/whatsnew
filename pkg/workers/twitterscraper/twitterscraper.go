@@ -142,7 +142,7 @@ func (ts *TwitterScraper) processTweet(tx *gorm.DB, src *models.TwitterSource, s
 		logger = logger.With().Uint("WebResource", webResource.ID).Logger()
 
 		if webResource.Tweet != nil {
-			logger.Warn().Uint("Tweet", webResource.Tweet.ID).Msg("a Tweet already exists")
+			logger.Debug().Uint("Tweet", webResource.Tweet.ID).Msg("a Tweet already exists")
 		} else {
 			tweet.WebResourceID = webResource.ID
 			err = createTweet(tx, logger, tweet)
@@ -152,7 +152,7 @@ func (ts *TwitterScraper) processTweet(tx *gorm.DB, src *models.TwitterSource, s
 		}
 
 		if webResource.WebArticle != nil {
-			logger.Warn().Uint("WebArticle", webResource.WebArticle.ID).Msg("a WebArticle already exists")
+			logger.Debug().Uint("WebArticle", webResource.WebArticle.ID).Msg("a WebArticle already exists")
 			return nil
 		}
 

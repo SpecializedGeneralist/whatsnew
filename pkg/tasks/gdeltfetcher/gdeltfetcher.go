@@ -134,7 +134,7 @@ func (gf *GDELTFetcher) processEvent(tx *gorm.DB, ev *events.Event, js *jobsched
 		logger = logger.With().Uint("WebResource", webResource.ID).Logger()
 
 		if webResource.GDELTEvent != nil {
-			logger.Warn().Uint("GDELTEvent", webResource.GDELTEvent.ID).Msg("a GDELT event already exists")
+			logger.Debug().Uint("GDELTEvent", webResource.GDELTEvent.ID).Msg("a GDELT event already exists")
 			return nil
 		}
 

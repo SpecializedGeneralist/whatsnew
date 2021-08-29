@@ -143,7 +143,7 @@ func (ff *FeedFetcher) processParsedFeedItem(tx *gorm.DB, feed *models.Feed, ite
 		logger = logger.With().Uint("WebResource", webResource.ID).Logger()
 
 		if webResource.FeedItem != nil {
-			logger.Warn().Uint("FeedItem", webResource.FeedItem.ID).Msg("a feed item already exists")
+			logger.Debug().Uint("FeedItem", webResource.FeedItem.ID).Msg("a FeedItem already exists")
 			return nil
 		}
 
