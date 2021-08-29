@@ -9,7 +9,7 @@ import (
 	"github.com/SpecializedGeneralist/whatsnew/pkg/cli/command"
 	"github.com/SpecializedGeneralist/whatsnew/pkg/config"
 	"github.com/SpecializedGeneralist/whatsnew/pkg/database"
-	"github.com/SpecializedGeneralist/whatsnew/pkg/twitterscheduler"
+	"github.com/SpecializedGeneralist/whatsnew/pkg/tasks/twitterscheduler"
 	"github.com/SpecializedGeneralist/whatsnew/pkg/workers"
 )
 
