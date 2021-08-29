@@ -34,6 +34,7 @@ func (w Worker) Run() {
 	w.FK.Concurrency = w.Concurrency
 	w.FK.Register(w.Name, w.faktoryPerform)
 	w.FK.ProcessStrictPriorityQueues(w.Queues...)
+	w.FK.Labels = []string{w.Name}
 	w.FK.Run()
 }
 
