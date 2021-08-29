@@ -258,6 +258,46 @@ func TestLogLevel_UnmarshalText(t *testing.T) {
 	})
 }
 
+func TestHNSWSpaceType_UnmarshalText(t *testing.T) {
+	t.Parallel()
+
+	t.Run("positive cases", func(t *testing.T) {
+		t.Parallel()
+		testCases := []struct {
+			text     string
+			expected config.HNSWSpaceType
+		}{
+			{"L2", config.HNSWSpaceType(hnsw_grpcapi.CreateIndexRequest_L2)},
+			{"IP", config.HNSWSpaceType(hnsw_grpcapi.CreateIndexRequest_IP)},
+			{"COSINE", config.HNSWSpaceType(hnsw_grpcapi.CreateIndexRequest_COSINE)},
+		}
+		for _, tc := range testCases {
+			t.Run(tc.text, func(t *testing.T) {
+				l := new(config.HNSWSpaceType)
+				err := l.UnmarshalText([]byte(tc.text))
+				assert.NoError(t, err)
+				assert.Equal(t, tc.expected, *l)
+			})
+		}
+	})
+
+	t.Run("negative cases", func(t *testing.T) {
+		t.Parallel()
+		testCases := []string{
+			"",
+			" ",
+			"foo",
+		}
+		for _, tc := range testCases {
+			t.Run(fmt.Sprintf("%#v", tc), func(t *testing.T) {
+				l := new(config.HNSWSpaceType)
+				err := l.UnmarshalText([]byte(tc))
+				assert.Error(t, err)
+			})
+		}
+	})
+}
+
 func dataFile(name string) string {
 	_, file, _, _ := runtime.Caller(0)
 	return filepath.Join(filepath.Dir(file), "testdata", name)
