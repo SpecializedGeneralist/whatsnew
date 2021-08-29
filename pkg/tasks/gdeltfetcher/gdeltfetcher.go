@@ -127,7 +127,8 @@ func (gf *GDELTFetcher) processEvent(tx *gorm.DB, ev *events.Event, js *jobsched
 
 	gdeltEvent, err := newGDELTEvent(ev)
 	if err != nil {
-		return err
+		logger.Err(err).Msg("error making new GDELT Event")
+		return nil
 	}
 
 	if webResource != nil {
