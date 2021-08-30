@@ -10,6 +10,7 @@ require (
 	github.com/PuerkitoBio/goquery v1.7.1 // indirect
 	github.com/SpecializedGeneralist/gdelt v0.3.0
 	github.com/SpecializedGeneralist/hnsw-grpc-server v1.0.0
+	github.com/SpecializedGeneralist/translator v0.0.0-20210830140609-8eb1a3cba7da
 	github.com/abadojack/whatlanggo v1.0.1
 	github.com/advancedlogic/GoOse v0.0.0-20210820140952-9d5822d4a625
 	github.com/araddon/dateparse v0.0.0-20210429162001-6b43995a97de // indirect
@@ -48,6 +49,7 @@ require (
 	github.com/fatih/set v0.2.1 // indirect
 	github.com/gigawattio/window v0.0.0-20180317192513-0f5467e35573 // indirect
 	github.com/golang/protobuf v1.5.2 // indirect
+	github.com/grpc-ecosystem/grpc-gateway/v2 v2.5.0 // indirect
 	github.com/jackc/chunkreader/v2 v2.0.1 // indirect
 	github.com/jackc/pgio v1.0.0 // indirect
 	github.com/jackc/pgpassfile v1.0.0 // indirect
