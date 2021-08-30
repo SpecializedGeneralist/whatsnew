@@ -131,7 +131,7 @@ func TestFromYAMLFile(t *testing.T) {
 						Enabled: true,
 						Time:    time.Date(2021, time.July, 1, 0, 0, 0, 0, time.UTC),
 					},
-					LanguageFilter: []string{"en", "es"},
+					LanguageFilter: []string{"en", "es", "fr", "it"},
 					LogLevel:       config.LogLevel(zerolog.InfoLevel),
 				},
 				TwitterScraper: config.TwitterScraper{
@@ -148,7 +148,7 @@ func TestFromYAMLFile(t *testing.T) {
 						Enabled: true,
 						Time:    time.Date(2021, time.July, 1, 0, 0, 0, 0, time.UTC),
 					},
-					LanguageFilter: []string{"en", "es"},
+					LanguageFilter: []string{"en", "es", "fr", "it"},
 					LogLevel:       config.LogLevel(zerolog.InfoLevel),
 				},
 				WebScraper: config.WebScraper{
@@ -160,7 +160,7 @@ func TestFromYAMLFile(t *testing.T) {
 							Queue:   "wn_translator",
 						},
 					},
-					LanguageFilter: []string{"en", "es"},
+					LanguageFilter: []string{"en", "es", "fr", "it"},
 					RequestTimeout: 30 * time.Second,
 					UserAgent:      "WhatsNew/0.0.0",
 					LogLevel:       config.LogLevel(zerolog.InfoLevel),

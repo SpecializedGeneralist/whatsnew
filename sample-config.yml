@@ -51,7 +51,7 @@ workers:
     omit_items_published_before:
       enabled: true
       time: '2021-07-01T00:00:00Z'
-    language_filter: ['en', 'es']
+    language_filter: ['en', 'es', 'fr', 'it']
     loglevel: 'info'
   twitter_scraper:
     queues: ['wn_twitter_scraper']
@@ -63,7 +63,7 @@ workers:
     omit_tweets_published_before:
       enabled: true
       time: '2021-07-01T00:00:00Z'
-    language_filter: ['en', 'es']
+    language_filter: ['en', 'es', 'fr', 'it']
     loglevel: 'info'
   web_scraper:
     queues: ['wn_web_scraper']
