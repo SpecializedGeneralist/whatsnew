@@ -58,8 +58,8 @@ workers:
     concurrency: 10
     max_tweets_number: 1000
     new_web_article_jobs:
-      - job_type: 'ZeroShotClassifier'
-        queue: 'wn_zero_shot_classifier'
+      - job_type: 'Translator'
+        queue: 'wn_translator'
     omit_tweets_published_before:
       enabled: true
       time: '2021-07-01T00:00:00Z'
@@ -69,9 +69,9 @@ workers:
     queues: ['wn_web_scraper']
     concurrency: 10
     new_web_article_jobs:
-      - job_type: 'ZeroShotClassifier'
-        queue: 'wn_zero_shot_classifier'
-    language_filter: ['en', 'es']
+      - job_type: 'Translator'
+        queue: 'wn_translator'
+    language_filter: ['en', 'es', 'fr', 'it']
     request_timeout: '30s'
     user_agent: 'WhatsNew/0.0.0'
     loglevel: 'info'

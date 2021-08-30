@@ -140,8 +140,8 @@ func TestFromYAMLFile(t *testing.T) {
 					MaxTweetsNumber: 1000,
 					NewWebArticleJobs: []config.FaktoryJob{
 						{
-							JobType: "ZeroShotClassifier",
-							Queue:   "wn_zero_shot_classifier",
+							JobType: "Translator",
+							Queue:   "wn_translator",
 						},
 					},
 					OmitTweetsPublishedBefore: config.OmitItemsPublishedBefore{
@@ -156,8 +156,8 @@ func TestFromYAMLFile(t *testing.T) {
 					Concurrency: 10,
 					NewWebArticleJobs: []config.FaktoryJob{
 						{
-							JobType: "ZeroShotClassifier",
-							Queue:   "wn_zero_shot_classifier",
+							JobType: "Translator",
+							Queue:   "wn_translator",
 						},
 					},
 					LanguageFilter: []string{"en", "es"},
