@@ -95,6 +95,7 @@ type Workers struct {
 	FeedFetcher        FeedFetcher        `yaml:"feed_fetcher"`
 	TwitterScraper     TwitterScraper     `yaml:"twitter_scraper"`
 	WebScraper         WebScraper         `yaml:"web_scraper"`
+	Translator         Translator         `yaml:"translator"`
 	ZeroShotClassifier ZeroShotClassifier `yaml:"zero_shot_classifier"`
 	Vectorizer         Vectorizer         `yaml:"vectorizer"`
 	DuplicateDetector  DuplicateDetector  `yaml:"duplicate_detector"`
@@ -131,6 +132,17 @@ type WebScraper struct {
 	RequestTimeout    time.Duration `yaml:"request_timeout"`
 	UserAgent         string        `yaml:"user_agent"`
 	LogLevel          LogLevel      `yaml:"loglevel"`
+}
+
+// Translator holds settings for the translator worker.
+type Translator struct {
+	Queues                  []string     `yaml:"queues"`
+	Concurrency             int          `yaml:"concurrency"`
+	TranslatorServer        GRPCServer   `yaml:"translator_server"`
+	ProcessedWebArticleJobs []FaktoryJob `yaml:"processed_web_article_jobs"`
+	LanguageWhitelist       []string     `yaml:"language_whitelist"`
+	TargetLanguage          string       `yaml:"target_language"`
+	LogLevel                LogLevel     `yaml:"loglevel"`
 }
 
 // ZeroShotClassifier holds settings for the zero-shot classifier worker.

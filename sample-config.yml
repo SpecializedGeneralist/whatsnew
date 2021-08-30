@@ -75,6 +75,18 @@ workers:
     request_timeout: '30s'
     user_agent: 'WhatsNew/0.0.0'
     loglevel: 'info'
+  translator:
+    queues: ['wn_translator']
+    concurrency: 4
+    translator_server:
+      target: '127.0.0.1:4557'
+      tls_enabled: false
+    processed_web_article_jobs:
+      - job_type: 'ZeroShotClassifier'
+        queue: 'wn_zero_shot_classifier'
+    language_whitelist: ['fr', 'it']
+    target_language: 'en'
+    loglevel: 'info'
   zero_shot_classifier:
     queues: ['wn_zero_shot_classifier']
     concurrency: 4

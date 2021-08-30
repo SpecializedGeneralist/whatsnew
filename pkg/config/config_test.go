@@ -165,6 +165,23 @@ func TestFromYAMLFile(t *testing.T) {
 					UserAgent:      "WhatsNew/0.0.0",
 					LogLevel:       config.LogLevel(zerolog.InfoLevel),
 				},
+				Translator: config.Translator{
+					Queues:      []string{"wn_translator"},
+					Concurrency: 4,
+					TranslatorServer: config.GRPCServer{
+						Target:     "127.0.0.1:4557",
+						TLSEnabled: false,
+					},
+					ProcessedWebArticleJobs: []config.FaktoryJob{
+						{
+							JobType: "ZeroShotClassifier",
+							Queue:   "wn_zero_shot_classifier",
+						},
+					},
+					LanguageWhitelist: []string{"fr", "it"},
+					TargetLanguage:    "en",
+					LogLevel:          config.LogLevel(zerolog.InfoLevel),
+				},
 				ZeroShotClassifier: config.ZeroShotClassifier{
 					Queues:      []string{"wn_zero_shot_classifier"},
 					Concurrency: 4,

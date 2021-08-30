@@ -283,6 +283,40 @@
           },
           "required": ["queues", "concurrency", "new_web_article_jobs", "language_filter", "request_timeout", "user_agent", "loglevel"]
         },
+        "translator": {
+          "description": "Settings for the translator worker.",
+          "type": "object",
+          "properties": {
+            "queues": {
+              "type": "array",
+              "items": {
+                "type": "string"
+              }
+            },
+            "concurrency": {
+              "type": "integer"
+            },
+            "translator_server": {
+              "$ref": "#/definitions/grpc_server"
+            },
+            "processed_web_article_jobs": {
+              "$ref": "#/definitions/faktory_jobs"
+            },
+            "language_whitelist": {
+              "type": "array",
+              "items": {
+                "type": "string"
+              }
+            },
+            "target_language": {
+              "type": "string"
+            },
+            "loglevel": {
+              "$ref": "#/definitions/loglevel"
+            }
+          },
+          "required": ["queues", "concurrency", "processed_web_article_jobs", "translator_server", "language_whitelist", "target_language", "loglevel"]
+        },
         "zero_shot_classifier": {
           "description": "Settings for the zero-shot classifier worker.",
           "type": "object",
@@ -374,7 +408,7 @@
           "required": ["queues", "timeframe_days", "distance_threshold", "non_duplicate_web_article_jobs", "duplicate_web_article_jobs", "loglevel"]
         }
       },
-      "required": ["feed_fetcher", "twitter_scraper", "web_scraper", "zero_shot_classifier", "vectorizer", "duplicate_detector"]
+      "required": ["feed_fetcher", "twitter_scraper", "web_scraper", "translator", "zero_shot_classifier", "vectorizer", "duplicate_detector"]
     }
   },
   "required": ["db", "faktory", "hnsw", "feed_scheduler", "twitter_scheduler", "gdelt_fetcher", "jobs_recoverer", "workers"],
