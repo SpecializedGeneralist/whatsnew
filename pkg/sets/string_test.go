@@ -40,32 +40,34 @@ func TestStringSet(t *testing.T) {
 
 	s.Add("foo")
 
+	assert.Len(t, s, 1)
 	assert.True(t, s.Has("foo"))
 	assert.False(t, s.Has("bar"))
-	assert.Len(t, s, 1)
 
 	s.Add("bar")
 
+	assert.Len(t, s, 2)
 	assert.True(t, s.Has("foo"))
 	assert.True(t, s.Has("bar"))
-	assert.Len(t, s, 2)
 
 	s.Delete("foo")
 
+	assert.Len(t, s, 1)
 	assert.False(t, s.Has("foo"))
 	assert.True(t, s.Has("bar"))
-	assert.Len(t, s, 1)
 
 	s.Delete("bar")
 
+	assert.Empty(t, s)
 	assert.False(t, s.Has("foo"))
 	assert.False(t, s.Has("bar"))
-	assert.Empty(t, s)
 }
 
 func TestStringSet_AddMany(t *testing.T) {
+	t.Parallel()
 	s := NewStringSet()
 	s.AddMany("foo", "bar")
+	assert.Len(t, s, 2)
 	assert.True(t, s.Has("foo"))
 	assert.True(t, s.Has("bar"))
 	assert.False(t, s.Has("baz"))
