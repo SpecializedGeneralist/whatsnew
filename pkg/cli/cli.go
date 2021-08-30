@@ -19,6 +19,7 @@ import (
 	"github.com/SpecializedGeneralist/whatsnew/pkg/cli/command/scrapetwitter"
 	"github.com/SpecializedGeneralist/whatsnew/pkg/cli/command/scrapeweb"
 	"github.com/SpecializedGeneralist/whatsnew/pkg/cli/command/server"
+	"github.com/SpecializedGeneralist/whatsnew/pkg/cli/command/translate"
 	"github.com/SpecializedGeneralist/whatsnew/pkg/cli/command/vectorize"
 	"github.com/SpecializedGeneralist/whatsnew/pkg/cli/command/zeroshotclassify"
 	"github.com/SpecializedGeneralist/whatsnew/pkg/config"
@@ -40,6 +41,7 @@ var (
 		fetchgdelt.CmdFetchGDELT,
 		scrapetwitter.CmdScrapeTwitter,
 		scrapeweb.CmdScrapeWeb,
+		translate.CmdTranslate,
 		zeroshotclassify.CmdZeroShotClassify,
 		vectorize.CmdVectorize,
 		detectduplicates.CmdDetectDuplicates,
