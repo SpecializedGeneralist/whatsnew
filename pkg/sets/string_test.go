@@ -21,6 +21,15 @@ func TestNewStringSetWithSize(t *testing.T) {
 	assert.Empty(t, s)
 }
 
+func TestNewStringSetWithElements(t *testing.T) {
+	t.Parallel()
+	s := NewStringSetWithElements("foo", "bar")
+	assert.Len(t, s, 2)
+	assert.True(t, s.Has("foo"))
+	assert.True(t, s.Has("bar"))
+	assert.False(t, s.Has("baz"))
+}
+
 func TestStringSet(t *testing.T) {
 	t.Parallel()
 	s := NewStringSetWithSize(10)

@@ -19,6 +19,14 @@ func NewStringSetWithSize(size int) StringSet {
 	return make(StringSet, size)
 }
 
+// NewStringSetWithElements creates a new StringSet, pre-filled with all the
+// given elements.
+func NewStringSetWithElements(vs ...string) StringSet {
+	s := NewStringSetWithSize(len(vs))
+	s.AddMany(vs...)
+	return s
+}
+
 // Has reports whether v is included in the set.
 func (s StringSet) Has(v string) bool {
 	_, ok := s[v]
