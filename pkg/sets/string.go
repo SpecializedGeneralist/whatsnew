@@ -30,6 +30,13 @@ func (s StringSet) Add(v string) {
 	s[v] = emptyStructValue
 }
 
+// AddMany adds all given elements to the set.
+func (s StringSet) AddMany(vs ...string) {
+	for _, v := range vs {
+		s[v] = emptyStructValue
+	}
+}
+
 // Delete deletes v from the set.
 func (s StringSet) Delete(v string) {
 	delete(s, v)

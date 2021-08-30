@@ -53,3 +53,11 @@ func TestStringSet(t *testing.T) {
 	assert.False(t, s.Has("bar"))
 	assert.Empty(t, s)
 }
+
+func TestStringSet_AddMany(t *testing.T) {
+	s := NewStringSet()
+	s.AddMany("foo", "bar")
+	assert.True(t, s.Has("foo"))
+	assert.True(t, s.Has("bar"))
+	assert.False(t, s.Has("baz"))
+}
