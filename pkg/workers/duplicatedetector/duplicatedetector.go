@@ -141,9 +141,9 @@ func (dd *DuplicateDetector) processWebArticle(ctx context.Context, tx *gorm.DB,
 	}
 
 	if hit != nil {
-		return js.AddJobs(dd.conf.NonDuplicateWebArticleJobs, wa.ID)
+		return js.AddJobs(dd.conf.DuplicateWebArticleJobs, wa.ID)
 	}
-	return js.AddJobs(dd.conf.DuplicateWebArticleJobs, wa.ID)
+	return js.AddJobs(dd.conf.NonDuplicateWebArticleJobs, wa.ID)
 }
 
 func newSimilarityInfo(wa *models.WebArticle, hit *hnswclient.Hit) *models.SimilarityInfo {
