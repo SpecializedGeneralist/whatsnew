@@ -406,9 +406,55 @@
             }
           },
           "required": ["queues", "timeframe_days", "distance_threshold", "non_duplicate_web_article_jobs", "duplicate_web_article_jobs", "loglevel"]
+        },
+        "information_extractor": {
+          "description": "Settings for the information extractor worker.",
+          "type": "object",
+          "properties": {
+            "queues": {
+              "type": "array",
+              "items": {
+                "type": "string"
+              }
+            },
+            "concurrency": {
+              "type": "integer"
+            },
+            "spago_bert_server": {
+              "$ref": "#/definitions/grpc_server"
+            },
+            "items": {
+              "type": "array",
+              "items": {
+                "type": "object",
+                "properties": {
+                  "label": {
+                    "type": "string"
+                  },
+                  "question": {
+                    "type": "string"
+                  },
+                  "answer_regexp": {
+                    "type": "string"
+                  },
+                  "threshold": {
+                    "type": "number"
+                  }
+                },
+                "required": ["label", "question", "answer_regexp", "threshold"]
+              }
+            },
+            "processed_web_article_jobs": {
+              "$ref": "#/definitions/faktory_jobs"
+            },
+            "loglevel": {
+              "$ref": "#/definitions/loglevel"
+            }
+          },
+          "required": ["queues", "concurrency", "spago_bert_server", "items", "processed_web_article_jobs", "loglevel"]
         }
       },
-      "required": ["feed_fetcher", "twitter_scraper", "web_scraper", "translator", "zero_shot_classifier", "vectorizer", "duplicate_detector"]
+      "required": ["feed_fetcher", "twitter_scraper", "web_scraper", "translator", "zero_shot_classifier", "vectorizer", "duplicate_detector", "information_extractor"]
     }
   },
   "required": ["db", "faktory", "hnsw", "feed_scheduler", "twitter_scheduler", "gdelt_fetcher", "jobs_recoverer", "workers"],

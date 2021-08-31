@@ -11,6 +11,7 @@ import (
 	"gopkg.in/yaml.v3"
 	gormlogger "gorm.io/gorm/logger"
 	"os"
+	"regexp"
 	"strings"
 	"time"
 )
@@ -92,13 +93,14 @@ type JobsRecoverer struct {
 
 // Workers holds settings for the various workers.
 type Workers struct {
-	FeedFetcher        FeedFetcher        `yaml:"feed_fetcher"`
-	TwitterScraper     TwitterScraper     `yaml:"twitter_scraper"`
-	WebScraper         WebScraper         `yaml:"web_scraper"`
-	Translator         Translator         `yaml:"translator"`
-	ZeroShotClassifier ZeroShotClassifier `yaml:"zero_shot_classifier"`
-	Vectorizer         Vectorizer         `yaml:"vectorizer"`
-	DuplicateDetector  DuplicateDetector  `yaml:"duplicate_detector"`
+	FeedFetcher          FeedFetcher          `yaml:"feed_fetcher"`
+	TwitterScraper       TwitterScraper       `yaml:"twitter_scraper"`
+	WebScraper           WebScraper           `yaml:"web_scraper"`
+	Translator           Translator           `yaml:"translator"`
+	ZeroShotClassifier   ZeroShotClassifier   `yaml:"zero_shot_classifier"`
+	Vectorizer           Vectorizer           `yaml:"vectorizer"`
+	DuplicateDetector    DuplicateDetector    `yaml:"duplicate_detector"`
+	InformationExtractor InformationExtractor `yaml:"information_extractor"`
 }
 
 // FeedFetcher holds settings for the FeedFetcher worker.
@@ -176,6 +178,25 @@ type DuplicateDetector struct {
 	LogLevel                   LogLevel     `yaml:"loglevel"`
 }
 
+// InformationExtractor holds settings for the information extractor worker.
+type InformationExtractor struct {
+	Queues                  []string                   `yaml:"queues"`
+	Concurrency             int                        `yaml:"concurrency"`
+	SpagoBERTServer         GRPCServer                 `yaml:"spago_bert_server"`
+	Items                   []InformationExtractorItem `yaml:"items"`
+	ProcessedWebArticleJobs []FaktoryJob               `yaml:"processed_web_article_jobs"`
+	LogLevel                LogLevel                   `yaml:"loglevel"`
+}
+
+// InformationExtractorItem is a single item for the information
+// extraction jobs.
+type InformationExtractorItem struct {
+	Label        string  `yaml:"label"`
+	Question     string  `yaml:"question"`
+	AnswerRegexp Regexp  `yaml:"answer_regexp"`
+	Threshold    float32 `yaml:"threshold"`
+}
+
 // OmitItemsPublishedBefore is part of FeedFetcher settings.
 type OmitItemsPublishedBefore struct {
 	Enabled bool      `yaml:"enabled"`
@@ -246,6 +267,23 @@ func (hst *HNSWSpaceType) UnmarshalText(text []byte) (err error) {
 		return fmt.Errorf("invalid HNSW space type: %#v", s)
 	}
 	*hst = HNSWSpaceType(st)
+	return nil
+}
+
+// Regexp is a redefinition of regexp.Regexp which satisfies
+// encoding.TextUnmarshaler, to be conveniently parsed from YAML.
+type Regexp regexp.Regexp
+
+// UnmarshalText satisfies the encoding.TextUnmarshaler interface, unmarshaling
+// the text to a Regexp.
+func (r *Regexp) UnmarshalText(text []byte) (err error) {
+	s := string(text)
+	re, err := regexp.Compile(s)
+	if err != nil {
+		return fmt.Errorf("invalid regular expression %#v: %w", s, err)
+	}
+
+	*r = Regexp(*re)
 	return nil
 }
 

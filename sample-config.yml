@@ -114,6 +114,25 @@ workers:
     queues: ['wn_duplicate_detector']
     timeframe_days: 3
     distance_threshold: 0.3
-    non_duplicate_web_article_jobs: []
+    non_duplicate_web_article_jobs:
+      - job_type: 'InformationExtractor'
+        queue: 'wn_information_extractor'
     duplicate_web_article_jobs: []
+    loglevel: 'info'
+  information_extractor:
+    queues: ['wn_information_extractor']
+    concurrency: 4
+    spago_bert_server:
+      target: '127.0.0.1:5831'
+      tls_enabled: false
+    items:
+      - label: 'love'
+        question: 'What do I love?'
+        answer_regexp: 'I love'
+        threshold: 0.8
+      - label: 'hate'
+        question: 'What do I hate?'
+        answer_regexp: 'I hate'
+        threshold: 0.8
+    processed_web_article_jobs: []
     loglevel: 'info'
