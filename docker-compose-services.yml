@@ -1,0 +1,60 @@
+version: '3.9'
+services:
+  faktory:
+    image: 'contribsys/faktory:1.5.3'
+    ports:
+      - '7419:7419'
+      - '7420:7420'
+    volumes:
+      - 'faktory:/var/lib/faktory'
+    environment:
+      FAKTORY_PASSWORD: 'faktory'
+    command: '/faktory -b :7419 -w :7420 -e production'
+  postgres:
+    image: 'postgres:13.3-alpine'
+    ports:
+      - '5432:5432'
+    volumes:
+      - 'postgres:/var/lib/postgresql/data'
+    environment:
+      POSTGRES_PASSWORD: 'postgres'
+  hnsw:
+    image: 'specializedgeneralist/hnsw-grpc-server:1.0.0'
+    ports:
+      - '19530:19530'
+    volumes:
+      - 'hnsw:/hnsw-grpc-server-data'
+  spago-distilbart:
+    image: 'nlpodyssey/spago:0.7.0'
+    ports:
+      - '4001:8080'
+    volumes:
+      - 'spago:/models'
+    command: 'bart-server server --address 0.0.0.0:8081 --grpc-address 0.0.0.0:8080 --repo /models --model valhalla/distilbart-mnli-12-9 --tls-disable true'
+  spago-labse:
+    image: 'nlpodyssey/spago:0.7.0'
+    ports:
+      - '1976:8080'
+    volumes:
+      - 'spago:/models'
+    command: 'bert-server server --address 0.0.0.0:8081 --grpc-address 0.0.0.0:8080 --repo /models --model pvl/labse_bert --tls-disable true'
+  spago-qa:
+    image: 'nlpodyssey/spago:0.7.0'
+    ports:
+      - '5831:8080'
+    volumes:
+      - 'spago:/models'
+    command: 'bert-server server --address 0.0.0.0:8081 --grpc-address 0.0.0.0:8080 --repo /models --model deepset/bert-base-cased-squad2 --tls-disable true'
+  translator:
+    image: 'specializedgeneralist/translator:0.1-alpha'
+    ports:
+      - '4557:10000'
+    volumes:
+      - './docker-compose:/config'
+      - 'spago:/models'
+    command: '-c /config/translator-config.yml'
+volumes:
+  faktory:
+  postgres:
+  hnsw:
+  spago:

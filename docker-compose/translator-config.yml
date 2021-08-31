@@ -1,0 +1,18 @@
+log_level: info
+host: 0.0.0.0
+port: 10000
+max_concurrent_computations: 4
+
+tls_enabled: false
+tls_cert:
+tls_key:
+
+models_path: /models
+
+language_models:
+  - source: it
+    target: en
+    model: Helsinki-NLP/opus-mt-it-en
+  - source: fr
+    target: en
+    model: Helsinki-NLP/opus-mt-fr-en
