@@ -128,11 +128,11 @@ workers:
     items:
       - label: 'love'
         question: 'What do I love?'
-        answer_regexp: 'I love'
+        answer_regexp: '.+'
         threshold: 0.8
       - label: 'hate'
         question: 'What do I hate?'
-        answer_regexp: 'I hate'
+        answer_regexp: '.+'
         threshold: 0.8
     processed_web_article_jobs: []
     loglevel: 'info'

@@ -240,13 +240,13 @@ func TestFromYAMLFile(t *testing.T) {
 						{
 							Label:        "love",
 							Question:     "What do I love?",
-							AnswerRegexp: config.Regexp(*regexp.MustCompile(`I love`)),
+							AnswerRegexp: config.Regexp(*regexp.MustCompile(`.+`)),
 							Threshold:    0.8,
 						},
 						{
 							Label:        "hate",
 							Question:     "What do I hate?",
-							AnswerRegexp: config.Regexp(*regexp.MustCompile(`I hate`)),
+							AnswerRegexp: config.Regexp(*regexp.MustCompile(`.+`)),
 							Threshold:    0.8,
 						},
 					},
