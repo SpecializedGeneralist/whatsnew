@@ -13,6 +13,6 @@ type ZeroShotClass struct {
 	WebArticleID uint `gorm:"not null;index;index:idx_web_article_id_best,unique,where:best;index:idx_web_article_id_class,unique"`
 
 	Class      string  `gorm:"not null;index;index:idx_web_article_id_class,unique"`
-	Confidence float64 `gorm:"not null"`
+	Confidence float32 `gorm:"not null"`
 	Best       bool    `gorm:"not null;index:idx_web_article_id_best,unique,where:best"`
 }

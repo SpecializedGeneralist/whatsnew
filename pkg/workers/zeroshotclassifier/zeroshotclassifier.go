@@ -114,7 +114,7 @@ func (zsc *ZeroShotClassifier) processWebArticle(ctx context.Context, tx *gorm.D
 		classes[i] = &models.ZeroShotClass{
 			WebArticleID: wa.ID,
 			Class:        pair.Class,
-			Confidence:   pair.Confidence,
+			Confidence:   float32(pair.Confidence),
 			Best:         i == 0,
 		}
 	}
