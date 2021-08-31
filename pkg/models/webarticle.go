@@ -28,6 +28,9 @@ type WebArticle struct {
 	// A WebArticle has many models.ZeroShotClass models.
 	ZeroShotClasses []ZeroShotClass `gorm:"constraint:OnDelete:CASCADE"`
 
+	// A WebArticle has many models.ExtractedInfo models.
+	ExtractedInfos []ExtractedInfo `gorm:"constraint:OnDelete:CASCADE"`
+
 	// A WebArticle has one Vector.
 	Vector *Vector `gorm:"constraint:OnDelete:CASCADE"`
 
