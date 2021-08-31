@@ -188,6 +188,12 @@ type GRPCServer struct {
 	TLSEnabled bool   `yaml:"tls_enabled"`
 }
 
+// FaktoryJob describes a Faktory job to be scheduled for execution.
+type FaktoryJob struct {
+	JobType string `yaml:"job_type"`
+	Queue   string `yaml:"queue"`
+}
+
 // DBLogLevel is a redefinition of GORM logger.LogLevel which satisfies
 // encoding.TextUnmarshaler, to be conveniently parsed from YAML.
 type DBLogLevel gormlogger.LogLevel
@@ -241,12 +247,6 @@ func (hst *HNSWSpaceType) UnmarshalText(text []byte) (err error) {
 	}
 	*hst = HNSWSpaceType(st)
 	return nil
-}
-
-// FaktoryJob describes a Faktory job to be scheduled for execution.
-type FaktoryJob struct {
-	JobType string `yaml:"job_type"`
-	Queue   string `yaml:"queue"`
 }
 
 // FromYAMLFile reads a Config object from a YAML file.
