@@ -11,6 +11,7 @@ import (
 	"github.com/SpecializedGeneralist/whatsnew/pkg/cli/command"
 	"github.com/SpecializedGeneralist/whatsnew/pkg/cli/command/db"
 	"github.com/SpecializedGeneralist/whatsnew/pkg/cli/command/detectduplicates"
+	"github.com/SpecializedGeneralist/whatsnew/pkg/cli/command/extractinformation"
 	"github.com/SpecializedGeneralist/whatsnew/pkg/cli/command/fetchfeeds"
 	"github.com/SpecializedGeneralist/whatsnew/pkg/cli/command/fetchgdelt"
 	"github.com/SpecializedGeneralist/whatsnew/pkg/cli/command/recoverjobs"
@@ -45,6 +46,7 @@ var (
 		zeroshotclassify.CmdZeroShotClassify,
 		vectorize.CmdVectorize,
 		detectduplicates.CmdDetectDuplicates,
+		extractinformation.CmdExtractInformation,
 		recoverjobs.CmdRecoverJobs,
 	}
 )
