@@ -149,7 +149,17 @@ func (s *Server) DeleteQueryTwitterSource(_ context.Context, req *whatsnew.Delet
 		return &whatsnew.DeleteQueryTwitterSourceResponse{Errors: s.makeErrors(req, ret.Error)}, nil
 	}
 
-	ret = s.db.Delete(&ts)
+	var tweetsCount int64
+	ret = s.db.Model(&models.Tweet{}).Where("twitter_source_id = ?", ts.ID).Limit(1).Count(&tweetsCount)
+	if ret.Error != nil {
+		return &whatsnew.DeleteQueryTwitterSourceResponse{Errors: s.makeErrors(req, ret.Error)}, nil
+	}
+
+	if tweetsCount == 0 {
+		ret = s.db.Unscoped().Delete(&ts)
+	} else {
+		ret = s.db.Delete(&ts)
+	}
 	if ret.Error != nil {
 		return &whatsnew.DeleteQueryTwitterSourceResponse{Errors: s.makeErrors(req, ret.Error)}, nil
 	}
