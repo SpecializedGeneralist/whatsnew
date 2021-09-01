@@ -29,6 +29,7 @@ require (
 	github.com/n0madic/twitter-scraper v0.0.0-20210809110235-53894d63e0c2
 	github.com/nlpodyssey/spago v0.7.0
 	github.com/olekukonko/tablewriter v0.0.5 // indirect
+	github.com/rs/cors v1.8.0
 	github.com/rs/zerolog v1.24.0
 	github.com/stretchr/testify v1.7.0
 	golang.org/x/crypto v0.0.0-20210711020723-a769d52b0f97 // indirect
