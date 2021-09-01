@@ -40,6 +40,13 @@ jobs_recoverer:
   time_interval: '1m'
   leeway_time: '1m'
   loglevel: 'info'
+server:
+  address: '0.0.0.0:10000'
+  tls_enabled: false
+  tls_cert: ''
+  tls_key: ''
+  allowed_origins: ['*']
+  loglevel: 'info'
 workers:
   feed_fetcher:
     queues: ['wn_feed_fetcher']

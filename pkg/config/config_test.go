@@ -117,6 +117,14 @@ func TestFromYAMLFile(t *testing.T) {
 				LeewayTime:   time.Minute,
 				LogLevel:     config.LogLevel(zerolog.InfoLevel),
 			},
+			Server: config.Server{
+				Address:        "0.0.0.0:10000",
+				TLSEnabled:     false,
+				TLSCert:        "",
+				TLSKey:         "",
+				AllowedOrigins: []string{"*"},
+				LogLevel:       config.LogLevel(zerolog.InfoLevel),
+			},
 			Workers: config.Workers{
 				FeedFetcher: config.FeedFetcher{
 					Queues:      []string{"wn_feed_fetcher"},

@@ -159,6 +159,34 @@
       },
       "required": ["time_interval", "leeway_time", "loglevel"]
     },
+    "server": {
+      "description": "Settings for HTTP and gRPC server.",
+      "type": "object",
+      "properties": {
+        "address": {
+          "type": "string"
+        },
+        "tls_enabled": {
+          "type": "boolean"
+        },
+        "tls_cert": {
+          "type": "string"
+        },
+        "tls_key": {
+          "type": "string"
+        },
+        "allowed_origins": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          }
+        },
+        "loglevel": {
+          "$ref": "#/definitions/loglevel"
+        }
+      },
+      "required": ["address", "tls_enabled", "tls_cert", "tls_key", "allowed_origins", "loglevel"]
+    },
     "workers": {
       "description": "Settings for specific workers.",
       "type": "object",
@@ -457,7 +485,7 @@
       "required": ["feed_fetcher", "twitter_scraper", "web_scraper", "translator", "zero_shot_classifier", "vectorizer", "duplicate_detector", "information_extractor"]
     }
   },
-  "required": ["db", "faktory", "hnsw", "feed_scheduler", "twitter_scheduler", "gdelt_fetcher", "jobs_recoverer", "workers"],
+  "required": ["db", "faktory", "hnsw", "feed_scheduler", "twitter_scheduler", "gdelt_fetcher", "jobs_recoverer", "server", "workers"],
   "definitions": {
     "loglevel": {
       "description": "Log level. The value is compatible with zerolog.Level.",

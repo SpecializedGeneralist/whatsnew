@@ -25,6 +25,7 @@ type Config struct {
 	TwitterScheduler TwitterScheduler `yaml:"twitter_scheduler"`
 	GDELTFetcher     GDELTFetcher     `yaml:"gdelt_fetcher"`
 	JobsRecoverer    JobsRecoverer    `yaml:"jobs_recoverer"`
+	Server           Server           `yaml:"server"`
 	Workers          Workers          `yaml:"workers"`
 }
 
@@ -89,6 +90,16 @@ type JobsRecoverer struct {
 	TimeInterval time.Duration `yaml:"time_interval"`
 	LeewayTime   time.Duration `yaml:"leeway_time"`
 	LogLevel     LogLevel      `yaml:"loglevel"`
+}
+
+// Server holds settings for the HTTP and gRPC server.
+type Server struct {
+	Address        string   `yaml:"address"`
+	TLSEnabled     bool     `yaml:"tls_enabled"`
+	TLSCert        string   `yaml:"tls_cert"`
+	TLSKey         string   `yaml:"tls_key"`
+	AllowedOrigins []string `yaml:"allowed_origins"`
+	LogLevel       LogLevel `yaml:"loglevel"`
 }
 
 // Workers holds settings for the various workers.
