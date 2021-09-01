@@ -4,11 +4,16 @@
 
 package models
 
-import "database/sql"
+import (
+	"database/sql"
+	"gorm.io/gorm"
+)
 
 // Feed is a model representing an RSS or Atom feed.
 type Feed struct {
 	Model
+
+	DeletedAt gorm.DeletedAt `gorm:"index"`
 
 	// The unique URL of the feed.
 	URL string `gorm:"not null;uniqueIndex"`
