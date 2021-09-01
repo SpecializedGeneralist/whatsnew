@@ -146,7 +146,17 @@ func (s *Server) DeleteFeed(_ context.Context, req *whatsnew.DeleteFeedRequest) 
 		return &whatsnew.DeleteFeedResponse{Errors: s.makeErrors(req, ret.Error)}, nil
 	}
 
-	ret = s.db.Delete(&feed)
+	var feedItemsCount int64
+	ret = s.db.Model(&models.FeedItem{}).Where("feed_id = ?", feed.ID).Limit(1).Count(&feedItemsCount)
+	if ret.Error != nil {
+		return &whatsnew.DeleteFeedResponse{Errors: s.makeErrors(req, ret.Error)}, nil
+	}
+
+	if feedItemsCount == 0 {
+		ret = s.db.Unscoped().Delete(&feed)
+	} else {
+		ret = s.db.Delete(&feed)
+	}
 	if ret.Error != nil {
 		return &whatsnew.DeleteFeedResponse{Errors: s.makeErrors(req, ret.Error)}, nil
 	}
