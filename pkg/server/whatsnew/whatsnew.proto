@@ -1,0 +1,489 @@
+syntax = "proto3";
+option go_package = "github.com/SpecializedGeneralist/whatsnew/pkg/server/whatsnew";
+
+package whatsnew;
+
+import "google/api/annotations.proto";
+
+import "google/protobuf/descriptor.proto";
+
+import "google/protobuf/empty.proto";
+
+message ResponseErrors {
+  repeated ResponseError value = 1;
+}
+
+message ResponseError {
+  string message = 1;
+}
+
+message NewFeeds {
+  repeated NewFeed feeds = 1;
+}
+
+message NewFeed {
+  string url = 1;
+}
+
+message CreateFeedsResponse {
+  CreateFeedsData data = 1;
+
+  ResponseErrors errors = 2;
+}
+
+message CreateFeedsData {
+  repeated string feed_ids = 1;
+}
+
+message GetFeedsResponse {
+  GetFeedsData data = 1;
+
+  ResponseErrors errors = 2;
+}
+
+message GetFeedsData {
+  repeated Feed feeds = 1;
+}
+
+message CreateFeedResponse {
+  CreateFeedData data = 1;
+
+  ResponseErrors errors = 2;
+}
+
+message CreateFeedData {
+  string feed_id = 1;
+}
+
+message GetFeedResponse {
+  GetFeedData data = 1;
+
+  ResponseErrors errors = 2;
+}
+
+message GetFeedData {
+  Feed feed = 1;
+}
+
+message UpdatedFeed {
+  string url = 1;
+
+  bool enabled = 2;
+
+  string last_retrieved_at = 3;
+
+  int64 failures_count = 4;
+
+  string last_error = 5;
+}
+
+message UpdateFeedResponse {
+  UpdateFeedData data = 1;
+
+  ResponseErrors errors = 2;
+}
+
+message UpdateFeedData {
+  Feed feed = 1;
+}
+
+message DeleteFeedResponse {
+  DeleteFeedData data = 1;
+
+  ResponseErrors errors = 2;
+}
+
+message DeleteFeedData {
+  string deleted_feed_id = 1;
+}
+
+message GetUserTwitterSourcesResponse {
+  GetUserTwitterSourcesData data = 1;
+
+  ResponseErrors errors = 2;
+}
+
+message GetUserTwitterSourcesData {
+  repeated UserTwitterSource user_twitter_sources = 1;
+}
+
+message NewUserTwitterSources {
+  repeated NewUserTwitterSource user_twitter_sources = 1;
+}
+
+message CreateUserTwitterSourcesResponse {
+  CreateUserTwitterSourcesData data = 1;
+
+  ResponseErrors errors = 2;
+}
+
+message CreateUserTwitterSourcesData {
+  repeated string user_twitter_source_ids = 1;
+}
+
+message NewUserTwitterSource {
+  string username = 1;
+}
+
+message CreateUserTwitterSourceResponse {
+  CreateUserTwitterSourceData data = 1;
+
+  ResponseErrors errors = 2;
+}
+
+message CreateUserTwitterSourceData {
+  string user_twitter_source_id = 1;
+}
+
+message GetUserTwitterSourceResponse {
+  GetUserTwitterSourceData data = 1;
+
+  ResponseErrors errors = 2;
+}
+
+message GetUserTwitterSourceData {
+  UserTwitterSource user_twitter_source = 1;
+}
+
+message UpdatedUserTwitterSource {
+  string username = 1;
+
+  bool enabled = 2;
+
+  string last_retrieved_at = 3;
+
+  int64 failures_count = 4;
+
+  string last_error = 5;
+}
+
+message UpdateUserTwitterSourceResponse {
+  UpdateUserTwitterSourceData data = 1;
+
+  ResponseErrors errors = 2;
+}
+
+message UpdateUserTwitterSourceData {
+  UserTwitterSource user_twitter_source = 1;
+}
+
+message DeleteUserTwitterSourceResponse {
+  DeleteUserTwitterSourceData data = 1;
+
+  ResponseErrors errors = 2;
+}
+
+message DeleteUserTwitterSourceData {
+  string deleted_user_twitter_source_id = 1;
+}
+
+message GetQueryTwitterSourcesResponse {
+  GetQueryTwitterSourcesData data = 1;
+
+  ResponseErrors errors = 2;
+}
+
+message GetQueryTwitterSourcesData {
+  repeated QueryTwitterSource query_twitter_sources = 1;
+}
+
+message NewQueryTwitterSources {
+  repeated NewQueryTwitterSource query_twitter_sources = 1;
+}
+
+message CreateQueryTwitterSourcesResponse {
+  CreateQueryTwitterSourcesData data = 1;
+
+  ResponseErrors errors = 2;
+}
+
+message CreateQueryTwitterSourcesData {
+  repeated string query_twitter_source_ids = 1;
+}
+
+message NewQueryTwitterSource {
+  string query = 1;
+}
+
+message CreateQueryTwitterSourceResponse {
+  CreateQueryTwitterSourceData data = 1;
+
+  ResponseErrors errors = 2;
+}
+
+message CreateQueryTwitterSourceData {
+  string query_twitter_source_id = 1;
+}
+
+message GetQueryTwitterSourceResponse {
+  GetQueryTwitterSourceData data = 1;
+
+  ResponseErrors errors = 2;
+}
+
+message GetQueryTwitterSourceData {
+  QueryTwitterSource query_twitter_source = 1;
+}
+
+message UpdatedQueryTwitterSource {
+  string query = 1;
+
+  bool enabled = 2;
+
+  string last_retrieved_at = 3;
+
+  int64 failures_count = 4;
+
+  string last_error = 5;
+}
+
+message UpdateQueryTwitterSourceResponse {
+  UpdateQueryTwitterSourceData data = 1;
+
+  ResponseErrors errors = 2;
+}
+
+message UpdateQueryTwitterSourceData {
+  QueryTwitterSource query_twitter_source = 1;
+}
+
+message DeleteQueryTwitterSourceResponse {
+  DeleteQueryTwitterSourceData data = 1;
+
+  ResponseErrors errors = 2;
+}
+
+message DeleteQueryTwitterSourceData {
+  string deleted_query_twitter_source_id = 1;
+}
+
+message Feed {
+  string id = 1;
+
+  string created_at = 2;
+
+  string updated_at = 3;
+
+  string url = 4;
+
+  bool enabled = 5;
+
+  string last_retrieved_at = 6;
+
+  int64 failures_count = 7;
+
+  string last_error = 8;
+}
+
+message UserTwitterSource {
+  string id = 1;
+
+  string created_at = 2;
+
+  string updated_at = 3;
+
+  string username = 4;
+
+  bool enabled = 5;
+
+  string last_retrieved_at = 6;
+
+  int64 failures_count = 7;
+
+  string last_error = 8;
+}
+
+message QueryTwitterSource {
+  string id = 1;
+
+  string created_at = 2;
+
+  string updated_at = 3;
+
+  string query = 4;
+
+  bool enabled = 5;
+
+  string last_retrieved_at = 6;
+
+  int64 failures_count = 7;
+
+  string last_error = 8;
+}
+
+//GetFeedsParameters holds parameters to GetFeeds
+message GetFeedsRequest {
+  int64 first = 1;
+
+  string after = 2;
+}
+
+//CreateFeedsParameters holds parameters to CreateFeeds
+message CreateFeedsRequest {
+  NewFeeds new_feeds = 1;
+}
+
+//CreateFeedParameters holds parameters to CreateFeed
+message CreateFeedRequest {
+  NewFeed new_feed = 1;
+}
+
+//GetFeedParameters holds parameters to GetFeed
+message GetFeedRequest {
+  string id = 1;
+}
+
+//UpdateFeedParameters holds parameters to UpdateFeed
+message UpdateFeedRequest {
+  string id = 1;
+
+  UpdatedFeed updated_feed = 2;
+}
+
+//DeleteFeedParameters holds parameters to DeleteFeed
+message DeleteFeedRequest {
+  string id = 1;
+}
+
+//GetUserTwitterSourcesParameters holds parameters to GetUserTwitterSources
+message GetUserTwitterSourcesRequest {
+  int64 first = 1;
+
+  string after = 2;
+}
+
+//CreateUserTwitterSourcesParameters holds parameters to CreateUserTwitterSources
+message CreateUserTwitterSourcesRequest {
+  NewUserTwitterSources new_user_twitter_sources = 1;
+}
+
+//CreateUserTwitterSourceParameters holds parameters to CreateUserTwitterSource
+message CreateUserTwitterSourceRequest {
+  NewUserTwitterSource new_user_twitter_source = 1;
+}
+
+//GetUserTwitterSourceParameters holds parameters to GetUserTwitterSource
+message GetUserTwitterSourceRequest {
+  string id = 1;
+}
+
+//UpdateUserTwitterSourceParameters holds parameters to UpdateUserTwitterSource
+message UpdateUserTwitterSourceRequest {
+  string id = 1;
+
+  UpdatedUserTwitterSource updated_user_twitter_source = 2;
+}
+
+//DeleteUserTwitterSourceParameters holds parameters to DeleteUserTwitterSource
+message DeleteUserTwitterSourceRequest {
+  string id = 1;
+}
+
+//GetQueryTwitterSourcesParameters holds parameters to GetQueryTwitterSources
+message GetQueryTwitterSourcesRequest {
+  int64 first = 1;
+
+  string after = 2;
+}
+
+//CreateQueryTwitterSourcesParameters holds parameters to CreateQueryTwitterSources
+message CreateQueryTwitterSourcesRequest {
+  NewQueryTwitterSources new_query_twitter_sources = 1;
+}
+
+//CreateQueryTwitterSourceParameters holds parameters to CreateQueryTwitterSource
+message CreateQueryTwitterSourceRequest {
+  NewQueryTwitterSource new_query_twitter_source = 1;
+}
+
+//GetQueryTwitterSourceParameters holds parameters to GetQueryTwitterSource
+message GetQueryTwitterSourceRequest {
+  string id = 1;
+}
+
+//UpdateQueryTwitterSourceParameters holds parameters to UpdateQueryTwitterSource
+message UpdateQueryTwitterSourceRequest {
+  string id = 1;
+
+  UpdatedQueryTwitterSource updated_query_twitter_source = 2;
+}
+
+//DeleteQueryTwitterSourceParameters holds parameters to DeleteQueryTwitterSource
+message DeleteQueryTwitterSourceRequest {
+  string id = 1;
+}
+
+service Whatsnew {
+  rpc GetFeeds ( GetFeedsRequest ) returns ( GetFeedsResponse ) {
+    option (google.api.http) = { get:"/feeds"  };
+  }
+
+  rpc CreateFeeds ( CreateFeedsRequest ) returns ( CreateFeedsResponse ) {
+    option (google.api.http) = { post:"/feeds" body:"new_feeds"  };
+  }
+
+  rpc CreateFeed ( CreateFeedRequest ) returns ( CreateFeedResponse ) {
+    option (google.api.http) = { post:"/feed" body:"new_feed"  };
+  }
+
+  rpc GetFeed ( GetFeedRequest ) returns ( GetFeedResponse ) {
+    option (google.api.http) = { get:"/feed/{id}"  };
+  }
+
+  rpc UpdateFeed ( UpdateFeedRequest ) returns ( UpdateFeedResponse ) {
+    option (google.api.http) = { put:"/feed/{id}" body:"updated_feed"  };
+  }
+
+  rpc DeleteFeed ( DeleteFeedRequest ) returns ( DeleteFeedResponse ) {
+    option (google.api.http) = { delete:"/feed/{id}"  };
+  }
+
+  rpc GetUserTwitterSources ( GetUserTwitterSourcesRequest ) returns ( GetUserTwitterSourcesResponse ) {
+    option (google.api.http) = { get:"/twitter_sources/users"  };
+  }
+
+  rpc CreateUserTwitterSources ( CreateUserTwitterSourcesRequest ) returns ( CreateUserTwitterSourcesResponse ) {
+    option (google.api.http) = { post:"/twitter_sources/users" body:"new_user_twitter_sources"  };
+  }
+
+  rpc CreateUserTwitterSource ( CreateUserTwitterSourceRequest ) returns ( CreateUserTwitterSourceResponse ) {
+    option (google.api.http) = { post:"/twitter_sources/user" body:"new_user_twitter_source"  };
+  }
+
+  rpc GetUserTwitterSource ( GetUserTwitterSourceRequest ) returns ( GetUserTwitterSourceResponse ) {
+    option (google.api.http) = { get:"/twitter_sources/user/{id}"  };
+  }
+
+  rpc UpdateUserTwitterSource ( UpdateUserTwitterSourceRequest ) returns ( UpdateUserTwitterSourceResponse ) {
+    option (google.api.http) = { put:"/twitter_sources/user/{id}" body:"updated_user_twitter_source"  };
+  }
+
+  rpc DeleteUserTwitterSource ( DeleteUserTwitterSourceRequest ) returns ( DeleteUserTwitterSourceResponse ) {
+    option (google.api.http) = { delete:"/twitter_sources/user/{id}"  };
+  }
+
+  rpc GetQueryTwitterSources ( GetQueryTwitterSourcesRequest ) returns ( GetQueryTwitterSourcesResponse ) {
+    option (google.api.http) = { get:"/twitter_sources/queries"  };
+  }
+
+  rpc CreateQueryTwitterSources ( CreateQueryTwitterSourcesRequest ) returns ( CreateQueryTwitterSourcesResponse ) {
+    option (google.api.http) = { post:"/twitter_sources/queries" body:"new_query_twitter_sources"  };
+  }
+
+  rpc CreateQueryTwitterSource ( CreateQueryTwitterSourceRequest ) returns ( CreateQueryTwitterSourceResponse ) {
+    option (google.api.http) = { post:"/twitter_sources/query" body:"new_query_twitter_source"  };
+  }
+
+  rpc GetQueryTwitterSource ( GetQueryTwitterSourceRequest ) returns ( GetQueryTwitterSourceResponse ) {
+    option (google.api.http) = { get:"/twitter_sources/query/{id}"  };
+  }
+
+  rpc UpdateQueryTwitterSource ( UpdateQueryTwitterSourceRequest ) returns ( UpdateQueryTwitterSourceResponse ) {
+    option (google.api.http) = { put:"/twitter_sources/query/{id}" body:"updated_query_twitter_source"  };
+  }
+
+  rpc DeleteQueryTwitterSource ( DeleteQueryTwitterSourceRequest ) returns ( DeleteQueryTwitterSourceResponse ) {
+    option (google.api.http) = { delete:"/twitter_sources/query/{id}"  };
+  }
+}
+
