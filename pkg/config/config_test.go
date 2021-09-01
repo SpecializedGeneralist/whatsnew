@@ -194,7 +194,7 @@ func TestFromYAMLFile(t *testing.T) {
 				ZeroShotClassifier: config.ZeroShotClassifier{
 					Queues:      []string{"wn_zero_shot_classifier"},
 					Concurrency: 4,
-					ClassifiedWebArticleJobs: []config.FaktoryJob{
+					ProcessedWebArticleJobs: []config.FaktoryJob{
 						{
 							JobType: "Vectorizer",
 							Queue:   "wn_vectorizer",

@@ -124,5 +124,5 @@ func (zsc *ZeroShotClassifier) processWebArticle(ctx context.Context, tx *gorm.D
 		return fmt.Errorf("error saving new ZeroShotClasses: %w", res.Error)
 	}
 
-	return js.AddJobs(zsc.conf.ClassifiedWebArticleJobs, wa.ID)
+	return js.AddJobs(zsc.conf.ProcessedWebArticleJobs, wa.ID)
 }

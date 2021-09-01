@@ -160,14 +160,14 @@ type Translator struct {
 
 // ZeroShotClassifier holds settings for the zero-shot classifier worker.
 type ZeroShotClassifier struct {
-	Queues                   []string     `yaml:"queues"`
-	Concurrency              int          `yaml:"concurrency"`
-	ClassifiedWebArticleJobs []FaktoryJob `yaml:"classified_web_article_jobs"`
-	SpagoBARTServer          GRPCServer   `yaml:"spago_bart_server"`
-	HypothesisTemplate       string       `yaml:"hypothesis_template"`
-	PossibleLabels           []string     `yaml:"possible_labels"`
-	MultiClass               bool         `yaml:"multi_class"`
-	LogLevel                 LogLevel     `yaml:"loglevel"`
+	Queues                  []string     `yaml:"queues"`
+	Concurrency             int          `yaml:"concurrency"`
+	ProcessedWebArticleJobs []FaktoryJob `yaml:"processed_web_article_jobs"`
+	SpagoBARTServer         GRPCServer   `yaml:"spago_bart_server"`
+	HypothesisTemplate      string       `yaml:"hypothesis_template"`
+	PossibleLabels          []string     `yaml:"possible_labels"`
+	MultiClass              bool         `yaml:"multi_class"`
+	LogLevel                LogLevel     `yaml:"loglevel"`
 }
 
 // Vectorizer holds settings for the Vectorizer worker.

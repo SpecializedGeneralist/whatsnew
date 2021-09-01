@@ -97,7 +97,7 @@ workers:
   zero_shot_classifier:
     queues: ['wn_zero_shot_classifier']
     concurrency: 4
-    classified_web_article_jobs:
+    processed_web_article_jobs:
       - job_type: 'Vectorizer'
         queue: 'wn_vectorizer'
     spago_bart_server:

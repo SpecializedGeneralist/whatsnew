@@ -358,7 +358,7 @@
             "concurrency": {
               "type": "integer"
             },
-            "classified_web_article_jobs": {
+            "processed_web_article_jobs": {
               "$ref": "#/definitions/faktory_jobs"
             },
             "spago_bart_server": {
@@ -380,7 +380,7 @@
               "$ref": "#/definitions/loglevel"
             }
           },
-          "required": ["queues", "concurrency", "classified_web_article_jobs", "spago_bart_server", "hypothesis_template", "possible_labels", "multi_class", "loglevel"]
+          "required": ["queues", "concurrency", "processed_web_article_jobs", "spago_bart_server", "hypothesis_template", "possible_labels", "multi_class", "loglevel"]
         },
         "vectorizer": {
           "description": "Settings for the vectorizer worker.",
