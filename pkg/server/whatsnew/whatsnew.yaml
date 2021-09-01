@@ -1,0 +1,765 @@
+# Copyright 2021 SpecializedGeneralist. All rights reserved.
+# Use of this source code is governed by a BSD-style
+# license that can be found in the LICENSE file.
+
+openapi: 3.0.3
+
+info:
+  title: WhatsNew
+  version: 1.0-alpha
+  contact:
+    name: SpecializedGeneralist
+    url: https://github.com/SpecializedGeneralist
+    email: specializedgeneralist@protonmail.com
+  license:
+    name: BSD-2-Clause
+    url: https://opensource.org/licenses/BSD-2-Clause
+
+paths:
+  /feeds:
+    get:
+      description: Get all Feeds
+      operationId: getFeeds
+      parameters:
+        - name: first
+          description: Maximum number of Feeds. Zero (0) means no limits (default).
+          required: false
+          in: query
+          schema:
+            type: integer
+        - name: after
+          description: Return Feeds after this ID. Empty value ("") or zero ("0") let the results start from the beginning (default).
+          required: false
+          in: query
+          schema:
+            type: string
+      responses:
+        default:
+          description: The list of all Feeds
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/GetFeedsResponse'
+    post:
+      description: Create new Feeds
+      operationId: createFeeds
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/NewFeeds'
+      responses:
+        default:
+          description: The IDs of the new Feeds
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/CreateFeedsResponse'
+  /feed:
+    post:
+      description: Create a new Feed
+      operationId: createFeed
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/NewFeed'
+      responses:
+        default:
+          description: The ID of the new Feed
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/CreateFeedResponse'
+  /feed/{id}:
+    get:
+      description: Get a Feed
+      operationId: getFeed
+      parameters:
+        - name: id
+          required: true
+          in: path
+          schema:
+            type: string
+      responses:
+        default:
+          description: The Feed
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/GetFeedResponse'
+    put:
+      description: Update a Feed
+      operationId: updateFeed
+      parameters:
+        - name: id
+          required: true
+          in: path
+          schema:
+            type: string
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/UpdatedFeed'
+      responses:
+        default:
+          description: The modified Feed
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/UpdateFeedResponse'
+    delete:
+      description: Delete a Feed
+      operationId: deleteFeed
+      parameters:
+        - name: id
+          required: true
+          in: path
+          schema:
+            type: string
+      responses:
+        default:
+          description: The ID of the deleted Feed
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/DeleteFeedResponse'
+  /twitter_sources/users:
+    get:
+      description: Get all User Twitter Sources
+      operationId: getUserTwitterSources
+      parameters:
+        - name: first
+          description: Maximum number of User Twitter Sources. Zero (0) means no limits (default).
+          required: false
+          in: query
+          schema:
+            type: integer
+        - name: after
+          description: Return User Twitter Sources after this ID. Empty value ("") or zero ("0") let the results start from the beginning (default).
+          required: false
+          in: query
+          schema:
+            type: string
+      responses:
+        default:
+          description: The list of all User Twitter Sources
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/GetUserTwitterSourcesResponse'
+    post:
+      description: Create new User Twitter Sources
+      operationId: createUserTwitterSources
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/NewUserTwitterSources'
+      responses:
+        default:
+          description: The IDs of the new User Twitter Sources
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/CreateUserTwitterSourcesResponse'
+  /twitter_sources/user:
+    post:
+      description: Create a new User Twitter Source
+      operationId: createUserTwitterSource
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/NewUserTwitterSource'
+      responses:
+        default:
+          description: The ID of the new User Twitter Source
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/CreateUserTwitterSourceResponse'
+  /twitter_sources/user/{id}:
+    get:
+      description: Get a User Twitter Source
+      operationId: getUserTwitterSource
+      parameters:
+        - name: id
+          required: true
+          in: path
+          schema:
+            type: string
+      responses:
+        default:
+          description: The User Twitter Source
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/GetUserTwitterSourceResponse'
+    put:
+      description: Update a User Twitter Source
+      operationId: updateUserTwitterSource
+      parameters:
+        - name: id
+          required: true
+          in: path
+          schema:
+            type: string
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/UpdatedUserTwitterSource'
+      responses:
+        default:
+          description: The modified User Twitter Source
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/UpdateUserTwitterSourceResponse'
+    delete:
+      description: Delete a User Twitter Source
+      operationId: deleteUserTwitterSource
+      parameters:
+        - name: id
+          required: true
+          in: path
+          schema:
+            type: string
+      responses:
+        default:
+          description: The ID of the deleted User Twitter Source
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/DeleteUserTwitterSourceResponse'
+  /twitter_sources/queries:
+    get:
+      description: Get all Query Twitter Sources
+      operationId: getQueryTwitterSources
+      parameters:
+        - name: first
+          description: Maximum number of Query Twitter Sources. Zero (0) means no limits (default).
+          required: false
+          in: query
+          schema:
+            type: integer
+        - name: after
+          description: Return Query Twitter Sources after this ID. Empty value ("") or zero ("0") let the results start from the beginning (default).
+          required: false
+          in: query
+          schema:
+            type: string
+      responses:
+        default:
+          description: The list of all Query Twitter Sources
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/GetQueryTwitterSourcesResponse'
+    post:
+      description: Create new Query Twitter Sources
+      operationId: createQueryTwitterSources
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/NewQueryTwitterSources'
+      responses:
+        default:
+          description: The IDs of the new Query Twitter Sources
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/CreateQueryTwitterSourcesResponse'
+  /twitter_sources/query:
+    post:
+      description: Create a new Query Twitter Source
+      operationId: createQueryTwitterSource
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/NewQueryTwitterSource'
+      responses:
+        default:
+          description: The ID of the new Query Twitter Source
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/CreateQueryTwitterSourceResponse'
+  /twitter_sources/query/{id}:
+    get:
+      description: Get a Query Twitter Source
+      operationId: getQueryTwitterSource
+      parameters:
+        - name: id
+          required: true
+          in: path
+          schema:
+            type: string
+      responses:
+        default:
+          description: The Query Twitter Source
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/GetQueryTwitterSourceResponse'
+    put:
+      description: Update a Query Twitter Source
+      operationId: updateQueryTwitterSource
+      parameters:
+        - name: id
+          required: true
+          in: path
+          schema:
+            type: string
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/UpdatedQueryTwitterSource'
+      responses:
+        default:
+          description: The modified Query Twitter Source
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/UpdateQueryTwitterSourceResponse'
+    delete:
+      description: Delete a Query Twitter Source
+      operationId: deleteQueryTwitterSource
+      parameters:
+        - name: id
+          required: true
+          in: path
+          schema:
+            type: string
+      responses:
+        default:
+          description: The ID of the deleted Query Twitter Source
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/DeleteQueryTwitterSourceResponse'
+components:
+  schemas:
+    ResponseErrors:
+      type: array
+      items:
+        $ref: '#/components/schemas/ResponseError'
+    ResponseError:
+      type: object
+      properties:
+        message:
+          type: string
+      additionalProperties: false
+    NewFeeds:
+      type: object
+      properties:
+        feeds:
+          type: array
+          items:
+            $ref: '#/components/schemas/NewFeed'
+      additionalProperties: false
+    NewFeed:
+      type: object
+      properties:
+        url:
+          type: string
+      additionalProperties: false
+    CreateFeedsResponse:
+      type: object
+      properties:
+        data:
+          $ref: '#/components/schemas/CreateFeedsData'
+        errors:
+          $ref: '#/components/schemas/ResponseErrors'
+      additionalProperties: false
+    CreateFeedsData:
+      type: object
+      properties:
+        feed_ids:
+          type: array
+          items:
+            type: string
+      additionalProperties: false
+    GetFeedsResponse:
+      type: object
+      properties:
+        data:
+          $ref: '#/components/schemas/GetFeedsData'
+        errors:
+          $ref: '#/components/schemas/ResponseErrors'
+      additionalProperties: false
+    GetFeedsData:
+      type: object
+      properties:
+        feeds:
+          type: array
+          items:
+            $ref: '#/components/schemas/Feed'
+      additionalProperties: false
+    CreateFeedResponse:
+      type: object
+      properties:
+        data:
+          $ref: '#/components/schemas/CreateFeedData'
+        errors:
+          $ref: '#/components/schemas/ResponseErrors'
+      additionalProperties: false
+    CreateFeedData:
+      type: object
+      properties:
+        feed_id:
+          type: string
+      additionalProperties: false
+    GetFeedResponse:
+      type: object
+      properties:
+        data:
+          $ref: '#/components/schemas/GetFeedData'
+        errors:
+          $ref: '#/components/schemas/ResponseErrors'
+      additionalProperties: false
+    GetFeedData:
+      type: object
+      properties:
+        feed:
+          $ref: '#/components/schemas/Feed'
+      additionalProperties: false
+    UpdatedFeed:
+      type: object
+      properties:
+        url:
+          type: string
+        enabled:
+          type: boolean
+        last_retrieved_at:
+          type: string
+        failures_count:
+          type: integer
+        last_error:
+          type: string
+      additionalProperties: false
+    UpdateFeedResponse:
+      type: object
+      properties:
+        data:
+          $ref: '#/components/schemas/UpdateFeedData'
+        errors:
+          $ref: '#/components/schemas/ResponseErrors'
+      additionalProperties: false
+    UpdateFeedData:
+      type: object
+      properties:
+        feed:
+          $ref: '#/components/schemas/Feed'
+      additionalProperties: false
+    DeleteFeedResponse:
+      type: object
+      properties:
+        data:
+          $ref: '#/components/schemas/DeleteFeedData'
+        errors:
+          $ref: '#/components/schemas/ResponseErrors'
+      additionalProperties: false
+    DeleteFeedData:
+      type: object
+      properties:
+        deleted_feed_id:
+          type: string
+      additionalProperties: false
+    GetUserTwitterSourcesResponse:
+      type: object
+      properties:
+        data:
+          $ref: '#/components/schemas/GetUserTwitterSourcesData'
+        errors:
+          $ref: '#/components/schemas/ResponseErrors'
+      additionalProperties: false
+    GetUserTwitterSourcesData:
+      type: object
+      properties:
+        user_twitter_sources:
+          type: array
+          items:
+            $ref: '#/components/schemas/UserTwitterSource'
+      additionalProperties: false
+    NewUserTwitterSources:
+      type: object
+      properties:
+        user_twitter_sources:
+          type: array
+          items:
+            $ref: '#/components/schemas/NewUserTwitterSource'
+      additionalProperties: false
+    CreateUserTwitterSourcesResponse:
+      type: object
+      properties:
+        data:
+          $ref: '#/components/schemas/CreateUserTwitterSourcesData'
+        errors:
+          $ref: '#/components/schemas/ResponseErrors'
+      additionalProperties: false
+    CreateUserTwitterSourcesData:
+      type: object
+      properties:
+        user_twitter_source_ids:
+          type: array
+          items:
+            type: string
+      additionalProperties: false
+    NewUserTwitterSource:
+      type: object
+      properties:
+        username:
+          type: string
+      additionalProperties: false
+    CreateUserTwitterSourceResponse:
+      type: object
+      properties:
+        data:
+          $ref: '#/components/schemas/CreateUserTwitterSourceData'
+        errors:
+          $ref: '#/components/schemas/ResponseErrors'
+      additionalProperties: false
+    CreateUserTwitterSourceData:
+      type: object
+      properties:
+        user_twitter_source_id:
+          type: string
+      additionalProperties: false
+    GetUserTwitterSourceResponse:
+      type: object
+      properties:
+        data:
+          $ref: '#/components/schemas/GetUserTwitterSourceData'
+        errors:
+          $ref: '#/components/schemas/ResponseErrors'
+      additionalProperties: false
+    GetUserTwitterSourceData:
+      type: object
+      properties:
+        user_twitter_source:
+          $ref: '#/components/schemas/UserTwitterSource'
+      additionalProperties: false
+    UpdatedUserTwitterSource:
+      type: object
+      properties:
+        username:
+          type: string
+        enabled:
+          type: boolean
+        last_retrieved_at:
+          type: string
+        failures_count:
+          type: integer
+        last_error:
+          type: string
+      additionalProperties: false
+    UpdateUserTwitterSourceResponse:
+      type: object
+      properties:
+        data:
+          $ref: '#/components/schemas/UpdateUserTwitterSourceData'
+        errors:
+          $ref: '#/components/schemas/ResponseErrors'
+      additionalProperties: false
+    UpdateUserTwitterSourceData:
+      type: object
+      properties:
+        user_twitter_source:
+          $ref: '#/components/schemas/UserTwitterSource'
+      additionalProperties: false
+    DeleteUserTwitterSourceResponse:
+      type: object
+      properties:
+        data:
+          $ref: '#/components/schemas/DeleteUserTwitterSourceData'
+        errors:
+          $ref: '#/components/schemas/ResponseErrors'
+      additionalProperties: false
+    DeleteUserTwitterSourceData:
+      type: object
+      properties:
+        deleted_user_twitter_source_id:
+          type: string
+      additionalProperties: false
+    GetQueryTwitterSourcesResponse:
+      type: object
+      properties:
+        data:
+          $ref: '#/components/schemas/GetQueryTwitterSourcesData'
+        errors:
+          $ref: '#/components/schemas/ResponseErrors'
+      additionalProperties: false
+    GetQueryTwitterSourcesData:
+      type: object
+      properties:
+        query_twitter_sources:
+          type: array
+          items:
+            $ref: '#/components/schemas/QueryTwitterSource'
+      additionalProperties: false
+    NewQueryTwitterSources:
+      type: object
+      properties:
+        query_twitter_sources:
+          type: array
+          items:
+            $ref: '#/components/schemas/NewQueryTwitterSource'
+      additionalProperties: false
+    CreateQueryTwitterSourcesResponse:
+      type: object
+      properties:
+        data:
+          $ref: '#/components/schemas/CreateQueryTwitterSourcesData'
+        errors:
+          $ref: '#/components/schemas/ResponseErrors'
+      additionalProperties: false
+    CreateQueryTwitterSourcesData:
+      type: object
+      properties:
+        query_twitter_source_ids:
+          type: array
+          items:
+            type: string
+      additionalProperties: false
+    NewQueryTwitterSource:
+      type: object
+      properties:
+        query:
+          type: string
+      additionalProperties: false
+    CreateQueryTwitterSourceResponse:
+      type: object
+      properties:
+        data:
+          $ref: '#/components/schemas/CreateQueryTwitterSourceData'
+        errors:
+          $ref: '#/components/schemas/ResponseErrors'
+      additionalProperties: false
+    CreateQueryTwitterSourceData:
+      type: object
+      properties:
+        query_twitter_source_id:
+          type: string
+      additionalProperties: false
+    GetQueryTwitterSourceResponse:
+      type: object
+      properties:
+        data:
+          $ref: '#/components/schemas/GetQueryTwitterSourceData'
+        errors:
+          $ref: '#/components/schemas/ResponseErrors'
+      additionalProperties: false
+    GetQueryTwitterSourceData:
+      type: object
+      properties:
+        query_twitter_source:
+          $ref: '#/components/schemas/QueryTwitterSource'
+      additionalProperties: false
+    UpdatedQueryTwitterSource:
+      type: object
+      properties:
+        query:
+          type: string
+        enabled:
+          type: boolean
+        last_retrieved_at:
+          type: string
+        failures_count:
+          type: integer
+        last_error:
+          type: string
+      additionalProperties: false
+    UpdateQueryTwitterSourceResponse:
+      type: object
+      properties:
+        data:
+          $ref: '#/components/schemas/UpdateQueryTwitterSourceData'
+        errors:
+          $ref: '#/components/schemas/ResponseErrors'
+      additionalProperties: false
+    UpdateQueryTwitterSourceData:
+      type: object
+      properties:
+        query_twitter_source:
+          $ref: '#/components/schemas/QueryTwitterSource'
+      additionalProperties: false
+    DeleteQueryTwitterSourceResponse:
+      type: object
+      properties:
+        data:
+          $ref: '#/components/schemas/DeleteQueryTwitterSourceData'
+        errors:
+          $ref: '#/components/schemas/ResponseErrors'
+      additionalProperties: false
+    DeleteQueryTwitterSourceData:
+      type: object
+      properties:
+        deleted_query_twitter_source_id:
+          type: string
+      additionalProperties: false
+    Feed:
+      type: object
+      properties:
+        id:
+          type: string
+        created_at:
+          type: string
+        updated_at:
+          type: string
+        url:
+          type: string
+        enabled:
+          type: boolean
+        last_retrieved_at:
+          type: string
+        failures_count:
+          type: integer
+        last_error:
+          type: string
+      additionalProperties: false
+    UserTwitterSource:
+      type: object
+      properties:
+        id:
+          type: string
+        created_at:
+          type: string
+        updated_at:
+          type: string
+        username:
+          type: string
+        enabled:
+          type: boolean
+        last_retrieved_at:
+          type: string
+        failures_count:
+          type: integer
+        last_error:
+          type: string
+      additionalProperties: false
+    QueryTwitterSource:
+      type: object
+      properties:
+        id:
+          type: string
+        created_at:
+          type: string
+        updated_at:
+          type: string
+        query:
+          type: string
+        enabled:
+          type: boolean
+        last_retrieved_at:
+          type: string
+        failures_count:
+          type: integer
+        last_error:
+          type: string
+      additionalProperties: false
