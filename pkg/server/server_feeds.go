@@ -10,6 +10,8 @@ import (
 	"fmt"
 	"github.com/SpecializedGeneralist/whatsnew/pkg/models"
 	"github.com/SpecializedGeneralist/whatsnew/pkg/server/whatsnew"
+	"gorm.io/gorm"
+	"gorm.io/gorm/clause"
 )
 
 // GetFeeds gets all Feeds.
@@ -103,31 +105,37 @@ func (s *Server) GetFeed(_ context.Context, req *whatsnew.GetFeedRequest) (*what
 }
 
 // UpdateFeed updates a Feed.
-func (s *Server) UpdateFeed(_ context.Context, req *whatsnew.UpdateFeedRequest) (*whatsnew.UpdateFeedResponse, error) {
+func (s *Server) UpdateFeed(ctx context.Context, req *whatsnew.UpdateFeedRequest) (*whatsnew.UpdateFeedResponse, error) {
 	var feed models.Feed
-	ret := s.db.First(&feed, "id = ?", req.GetId())
-	if ret.Error != nil {
-		return &whatsnew.UpdateFeedResponse{Errors: s.makeErrors(req, ret.Error)}, nil
-	}
-	uf := req.GetUpdatedFeed()
 
-	feed.URL = uf.GetUrl()
-	feed.Enabled = uf.GetEnabled()
-	feed.FailuresCount = int(uf.GetFailuresCount())
-	feed.LastError = sql.NullString{
-		String: uf.GetLastError(),
-		Valid:  len(uf.GetLastError()) > 0,
-	}
+	err := s.db.WithContext(ctx).Transaction(func(tx *gorm.DB) error {
+		ret := tx.Clauses(clause.Locking{Strength: "UPDATE"}).First(&feed, "id = ?", req.GetId())
+		if ret.Error != nil {
+			return ret.Error
+		}
 
-	var err error
-	feed.LastRetrievedAt, err = nullTimeFromString(uf.GetLastRetrievedAt())
+		uf := req.GetUpdatedFeed()
+
+		feed.URL = uf.GetUrl()
+		feed.Enabled = uf.GetEnabled()
+		feed.FailuresCount = int(uf.GetFailuresCount())
+		feed.LastError = sql.NullString{
+			String: uf.GetLastError(),
+			Valid:  len(uf.GetLastError()) > 0,
+		}
+
+		var err error
+		feed.LastRetrievedAt, err = nullTimeFromString(uf.GetLastRetrievedAt())
+		if err != nil {
+			return err
+		}
+
+		ret = tx.Save(feed)
+		return ret.Error
+	})
+
 	if err != nil {
 		return &whatsnew.UpdateFeedResponse{Errors: s.makeErrors(req, err)}, nil
-	}
-
-	ret = s.db.Save(feed)
-	if ret.Error != nil {
-		return &whatsnew.UpdateFeedResponse{Errors: s.makeErrors(req, ret.Error)}, nil
 	}
 
 	resp := &whatsnew.UpdateFeedResponse{
@@ -139,27 +147,33 @@ func (s *Server) UpdateFeed(_ context.Context, req *whatsnew.UpdateFeedRequest) 
 }
 
 // DeleteFeed deletes a Feed.
-func (s *Server) DeleteFeed(_ context.Context, req *whatsnew.DeleteFeedRequest) (*whatsnew.DeleteFeedResponse, error) {
+func (s *Server) DeleteFeed(ctx context.Context, req *whatsnew.DeleteFeedRequest) (*whatsnew.DeleteFeedResponse, error) {
 	var feed models.Feed
-	ret := s.db.First(&feed, "id = ?", req.GetId())
-	if ret.Error != nil {
-		return &whatsnew.DeleteFeedResponse{Errors: s.makeErrors(req, ret.Error)}, nil
+
+	err := s.db.WithContext(ctx).Transaction(func(tx *gorm.DB) error {
+		ret := tx.Clauses(clause.Locking{Strength: "UPDATE"}).First(&feed, "id = ?", req.GetId())
+		if ret.Error != nil {
+			return ret.Error
+		}
+
+		var feedItemsCount int64
+		ret = tx.Model(&models.FeedItem{}).Where("feed_id = ?", feed.ID).Limit(1).Count(&feedItemsCount)
+		if ret.Error != nil {
+			return ret.Error
+		}
+
+		if feedItemsCount == 0 {
+			ret = tx.Unscoped().Delete(&feed)
+		} else {
+			ret = tx.Delete(&feed)
+		}
+		return ret.Error
+	})
+
+	if err != nil {
+		return &whatsnew.DeleteFeedResponse{Errors: s.makeErrors(req, err)}, nil
 	}
 
-	var feedItemsCount int64
-	ret = s.db.Model(&models.FeedItem{}).Where("feed_id = ?", feed.ID).Limit(1).Count(&feedItemsCount)
-	if ret.Error != nil {
-		return &whatsnew.DeleteFeedResponse{Errors: s.makeErrors(req, ret.Error)}, nil
-	}
-
-	if feedItemsCount == 0 {
-		ret = s.db.Unscoped().Delete(&feed)
-	} else {
-		ret = s.db.Delete(&feed)
-	}
-	if ret.Error != nil {
-		return &whatsnew.DeleteFeedResponse{Errors: s.makeErrors(req, ret.Error)}, nil
-	}
 	resp := &whatsnew.DeleteFeedResponse{
 		Data: &whatsnew.DeleteFeedData{
 			DeletedFeedId: fmt.Sprintf("%d", feed.ID),

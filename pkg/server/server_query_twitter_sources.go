@@ -10,6 +10,8 @@ import (
 	"fmt"
 	"github.com/SpecializedGeneralist/whatsnew/pkg/models"
 	"github.com/SpecializedGeneralist/whatsnew/pkg/server/whatsnew"
+	"gorm.io/gorm"
+	"gorm.io/gorm/clause"
 )
 
 // GetQueryTwitterSources gets all Query Twitter Sources.
@@ -106,31 +108,36 @@ func (s *Server) GetQueryTwitterSource(_ context.Context, req *whatsnew.GetQuery
 }
 
 // UpdateQueryTwitterSource updates a Query Twitter Source.
-func (s *Server) UpdateQueryTwitterSource(_ context.Context, req *whatsnew.UpdateQueryTwitterSourceRequest) (*whatsnew.UpdateQueryTwitterSourceResponse, error) {
+func (s *Server) UpdateQueryTwitterSource(ctx context.Context, req *whatsnew.UpdateQueryTwitterSourceRequest) (*whatsnew.UpdateQueryTwitterSourceResponse, error) {
 	var ts models.TwitterSource
-	ret := s.db.First(&ts, "type = ? AND id = ?", models.SearchTwitterSource, req.GetId())
-	if ret.Error != nil {
-		return &whatsnew.UpdateQueryTwitterSourceResponse{Errors: s.makeErrors(req, ret.Error)}, nil
-	}
-	us := req.GetUpdatedQueryTwitterSource()
 
-	ts.Text = us.GetQuery()
-	ts.Enabled = us.GetEnabled()
-	ts.FailuresCount = int(us.GetFailuresCount())
-	ts.LastError = sql.NullString{
-		String: us.GetLastError(),
-		Valid:  len(us.GetLastError()) > 0,
-	}
+	err := s.db.WithContext(ctx).Transaction(func(tx *gorm.DB) error {
+		ret := tx.Clauses(clause.Locking{Strength: "UPDATE"}).First(&ts, "type = ? AND id = ?", models.SearchTwitterSource, req.GetId())
+		if ret.Error != nil {
+			return ret.Error
+		}
+		us := req.GetUpdatedQueryTwitterSource()
 
-	var err error
-	ts.LastRetrievedAt, err = nullTimeFromString(us.GetLastRetrievedAt())
+		ts.Text = us.GetQuery()
+		ts.Enabled = us.GetEnabled()
+		ts.FailuresCount = int(us.GetFailuresCount())
+		ts.LastError = sql.NullString{
+			String: us.GetLastError(),
+			Valid:  len(us.GetLastError()) > 0,
+		}
+
+		var err error
+		ts.LastRetrievedAt, err = nullTimeFromString(us.GetLastRetrievedAt())
+		if err != nil {
+			return err
+		}
+
+		ret = tx.Save(ts)
+		return ret.Error
+	})
+
 	if err != nil {
 		return &whatsnew.UpdateQueryTwitterSourceResponse{Errors: s.makeErrors(req, err)}, nil
-	}
-
-	ret = s.db.Save(ts)
-	if ret.Error != nil {
-		return &whatsnew.UpdateQueryTwitterSourceResponse{Errors: s.makeErrors(req, ret.Error)}, nil
 	}
 
 	resp := &whatsnew.UpdateQueryTwitterSourceResponse{
@@ -142,27 +149,33 @@ func (s *Server) UpdateQueryTwitterSource(_ context.Context, req *whatsnew.Updat
 }
 
 // DeleteQueryTwitterSource deletes a Query Twitter Source.
-func (s *Server) DeleteQueryTwitterSource(_ context.Context, req *whatsnew.DeleteQueryTwitterSourceRequest) (*whatsnew.DeleteQueryTwitterSourceResponse, error) {
+func (s *Server) DeleteQueryTwitterSource(ctx context.Context, req *whatsnew.DeleteQueryTwitterSourceRequest) (*whatsnew.DeleteQueryTwitterSourceResponse, error) {
 	var ts models.TwitterSource
-	ret := s.db.First(&ts, "type = ? AND id = ?", models.SearchTwitterSource, req.GetId())
-	if ret.Error != nil {
-		return &whatsnew.DeleteQueryTwitterSourceResponse{Errors: s.makeErrors(req, ret.Error)}, nil
+
+	err := s.db.WithContext(ctx).Transaction(func(tx *gorm.DB) error {
+		ret := tx.Clauses(clause.Locking{Strength: "UPDATE"}).First(&ts, "type = ? AND id = ?", models.SearchTwitterSource, req.GetId())
+		if ret.Error != nil {
+			return ret.Error
+		}
+
+		var tweetsCount int64
+		ret = tx.Model(&models.Tweet{}).Where("twitter_source_id = ?", ts.ID).Limit(1).Count(&tweetsCount)
+		if ret.Error != nil {
+			return ret.Error
+		}
+
+		if tweetsCount == 0 {
+			ret = tx.Unscoped().Delete(&ts)
+		} else {
+			ret = tx.Delete(&ts)
+		}
+		return ret.Error
+	})
+
+	if err != nil {
+		return &whatsnew.DeleteQueryTwitterSourceResponse{Errors: s.makeErrors(req, err)}, nil
 	}
 
-	var tweetsCount int64
-	ret = s.db.Model(&models.Tweet{}).Where("twitter_source_id = ?", ts.ID).Limit(1).Count(&tweetsCount)
-	if ret.Error != nil {
-		return &whatsnew.DeleteQueryTwitterSourceResponse{Errors: s.makeErrors(req, ret.Error)}, nil
-	}
-
-	if tweetsCount == 0 {
-		ret = s.db.Unscoped().Delete(&ts)
-	} else {
-		ret = s.db.Delete(&ts)
-	}
-	if ret.Error != nil {
-		return &whatsnew.DeleteQueryTwitterSourceResponse{Errors: s.makeErrors(req, ret.Error)}, nil
-	}
 	resp := &whatsnew.DeleteQueryTwitterSourceResponse{
 		Data: &whatsnew.DeleteQueryTwitterSourceData{
 			DeletedQueryTwitterSourceId: fmt.Sprintf("%d", ts.ID),
