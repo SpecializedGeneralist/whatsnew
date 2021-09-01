@@ -4,7 +4,10 @@
 
 package models
 
-import "database/sql"
+import (
+	"database/sql"
+	"gorm.io/gorm"
+)
 
 // TwitterSourceType acts as an enumeration type to identify different kind
 // of Twitter sources.
@@ -21,6 +24,8 @@ const (
 // TwitterSource represents the source of Tweets / WebResources.
 type TwitterSource struct {
 	Model
+
+	DeletedAt gorm.DeletedAt `gorm:"index"`
 
 	Type TwitterSourceType `gorm:"not null;index:idx_twitter_source_type_text,unique"`
 
