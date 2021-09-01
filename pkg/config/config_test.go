@@ -204,10 +204,7 @@ func TestFromYAMLFile(t *testing.T) {
 						Target:     "127.0.0.1:4001",
 						TLSEnabled: false,
 					},
-					HypothesisTemplate: "This text is about {}.",
-					PossibleLabels:     []string{"sport", "economy", "science"},
-					MultiClass:         true,
-					LogLevel:           config.LogLevel(zerolog.InfoLevel),
+					LogLevel: config.LogLevel(zerolog.InfoLevel),
 				},
 				Vectorizer: config.Vectorizer{
 					Queues:      []string{"wn_vectorizer"},

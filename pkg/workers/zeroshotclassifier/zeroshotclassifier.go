@@ -94,35 +94,82 @@ func (zsc *ZeroShotClassifier) processWebArticle(ctx context.Context, tx *gorm.D
 		return nil
 	}
 
-	reply, err := zsc.bartClient.ClassifyNLI(ctx, &grpcapi.ClassifyNLIRequest{
-		Text:               title,
-		HypothesisTemplate: zsc.conf.HypothesisTemplate,
-		PossibleLabels:     zsc.conf.PossibleLabels,
-		MultiClass:         zsc.conf.MultiClass,
-	})
+	templates, err := zsc.getHypotheses(tx)
 	if err != nil {
-		return fmt.Errorf("BART ClassifyNLI error: %w", err)
+		return err
 	}
 
+	var classes []*models.ZeroShotClass
+	for _, template := range templates {
+		newClasses, err := zsc.classify(ctx, wa.ID, title, template)
+		if err != nil {
+			return err
+		}
+		classes = append(classes, newClasses...)
+	}
+
+	if len(classes) > 0 {
+		res := tx.Create(classes)
+		if res.Error != nil {
+			return fmt.Errorf("error saving new ZeroShotClasses: %w", res.Error)
+		}
+	}
+
+	return js.AddJobs(zsc.conf.ProcessedWebArticleJobs, wa.ID)
+}
+
+func (zsc *ZeroShotClassifier) getHypotheses(tx *gorm.DB) ([]models.ZeroShotHypothesisTemplate, error) {
+	var templates []models.ZeroShotHypothesisTemplate
+	res := tx.Preload("Labels", "enabled").Find(&templates, "enabled")
+	if res.Error != nil {
+		return nil, fmt.Errorf("error fetching ZeroShotHypothesisTemplates: %w", res.Error)
+	}
+	return templates, nil
+}
+
+func (zsc *ZeroShotClassifier) classify(ctx context.Context, webArticleID uint, text string, template models.ZeroShotHypothesisTemplate) ([]*models.ZeroShotClass, error) {
+	if len(template.Labels) == 0 {
+		// This happens if a template has no enabled labels
+		return nil, nil
+	}
+
+	possibleLabels := make([]string, len(template.Labels))
+	labelToID := make(map[string]uint, len(template.Labels))
+	for i, l := range template.Labels {
+		possibleLabels[i] = l.Text
+		if _, exists := labelToID[l.Text]; exists {
+			return nil, fmt.Errorf("duplicate label %#v for hypothesis template %d", l.Text, template.ID)
+		}
+		labelToID[l.Text] = l.ID
+	}
+
+	reply, err := zsc.bartClient.ClassifyNLI(ctx, &grpcapi.ClassifyNLIRequest{
+		Text:               text,
+		HypothesisTemplate: template.Text,
+		PossibleLabels:     possibleLabels,
+		MultiClass:         template.MultiClass,
+	})
+	if err != nil {
+		return nil, fmt.Errorf("BART ClassifyNLI error: %w", err)
+	}
 	distribution := reply.GetDistribution()
 	if len(distribution) == 0 {
-		return fmt.Errorf("BART ClassifyNLI returned an empty distribution")
+		return nil, fmt.Errorf("BART ClassifyNLI returned an empty distribution")
 	}
 
 	classes := make([]*models.ZeroShotClass, len(distribution))
 	for i, pair := range distribution {
+		labelID, ok := labelToID[pair.Class]
+		if !ok {
+			return nil, fmt.Errorf("ClassifyNLI returned an unknown class: %#v", pair.Class)
+		}
 		classes[i] = &models.ZeroShotClass{
-			WebArticleID: wa.ID,
-			Class:        pair.Class,
-			Confidence:   float32(pair.Confidence),
-			Best:         i == 0,
+			WebArticleID:                 webArticleID,
+			ZeroShotHypothesisLabelID:    labelID,
+			ZeroShotHypothesisTemplateID: template.ID,
+			Best:                         i == 0,
+			Confidence:                   float32(pair.Confidence),
 		}
 	}
-
-	res := tx.Create(classes)
-	if res.Error != nil {
-		return fmt.Errorf("error saving new ZeroShotClasses: %w", res.Error)
-	}
-
-	return js.AddJobs(zsc.conf.ProcessedWebArticleJobs, wa.ID)
+	return classes, nil
 }

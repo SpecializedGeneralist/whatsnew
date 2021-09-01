@@ -164,9 +164,6 @@ type ZeroShotClassifier struct {
 	Concurrency             int          `yaml:"concurrency"`
 	ProcessedWebArticleJobs []FaktoryJob `yaml:"processed_web_article_jobs"`
 	SpagoBARTServer         GRPCServer   `yaml:"spago_bart_server"`
-	HypothesisTemplate      string       `yaml:"hypothesis_template"`
-	PossibleLabels          []string     `yaml:"possible_labels"`
-	MultiClass              bool         `yaml:"multi_class"`
 	LogLevel                LogLevel     `yaml:"loglevel"`
 }
 

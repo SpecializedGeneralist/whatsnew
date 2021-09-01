@@ -364,23 +364,11 @@
             "spago_bart_server": {
               "$ref": "#/definitions/grpc_server"
             },
-            "hypothesis_template": {
-              "type": "string"
-            },
-            "possible_labels": {
-              "type": "array",
-              "items": {
-                "type": "string"
-              }
-            },
-            "multi_class": {
-              "type": "boolean"
-            },
             "loglevel": {
               "$ref": "#/definitions/loglevel"
             }
           },
-          "required": ["queues", "concurrency", "processed_web_article_jobs", "spago_bart_server", "hypothesis_template", "possible_labels", "multi_class", "loglevel"]
+          "required": ["queues", "concurrency", "processed_web_article_jobs", "spago_bart_server", "loglevel"]
         },
         "vectorizer": {
           "description": "Settings for the vectorizer worker.",

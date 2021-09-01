@@ -103,9 +103,6 @@ workers:
     spago_bart_server:
       target: '127.0.0.1:4001'
       tls_enabled: false
-    hypothesis_template: 'This text is about {}.'
-    possible_labels: ['sport', 'economy', 'science']
-    multi_class: true
     loglevel: 'info'
   vectorizer:
     queues: ['wn_vectorizer']

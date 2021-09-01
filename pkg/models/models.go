@@ -20,6 +20,8 @@ var allModels = []interface{}{
 	Vector{},
 	SimilarityInfo{},
 	ExtractedInfo{},
+	ZeroShotHypothesisTemplate{},
+	ZeroShotHypothesisLabel{},
 }
 
 // AutoMigrate performs the automatic migration of all GORM models.
