@@ -10,7 +10,7 @@ type ZeroShotHypothesisTemplate struct {
 	Model
 
 	// The system will ignore the templates which are not Enabled.
-	Enabled bool `gorm:"not null;index;default:true"`
+	Enabled bool `gorm:"not null;index"`
 
 	// Text is the hypothesis. It MUST contain one character sequence "{}" to
 	// indicate the point where each related label will be placed.

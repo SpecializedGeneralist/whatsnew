@@ -20,7 +20,7 @@ type Feed struct {
 
 	// The system will look for new feed items from this feed only when it is
 	// Enabled. Otherwise, the feed is simply ignored.
-	Enabled bool `gorm:"not null;index;default:true"`
+	Enabled bool `gorm:"not null;index"`
 
 	// The date and time when this feed was last visited to successfully
 	// retrieve its content (feed items), store it, and schedule further

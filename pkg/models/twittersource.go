@@ -34,7 +34,7 @@ type TwitterSource struct {
 
 	// The system will look for new tweets from this source only when it is
 	// Enabled. Otherwise, the twitter source is simply ignored.
-	Enabled bool `gorm:"not null;index;default:true"`
+	Enabled bool `gorm:"not null;index"`
 
 	// The date and time when this source was last visited to successfully
 	// retrieve its content (tweets), store it, and schedule further

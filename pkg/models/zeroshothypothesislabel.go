@@ -13,7 +13,7 @@ type ZeroShotHypothesisLabel struct {
 	ZeroShotHypothesisTemplateID uint `gorm:"not null;index;index:idx_hypothesis_id_text,unique"`
 
 	// The system will ignore the labels which are not Enabled.
-	Enabled bool `gorm:"not null;index;default:true"`
+	Enabled bool `gorm:"not null;index"`
 
 	// Text is the label to be replaced in the hypothesis text.
 	Text string `gorm:"not null;index:idx_hypothesis_id_text,unique"`
