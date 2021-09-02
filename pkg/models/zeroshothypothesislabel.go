@@ -4,10 +4,14 @@
 
 package models
 
+import "gorm.io/gorm"
+
 // ZeroShotHypothesisLabel is one possible label to be replaced in the text of
 // a ZeroShotHypothesisTemplate.
 type ZeroShotHypothesisLabel struct {
 	Model
+
+	DeletedAt gorm.DeletedAt `gorm:"index"`
 
 	// Association to the ZeroShotHypothesisTemplate.
 	ZeroShotHypothesisTemplateID uint `gorm:"not null;index;index:idx_hypothesis_id_text,unique"`
