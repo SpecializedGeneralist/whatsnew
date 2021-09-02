@@ -4,10 +4,14 @@
 
 package models
 
+import "gorm.io/gorm"
+
 // ZeroShotHypothesisTemplate represents the template for on hypothesis
 // used for BART zero-shot classification of WebArticles.
 type ZeroShotHypothesisTemplate struct {
 	Model
+
+	DeletedAt gorm.DeletedAt `gorm:"index"`
 
 	// The system will ignore the templates which are not Enabled.
 	Enabled bool `gorm:"not null;index"`
