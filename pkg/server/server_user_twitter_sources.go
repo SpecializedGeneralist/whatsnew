@@ -132,7 +132,7 @@ func (s *Server) UpdateUserTwitterSource(ctx context.Context, req *whatsnew.Upda
 			return err
 		}
 
-		ret = tx.Save(ts)
+		ret = tx.Save(&ts)
 		return ret.Error
 	})
 

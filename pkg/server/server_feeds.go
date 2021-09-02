@@ -130,7 +130,7 @@ func (s *Server) UpdateFeed(ctx context.Context, req *whatsnew.UpdateFeedRequest
 			return err
 		}
 
-		ret = tx.Save(feed)
+		ret = tx.Save(&feed)
 		return ret.Error
 	})
 
