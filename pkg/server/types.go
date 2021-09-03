@@ -51,6 +51,36 @@ func makeAPIUserTwitterSource(source models.TwitterSource) *whatsnew.UserTwitter
 	}
 }
 
+func makeAPIZeroShotHypothesisTemplate(template models.ZeroShotHypothesisTemplate) *whatsnew.ZeroShotHypothesisTemplate {
+	return &whatsnew.ZeroShotHypothesisTemplate{
+		Id:         fmt.Sprintf("%d", template.ID),
+		CreatedAt:  template.CreatedAt.Format(time.RFC3339),
+		UpdatedAt:  template.UpdatedAt.Format(time.RFC3339),
+		Enabled:    template.Enabled,
+		Text:       template.Text,
+		MultiClass: template.MultiClass,
+		Labels:     makeAPIZeroShotHypothesisLabels(template.Labels),
+	}
+}
+
+func makeAPIZeroShotHypothesisLabels(labels []models.ZeroShotHypothesisLabel) []*whatsnew.ZeroShotHypothesisLabel {
+	out := make([]*whatsnew.ZeroShotHypothesisLabel, len(labels))
+	for i, label := range labels {
+		out[i] = makeAPIZeroShotHypothesisLabel(label)
+	}
+	return out
+}
+
+func makeAPIZeroShotHypothesisLabel(label models.ZeroShotHypothesisLabel) *whatsnew.ZeroShotHypothesisLabel {
+	return &whatsnew.ZeroShotHypothesisLabel{
+		Id:        fmt.Sprintf("%d", label.ID),
+		CreatedAt: label.CreatedAt.Format(time.RFC3339),
+		UpdatedAt: label.UpdatedAt.Format(time.RFC3339),
+		Enabled:   label.Enabled,
+		Text:      label.Text,
+	}
+}
+
 func nullTimeToString(t sql.NullTime) string {
 	if !t.Valid {
 		return ""

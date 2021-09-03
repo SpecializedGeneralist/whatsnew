@@ -343,6 +343,228 @@ paths:
             application/json:
               schema:
                 $ref: '#/components/schemas/DeleteQueryTwitterSourceResponse'
+  /zero_shot_hypothesis_templates:
+    get:
+      description: Get all zero-shot classification hypothesis templates with their related labels
+      operationId: getZeroShotHypothesisTemplates
+      parameters:
+        - name: first
+          description: Maximum number of results. Zero (0) means no limits (default).
+          required: false
+          in: query
+          schema:
+            type: integer
+        - name: after
+          description: Return results after this ID. Empty value ("") or zero ("0") let the results start from the beginning (default).
+          required: false
+          in: query
+          schema:
+            type: string
+      responses:
+        default:
+          description: The list of all zero-shot classification hypothesis templates with their related labels
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/GetZeroShotHypothesisTemplatesResponse'
+    post:
+      description: Create new zero-shot classification hypothesis templates and labels
+      operationId: createZeroShotHypothesisTemplates
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/NewZeroShotHypothesisTemplates'
+      responses:
+        default:
+          description: The IDs of the new zero-shot hypotesis templates
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/CreateZeroShotHypothesisTemplatesResponse'
+  /zero_shot_hypothesis_template:
+    post:
+      description: Create a new zero-shot classification hypothesis template and labels
+      operationId: createZeroShotHypothesisTemplate
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/NewZeroShotHypothesisTemplate'
+      responses:
+        default:
+          description: The ID of the new ZeroShotHypothesisTemplate
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/CreateZeroShotHypothesisTemplateResponse'
+  /zero_shot_hypothesis_template/{id}:
+    get:
+      description: Get a zero-shot classification hypothesis template with its related labels
+      operationId: getZeroShotHypothesisTemplate
+      parameters:
+        - name: id
+          required: true
+          in: path
+          schema:
+            type: string
+      responses:
+        default:
+          description: The zero-shot classification hypothesis template with its related labels
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/GetZeroShotHypothesisTemplateResponse'
+    put:
+      description: Update a zero-shot classification hypothesis template
+      operationId: updateZeroShotHypothesisTemplate
+      parameters:
+        - name: id
+          required: true
+          in: path
+          schema:
+            type: string
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/UpdatedZeroShotHypothesisTemplate'
+      responses:
+        default:
+          description: The modified zero-shot classification hypothesis template
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/UpdateZeroShotHypothesisTemplateResponse'
+    delete:
+      description: Delete a zero-shot classification hypothesis template
+      operationId: deleteZeroShotHypothesisTemplate
+      parameters:
+        - name: id
+          required: true
+          in: path
+          schema:
+            type: string
+      responses:
+        default:
+          description: The ID of the deleted zero-shot classification hypothesis template
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/DeleteZeroShotHypothesisTemplateResponse'
+  /zero_shot_hypothesis_template/{template_id}/labels:
+    post:
+      description: Create new zero-shot classification hypothesis labels
+      operationId: createZeroShotHypothesisLabels
+      parameters:
+        - name: template_id
+          required: true
+          in: path
+          schema:
+            type: string
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/NewZeroShotHypothesisLabels'
+      responses:
+        default:
+          description: The IDs of the new zero-shot classification hypothesis labels
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/CreateZeroShotHypothesisLabelsResponse'
+  /zero_shot_hypothesis_template/{template_id}/label:
+    post:
+      description: Create a new zero-shot classification hypothesis label
+      operationId: createZeroShotHypothesisLabel
+      parameters:
+        - name: template_id
+          required: true
+          in: path
+          schema:
+            type: string
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/NewZeroShotHypothesisLabel'
+      responses:
+        default:
+          description: The ID of the new ZeroShotHypothesisLabel
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/CreateZeroShotHypothesisLabelResponse'
+  /zero_shot_hypothesis_template/{template_id}/label/{label_id}:
+    get:
+      description: Get a zero-shot classification hypothesis label
+      operationId: getZeroShotHypothesisLabel
+      parameters:
+        - name: template_id
+          required: true
+          in: path
+          schema:
+            type: string
+        - name: label_id
+          required: true
+          in: path
+          schema:
+            type: string
+      responses:
+        default:
+          description: The zero-shot classification hypothesis label
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/GetZeroShotHypothesisLabelResponse'
+    put:
+      description: Update a zero-shot classification hypothesis label
+      operationId: updateZeroShotHypothesisLabel
+      parameters:
+        - name: template_id
+          required: true
+          in: path
+          schema:
+            type: string
+        - name: label_id
+          required: true
+          in: path
+          schema:
+            type: string
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/UpdatedZeroShotHypothesisLabel'
+      responses:
+        default:
+          description: The modified zero-shot classification hypothesis label
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/UpdateZeroShotHypothesisLabelResponse'
+    delete:
+      description: Delete a zero-shot classification hypothesis label
+      operationId: deleteZeroShotHypothesisLabel
+      parameters:
+        - name: template_id
+          required: true
+          in: path
+          schema:
+            type: string
+        - name: label_id
+          required: true
+          in: path
+          schema:
+            type: string
+      responses:
+        default:
+          description: The ID of the deleted zero-shot classification hypothesis label
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/DeleteZeroShotHypothesisLabelResponse'
 components:
   schemas:
     ResponseErrors:
@@ -703,6 +925,227 @@ components:
         deleted_query_twitter_source_id:
           type: string
       additionalProperties: false
+    GetZeroShotHypothesisTemplatesResponse:
+      type: object
+      properties:
+        data:
+          $ref: '#/components/schemas/GetZeroShotHypothesisTemplatesData'
+        errors:
+          $ref: '#/components/schemas/ResponseErrors'
+      additionalProperties: false
+    GetZeroShotHypothesisTemplatesData:
+      type: object
+      properties:
+        zero_shot_hypothesis_templates:
+          type: array
+          items:
+            $ref: '#/components/schemas/ZeroShotHypothesisTemplate'
+      additionalProperties: false
+    NewZeroShotHypothesisTemplates:
+      type: object
+      properties:
+        zero_shot_hypothesis_templates:
+          type: array
+          items:
+            $ref: '#/components/schemas/NewZeroShotHypothesisTemplate'
+      additionalProperties: false
+    NewZeroShotHypothesisTemplate:
+      type: object
+      properties:
+        enabled:
+          type: boolean
+        text:
+          type: string
+        multi_class:
+          type: boolean
+        labels:
+          type: array
+          items:
+            $ref: '#/components/schemas/NewZeroShotHypothesisTemplateLabel'
+      additionalProperties: false
+    NewZeroShotHypothesisTemplateLabel:
+      type: object
+      properties:
+        enabled:
+          type: boolean
+        text:
+          type: string
+      additionalProperties: false
+    CreateZeroShotHypothesisTemplatesResponse:
+      type: object
+      properties:
+        data:
+          $ref: '#/components/schemas/CreateZeroShotHypothesisTemplatesData'
+        errors:
+          $ref: '#/components/schemas/ResponseErrors'
+      additionalProperties: false
+    CreateZeroShotHypothesisTemplatesData:
+      type: object
+      properties:
+        zero_shot_hypothesis_template_ids:
+          type: array
+          items:
+            type: string
+      additionalProperties: false
+    CreateZeroShotHypothesisTemplateResponse:
+      type: object
+      properties:
+        data:
+          $ref: '#/components/schemas/CreateZeroShotHypothesisTemplateData'
+        errors:
+          $ref: '#/components/schemas/ResponseErrors'
+      additionalProperties: false
+    CreateZeroShotHypothesisTemplateData:
+      type: object
+      properties:
+        zero_shot_hypothesis_template_id:
+          type: string
+      additionalProperties: false
+    GetZeroShotHypothesisTemplateResponse:
+      type: object
+      properties:
+        data:
+          $ref: '#/components/schemas/GetZeroShotHypothesisTemplateData'
+        errors:
+          $ref: '#/components/schemas/ResponseErrors'
+      additionalProperties: false
+    GetZeroShotHypothesisTemplateData:
+      type: object
+      properties:
+        zero_shot_hypothesis_template:
+          $ref: '#/components/schemas/ZeroShotHypothesisTemplate'
+    UpdatedZeroShotHypothesisTemplate:
+      type: object
+      properties:
+        enabled:
+          type: boolean
+        text:
+          type: string
+        multi_class:
+          type: boolean
+      additionalProperties: false
+    UpdateZeroShotHypothesisTemplateResponse:
+      type: object
+      properties:
+        data:
+          $ref: '#/components/schemas/UpdateZeroShotHypothesisTemplateData'
+        errors:
+          $ref: '#/components/schemas/ResponseErrors'
+      additionalProperties: false
+    UpdateZeroShotHypothesisTemplateData:
+      type: object
+      properties:
+        zero_shot_hypothesis_template:
+          $ref: '#/components/schemas/ZeroShotHypothesisTemplate'
+      additionalProperties: false
+    DeleteZeroShotHypothesisTemplateResponse:
+      type: object
+      properties:
+        data:
+          $ref: '#/components/schemas/DeleteZeroShotHypothesisTemplateData'
+        errors:
+          $ref: '#/components/schemas/ResponseErrors'
+      additionalProperties: false
+    DeleteZeroShotHypothesisTemplateData:
+      type: object
+      properties:
+        deleted_zero_shot_hypothesis_template_id:
+          type: string
+      additionalProperties: false
+    NewZeroShotHypothesisLabels:
+      type: object
+      properties:
+        zero_shot_hypothesis_labels:
+          type: array
+          items:
+            $ref: '#/components/schemas/NewZeroShotHypothesisLabel'
+      additionalProperties: false
+    NewZeroShotHypothesisLabel:
+      type: object
+      properties:
+        enabled:
+          type: boolean
+        text:
+          type: string
+      additionalProperties: false
+    CreateZeroShotHypothesisLabelsResponse:
+      type: object
+      properties:
+        data:
+          $ref: '#/components/schemas/CreateZeroShotHypothesisLabelsData'
+        errors:
+          $ref: '#/components/schemas/ResponseErrors'
+      additionalProperties: false
+    CreateZeroShotHypothesisLabelsData:
+      type: object
+      properties:
+        zero_shot_hypothesis_label_ids:
+          type: array
+          items:
+            type: string
+      additionalProperties: false
+    CreateZeroShotHypothesisLabelResponse:
+      type: object
+      properties:
+        data:
+          $ref: '#/components/schemas/CreateZeroShotHypothesisLabelData'
+        errors:
+          $ref: '#/components/schemas/ResponseErrors'
+      additionalProperties: false
+    CreateZeroShotHypothesisLabelData:
+      type: object
+      properties:
+        zero_shot_hypothesis_label_id:
+          type: string
+      additionalProperties: false
+    GetZeroShotHypothesisLabelResponse:
+      type: object
+      properties:
+        data:
+          $ref: '#/components/schemas/GetZeroShotHypothesisLabelData'
+        errors:
+          $ref: '#/components/schemas/ResponseErrors'
+      additionalProperties: false
+    GetZeroShotHypothesisLabelData:
+      type: object
+      properties:
+        zero_shot_hypothesis_label:
+          $ref: '#/components/schemas/ZeroShotHypothesisLabel'
+    UpdatedZeroShotHypothesisLabel:
+      type: object
+      properties:
+        enabled:
+          type: boolean
+        text:
+          type: string
+      additionalProperties: false
+    UpdateZeroShotHypothesisLabelResponse:
+      type: object
+      properties:
+        data:
+          $ref: '#/components/schemas/UpdateZeroShotHypothesisLabelData'
+        errors:
+          $ref: '#/components/schemas/ResponseErrors'
+      additionalProperties: false
+    UpdateZeroShotHypothesisLabelData:
+      type: object
+      properties:
+        zero_shot_hypothesis_label:
+          $ref: '#/components/schemas/ZeroShotHypothesisLabel'
+    DeleteZeroShotHypothesisLabelResponse:
+      type: object
+      properties:
+        data:
+          $ref: '#/components/schemas/DeleteZeroShotHypothesisLabelData'
+        errors:
+          $ref: '#/components/schemas/ResponseErrors'
+      additionalProperties: false
+    DeleteZeroShotHypothesisLabelData:
+      type: object
+      properties:
+        deleted_zero_shot_hypothesis_label_id:
+          type: string
+      additionalProperties: false
     Feed:
       type: object
       properties:
@@ -761,5 +1204,39 @@ components:
         failures_count:
           type: integer
         last_error:
+          type: string
+      additionalProperties: false
+    ZeroShotHypothesisTemplate:
+      type: object
+      properties:
+        id:
+          type: string
+        created_at:
+          type: string
+        updated_at:
+          type: string
+        enabled:
+          type: boolean
+        text:
+          type: string
+        multi_class:
+          type: boolean
+        labels:
+          type: array
+          items:
+            $ref: '#/components/schemas/ZeroShotHypothesisLabel'
+      additionalProperties: false
+    ZeroShotHypothesisLabel:
+      type: object
+      properties:
+        id:
+          type: string
+        created_at:
+          type: string
+        updated_at:
+          type: string
+        enabled:
+          type: boolean
+        text:
           type: string
       additionalProperties: false

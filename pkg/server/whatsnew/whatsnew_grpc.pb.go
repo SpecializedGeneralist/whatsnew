@@ -36,6 +36,17 @@ type WhatsnewClient interface {
 	GetQueryTwitterSource(ctx context.Context, in *GetQueryTwitterSourceRequest, opts ...grpc.CallOption) (*GetQueryTwitterSourceResponse, error)
 	UpdateQueryTwitterSource(ctx context.Context, in *UpdateQueryTwitterSourceRequest, opts ...grpc.CallOption) (*UpdateQueryTwitterSourceResponse, error)
 	DeleteQueryTwitterSource(ctx context.Context, in *DeleteQueryTwitterSourceRequest, opts ...grpc.CallOption) (*DeleteQueryTwitterSourceResponse, error)
+	GetZeroShotHypothesisTemplates(ctx context.Context, in *GetZeroShotHypothesisTemplatesRequest, opts ...grpc.CallOption) (*GetZeroShotHypothesisTemplatesResponse, error)
+	CreateZeroShotHypothesisTemplates(ctx context.Context, in *CreateZeroShotHypothesisTemplatesRequest, opts ...grpc.CallOption) (*CreateZeroShotHypothesisTemplatesResponse, error)
+	CreateZeroShotHypothesisTemplate(ctx context.Context, in *CreateZeroShotHypothesisTemplateRequest, opts ...grpc.CallOption) (*CreateZeroShotHypothesisTemplateResponse, error)
+	GetZeroShotHypothesisTemplate(ctx context.Context, in *GetZeroShotHypothesisTemplateRequest, opts ...grpc.CallOption) (*GetZeroShotHypothesisTemplateResponse, error)
+	UpdateZeroShotHypothesisTemplate(ctx context.Context, in *UpdateZeroShotHypothesisTemplateRequest, opts ...grpc.CallOption) (*UpdateZeroShotHypothesisTemplateResponse, error)
+	DeleteZeroShotHypothesisTemplate(ctx context.Context, in *DeleteZeroShotHypothesisTemplateRequest, opts ...grpc.CallOption) (*DeleteZeroShotHypothesisTemplateResponse, error)
+	CreateZeroShotHypothesisLabels(ctx context.Context, in *CreateZeroShotHypothesisLabelsRequest, opts ...grpc.CallOption) (*CreateZeroShotHypothesisLabelsResponse, error)
+	CreateZeroShotHypothesisLabel(ctx context.Context, in *CreateZeroShotHypothesisLabelRequest, opts ...grpc.CallOption) (*CreateZeroShotHypothesisLabelResponse, error)
+	GetZeroShotHypothesisLabel(ctx context.Context, in *GetZeroShotHypothesisLabelRequest, opts ...grpc.CallOption) (*GetZeroShotHypothesisLabelResponse, error)
+	UpdateZeroShotHypothesisLabel(ctx context.Context, in *UpdateZeroShotHypothesisLabelRequest, opts ...grpc.CallOption) (*UpdateZeroShotHypothesisLabelResponse, error)
+	DeleteZeroShotHypothesisLabel(ctx context.Context, in *DeleteZeroShotHypothesisLabelRequest, opts ...grpc.CallOption) (*DeleteZeroShotHypothesisLabelResponse, error)
 }
 
 type whatsnewClient struct {
@@ -208,6 +219,105 @@ func (c *whatsnewClient) DeleteQueryTwitterSource(ctx context.Context, in *Delet
 	return out, nil
 }
 
+func (c *whatsnewClient) GetZeroShotHypothesisTemplates(ctx context.Context, in *GetZeroShotHypothesisTemplatesRequest, opts ...grpc.CallOption) (*GetZeroShotHypothesisTemplatesResponse, error) {
+	out := new(GetZeroShotHypothesisTemplatesResponse)
+	err := c.cc.Invoke(ctx, "/whatsnew.Whatsnew/GetZeroShotHypothesisTemplates", in, out, opts...)
+	if err != nil {
+		return nil, err
+	}
+	return out, nil
+}
+
+func (c *whatsnewClient) CreateZeroShotHypothesisTemplates(ctx context.Context, in *CreateZeroShotHypothesisTemplatesRequest, opts ...grpc.CallOption) (*CreateZeroShotHypothesisTemplatesResponse, error) {
+	out := new(CreateZeroShotHypothesisTemplatesResponse)
+	err := c.cc.Invoke(ctx, "/whatsnew.Whatsnew/CreateZeroShotHypothesisTemplates", in, out, opts...)
+	if err != nil {
+		return nil, err
+	}
+	return out, nil
+}
+
+func (c *whatsnewClient) CreateZeroShotHypothesisTemplate(ctx context.Context, in *CreateZeroShotHypothesisTemplateRequest, opts ...grpc.CallOption) (*CreateZeroShotHypothesisTemplateResponse, error) {
+	out := new(CreateZeroShotHypothesisTemplateResponse)
+	err := c.cc.Invoke(ctx, "/whatsnew.Whatsnew/CreateZeroShotHypothesisTemplate", in, out, opts...)
+	if err != nil {
+		return nil, err
+	}
+	return out, nil
+}
+
+func (c *whatsnewClient) GetZeroShotHypothesisTemplate(ctx context.Context, in *GetZeroShotHypothesisTemplateRequest, opts ...grpc.CallOption) (*GetZeroShotHypothesisTemplateResponse, error) {
+	out := new(GetZeroShotHypothesisTemplateResponse)
+	err := c.cc.Invoke(ctx, "/whatsnew.Whatsnew/GetZeroShotHypothesisTemplate", in, out, opts...)
+	if err != nil {
+		return nil, err
+	}
+	return out, nil
+}
+
+func (c *whatsnewClient) UpdateZeroShotHypothesisTemplate(ctx context.Context, in *UpdateZeroShotHypothesisTemplateRequest, opts ...grpc.CallOption) (*UpdateZeroShotHypothesisTemplateResponse, error) {
+	out := new(UpdateZeroShotHypothesisTemplateResponse)
+	err := c.cc.Invoke(ctx, "/whatsnew.Whatsnew/UpdateZeroShotHypothesisTemplate", in, out, opts...)
+	if err != nil {
+		return nil, err
+	}
+	return out, nil
+}
+
+func (c *whatsnewClient) DeleteZeroShotHypothesisTemplate(ctx context.Context, in *DeleteZeroShotHypothesisTemplateRequest, opts ...grpc.CallOption) (*DeleteZeroShotHypothesisTemplateResponse, error) {
+	out := new(DeleteZeroShotHypothesisTemplateResponse)
+	err := c.cc.Invoke(ctx, "/whatsnew.Whatsnew/DeleteZeroShotHypothesisTemplate", in, out, opts...)
+	if err != nil {
+		return nil, err
+	}
+	return out, nil
+}
+
+func (c *whatsnewClient) CreateZeroShotHypothesisLabels(ctx context.Context, in *CreateZeroShotHypothesisLabelsRequest, opts ...grpc.CallOption) (*CreateZeroShotHypothesisLabelsResponse, error) {
+	out := new(CreateZeroShotHypothesisLabelsResponse)
+	err := c.cc.Invoke(ctx, "/whatsnew.Whatsnew/CreateZeroShotHypothesisLabels", in, out, opts...)
+	if err != nil {
+		return nil, err
+	}
+	return out, nil
+}
+
+func (c *whatsnewClient) CreateZeroShotHypothesisLabel(ctx context.Context, in *CreateZeroShotHypothesisLabelRequest, opts ...grpc.CallOption) (*CreateZeroShotHypothesisLabelResponse, error) {
+	out := new(CreateZeroShotHypothesisLabelResponse)
+	err := c.cc.Invoke(ctx, "/whatsnew.Whatsnew/CreateZeroShotHypothesisLabel", in, out, opts...)
+	if err != nil {
+		return nil, err
+	}
+	return out, nil
+}
+
+func (c *whatsnewClient) GetZeroShotHypothesisLabel(ctx context.Context, in *GetZeroShotHypothesisLabelRequest, opts ...grpc.CallOption) (*GetZeroShotHypothesisLabelResponse, error) {
+	out := new(GetZeroShotHypothesisLabelResponse)
+	err := c.cc.Invoke(ctx, "/whatsnew.Whatsnew/GetZeroShotHypothesisLabel", in, out, opts...)
+	if err != nil {
+		return nil, err
+	}
+	return out, nil
+}
+
+func (c *whatsnewClient) UpdateZeroShotHypothesisLabel(ctx context.Context, in *UpdateZeroShotHypothesisLabelRequest, opts ...grpc.CallOption) (*UpdateZeroShotHypothesisLabelResponse, error) {
+	out := new(UpdateZeroShotHypothesisLabelResponse)
+	err := c.cc.Invoke(ctx, "/whatsnew.Whatsnew/UpdateZeroShotHypothesisLabel", in, out, opts...)
+	if err != nil {
+		return nil, err
+	}
+	return out, nil
+}
+
+func (c *whatsnewClient) DeleteZeroShotHypothesisLabel(ctx context.Context, in *DeleteZeroShotHypothesisLabelRequest, opts ...grpc.CallOption) (*DeleteZeroShotHypothesisLabelResponse, error) {
+	out := new(DeleteZeroShotHypothesisLabelResponse)
+	err := c.cc.Invoke(ctx, "/whatsnew.Whatsnew/DeleteZeroShotHypothesisLabel", in, out, opts...)
+	if err != nil {
+		return nil, err
+	}
+	return out, nil
+}
+
 // WhatsnewServer is the server API for Whatsnew service.
 // All implementations must embed UnimplementedWhatsnewServer
 // for forward compatibility
@@ -230,6 +340,17 @@ type WhatsnewServer interface {
 	GetQueryTwitterSource(context.Context, *GetQueryTwitterSourceRequest) (*GetQueryTwitterSourceResponse, error)
 	UpdateQueryTwitterSource(context.Context, *UpdateQueryTwitterSourceRequest) (*UpdateQueryTwitterSourceResponse, error)
 	DeleteQueryTwitterSource(context.Context, *DeleteQueryTwitterSourceRequest) (*DeleteQueryTwitterSourceResponse, error)
+	GetZeroShotHypothesisTemplates(context.Context, *GetZeroShotHypothesisTemplatesRequest) (*GetZeroShotHypothesisTemplatesResponse, error)
+	CreateZeroShotHypothesisTemplates(context.Context, *CreateZeroShotHypothesisTemplatesRequest) (*CreateZeroShotHypothesisTemplatesResponse, error)
+	CreateZeroShotHypothesisTemplate(context.Context, *CreateZeroShotHypothesisTemplateRequest) (*CreateZeroShotHypothesisTemplateResponse, error)
+	GetZeroShotHypothesisTemplate(context.Context, *GetZeroShotHypothesisTemplateRequest) (*GetZeroShotHypothesisTemplateResponse, error)
+	UpdateZeroShotHypothesisTemplate(context.Context, *UpdateZeroShotHypothesisTemplateRequest) (*UpdateZeroShotHypothesisTemplateResponse, error)
+	DeleteZeroShotHypothesisTemplate(context.Context, *DeleteZeroShotHypothesisTemplateRequest) (*DeleteZeroShotHypothesisTemplateResponse, error)
+	CreateZeroShotHypothesisLabels(context.Context, *CreateZeroShotHypothesisLabelsRequest) (*CreateZeroShotHypothesisLabelsResponse, error)
+	CreateZeroShotHypothesisLabel(context.Context, *CreateZeroShotHypothesisLabelRequest) (*CreateZeroShotHypothesisLabelResponse, error)
+	GetZeroShotHypothesisLabel(context.Context, *GetZeroShotHypothesisLabelRequest) (*GetZeroShotHypothesisLabelResponse, error)
+	UpdateZeroShotHypothesisLabel(context.Context, *UpdateZeroShotHypothesisLabelRequest) (*UpdateZeroShotHypothesisLabelResponse, error)
+	DeleteZeroShotHypothesisLabel(context.Context, *DeleteZeroShotHypothesisLabelRequest) (*DeleteZeroShotHypothesisLabelResponse, error)
 	mustEmbedUnimplementedWhatsnewServer()
 }
 
@@ -290,6 +411,39 @@ func (UnimplementedWhatsnewServer) UpdateQueryTwitterSource(context.Context, *Up
 }
 func (UnimplementedWhatsnewServer) DeleteQueryTwitterSource(context.Context, *DeleteQueryTwitterSourceRequest) (*DeleteQueryTwitterSourceResponse, error) {
 	return nil, status.Errorf(codes.Unimplemented, "method DeleteQueryTwitterSource not implemented")
+}
+func (UnimplementedWhatsnewServer) GetZeroShotHypothesisTemplates(context.Context, *GetZeroShotHypothesisTemplatesRequest) (*GetZeroShotHypothesisTemplatesResponse, error) {
+	return nil, status.Errorf(codes.Unimplemented, "method GetZeroShotHypothesisTemplates not implemented")
+}
+func (UnimplementedWhatsnewServer) CreateZeroShotHypothesisTemplates(context.Context, *CreateZeroShotHypothesisTemplatesRequest) (*CreateZeroShotHypothesisTemplatesResponse, error) {
+	return nil, status.Errorf(codes.Unimplemented, "method CreateZeroShotHypothesisTemplates not implemented")
+}
+func (UnimplementedWhatsnewServer) CreateZeroShotHypothesisTemplate(context.Context, *CreateZeroShotHypothesisTemplateRequest) (*CreateZeroShotHypothesisTemplateResponse, error) {
+	return nil, status.Errorf(codes.Unimplemented, "method CreateZeroShotHypothesisTemplate not implemented")
+}
+func (UnimplementedWhatsnewServer) GetZeroShotHypothesisTemplate(context.Context, *GetZeroShotHypothesisTemplateRequest) (*GetZeroShotHypothesisTemplateResponse, error) {
+	return nil, status.Errorf(codes.Unimplemented, "method GetZeroShotHypothesisTemplate not implemented")
+}
+func (UnimplementedWhatsnewServer) UpdateZeroShotHypothesisTemplate(context.Context, *UpdateZeroShotHypothesisTemplateRequest) (*UpdateZeroShotHypothesisTemplateResponse, error) {
+	return nil, status.Errorf(codes.Unimplemented, "method UpdateZeroShotHypothesisTemplate not implemented")
+}
+func (UnimplementedWhatsnewServer) DeleteZeroShotHypothesisTemplate(context.Context, *DeleteZeroShotHypothesisTemplateRequest) (*DeleteZeroShotHypothesisTemplateResponse, error) {
+	return nil, status.Errorf(codes.Unimplemented, "method DeleteZeroShotHypothesisTemplate not implemented")
+}
+func (UnimplementedWhatsnewServer) CreateZeroShotHypothesisLabels(context.Context, *CreateZeroShotHypothesisLabelsRequest) (*CreateZeroShotHypothesisLabelsResponse, error) {
+	return nil, status.Errorf(codes.Unimplemented, "method CreateZeroShotHypothesisLabels not implemented")
+}
+func (UnimplementedWhatsnewServer) CreateZeroShotHypothesisLabel(context.Context, *CreateZeroShotHypothesisLabelRequest) (*CreateZeroShotHypothesisLabelResponse, error) {
+	return nil, status.Errorf(codes.Unimplemented, "method CreateZeroShotHypothesisLabel not implemented")
+}
+func (UnimplementedWhatsnewServer) GetZeroShotHypothesisLabel(context.Context, *GetZeroShotHypothesisLabelRequest) (*GetZeroShotHypothesisLabelResponse, error) {
+	return nil, status.Errorf(codes.Unimplemented, "method GetZeroShotHypothesisLabel not implemented")
+}
+func (UnimplementedWhatsnewServer) UpdateZeroShotHypothesisLabel(context.Context, *UpdateZeroShotHypothesisLabelRequest) (*UpdateZeroShotHypothesisLabelResponse, error) {
+	return nil, status.Errorf(codes.Unimplemented, "method UpdateZeroShotHypothesisLabel not implemented")
+}
+func (UnimplementedWhatsnewServer) DeleteZeroShotHypothesisLabel(context.Context, *DeleteZeroShotHypothesisLabelRequest) (*DeleteZeroShotHypothesisLabelResponse, error) {
+	return nil, status.Errorf(codes.Unimplemented, "method DeleteZeroShotHypothesisLabel not implemented")
 }
 func (UnimplementedWhatsnewServer) mustEmbedUnimplementedWhatsnewServer() {}
 
@@ -628,6 +782,204 @@ func _Whatsnew_DeleteQueryTwitterSource_Handler(srv interface{}, ctx context.Con
 	return interceptor(ctx, in, info, handler)
 }
 
+func _Whatsnew_GetZeroShotHypothesisTemplates_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(GetZeroShotHypothesisTemplatesRequest)
+	if err := dec(in); err != nil {
+		return nil, err
+	}
+	if interceptor == nil {
+		return srv.(WhatsnewServer).GetZeroShotHypothesisTemplates(ctx, in)
+	}
+	info := &grpc.UnaryServerInfo{
+		Server:     srv,
+		FullMethod: "/whatsnew.Whatsnew/GetZeroShotHypothesisTemplates",
+	}
+	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
+		return srv.(WhatsnewServer).GetZeroShotHypothesisTemplates(ctx, req.(*GetZeroShotHypothesisTemplatesRequest))
+	}
+	return interceptor(ctx, in, info, handler)
+}
+
+func _Whatsnew_CreateZeroShotHypothesisTemplates_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(CreateZeroShotHypothesisTemplatesRequest)
+	if err := dec(in); err != nil {
+		return nil, err
+	}
+	if interceptor == nil {
+		return srv.(WhatsnewServer).CreateZeroShotHypothesisTemplates(ctx, in)
+	}
+	info := &grpc.UnaryServerInfo{
+		Server:     srv,
+		FullMethod: "/whatsnew.Whatsnew/CreateZeroShotHypothesisTemplates",
+	}
+	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
+		return srv.(WhatsnewServer).CreateZeroShotHypothesisTemplates(ctx, req.(*CreateZeroShotHypothesisTemplatesRequest))
+	}
+	return interceptor(ctx, in, info, handler)
+}
+
+func _Whatsnew_CreateZeroShotHypothesisTemplate_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(CreateZeroShotHypothesisTemplateRequest)
+	if err := dec(in); err != nil {
+		return nil, err
+	}
+	if interceptor == nil {
+		return srv.(WhatsnewServer).CreateZeroShotHypothesisTemplate(ctx, in)
+	}
+	info := &grpc.UnaryServerInfo{
+		Server:     srv,
+		FullMethod: "/whatsnew.Whatsnew/CreateZeroShotHypothesisTemplate",
+	}
+	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
+		return srv.(WhatsnewServer).CreateZeroShotHypothesisTemplate(ctx, req.(*CreateZeroShotHypothesisTemplateRequest))
+	}
+	return interceptor(ctx, in, info, handler)
+}
+
+func _Whatsnew_GetZeroShotHypothesisTemplate_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(GetZeroShotHypothesisTemplateRequest)
+	if err := dec(in); err != nil {
+		return nil, err
+	}
+	if interceptor == nil {
+		return srv.(WhatsnewServer).GetZeroShotHypothesisTemplate(ctx, in)
+	}
+	info := &grpc.UnaryServerInfo{
+		Server:     srv,
+		FullMethod: "/whatsnew.Whatsnew/GetZeroShotHypothesisTemplate",
+	}
+	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
+		return srv.(WhatsnewServer).GetZeroShotHypothesisTemplate(ctx, req.(*GetZeroShotHypothesisTemplateRequest))
+	}
+	return interceptor(ctx, in, info, handler)
+}
+
+func _Whatsnew_UpdateZeroShotHypothesisTemplate_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(UpdateZeroShotHypothesisTemplateRequest)
+	if err := dec(in); err != nil {
+		return nil, err
+	}
+	if interceptor == nil {
+		return srv.(WhatsnewServer).UpdateZeroShotHypothesisTemplate(ctx, in)
+	}
+	info := &grpc.UnaryServerInfo{
+		Server:     srv,
+		FullMethod: "/whatsnew.Whatsnew/UpdateZeroShotHypothesisTemplate",
+	}
+	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
+		return srv.(WhatsnewServer).UpdateZeroShotHypothesisTemplate(ctx, req.(*UpdateZeroShotHypothesisTemplateRequest))
+	}
+	return interceptor(ctx, in, info, handler)
+}
+
+func _Whatsnew_DeleteZeroShotHypothesisTemplate_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(DeleteZeroShotHypothesisTemplateRequest)
+	if err := dec(in); err != nil {
+		return nil, err
+	}
+	if interceptor == nil {
+		return srv.(WhatsnewServer).DeleteZeroShotHypothesisTemplate(ctx, in)
+	}
+	info := &grpc.UnaryServerInfo{
+		Server:     srv,
+		FullMethod: "/whatsnew.Whatsnew/DeleteZeroShotHypothesisTemplate",
+	}
+	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
+		return srv.(WhatsnewServer).DeleteZeroShotHypothesisTemplate(ctx, req.(*DeleteZeroShotHypothesisTemplateRequest))
+	}
+	return interceptor(ctx, in, info, handler)
+}
+
+func _Whatsnew_CreateZeroShotHypothesisLabels_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(CreateZeroShotHypothesisLabelsRequest)
+	if err := dec(in); err != nil {
+		return nil, err
+	}
+	if interceptor == nil {
+		return srv.(WhatsnewServer).CreateZeroShotHypothesisLabels(ctx, in)
+	}
+	info := &grpc.UnaryServerInfo{
+		Server:     srv,
+		FullMethod: "/whatsnew.Whatsnew/CreateZeroShotHypothesisLabels",
+	}
+	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
+		return srv.(WhatsnewServer).CreateZeroShotHypothesisLabels(ctx, req.(*CreateZeroShotHypothesisLabelsRequest))
+	}
+	return interceptor(ctx, in, info, handler)
+}
+
+func _Whatsnew_CreateZeroShotHypothesisLabel_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(CreateZeroShotHypothesisLabelRequest)
+	if err := dec(in); err != nil {
+		return nil, err
+	}
+	if interceptor == nil {
+		return srv.(WhatsnewServer).CreateZeroShotHypothesisLabel(ctx, in)
+	}
+	info := &grpc.UnaryServerInfo{
+		Server:     srv,
+		FullMethod: "/whatsnew.Whatsnew/CreateZeroShotHypothesisLabel",
+	}
+	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
+		return srv.(WhatsnewServer).CreateZeroShotHypothesisLabel(ctx, req.(*CreateZeroShotHypothesisLabelRequest))
+	}
+	return interceptor(ctx, in, info, handler)
+}
+
+func _Whatsnew_GetZeroShotHypothesisLabel_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(GetZeroShotHypothesisLabelRequest)
+	if err := dec(in); err != nil {
+		return nil, err
+	}
+	if interceptor == nil {
+		return srv.(WhatsnewServer).GetZeroShotHypothesisLabel(ctx, in)
+	}
+	info := &grpc.UnaryServerInfo{
+		Server:     srv,
+		FullMethod: "/whatsnew.Whatsnew/GetZeroShotHypothesisLabel",
+	}
+	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
+		return srv.(WhatsnewServer).GetZeroShotHypothesisLabel(ctx, req.(*GetZeroShotHypothesisLabelRequest))
+	}
+	return interceptor(ctx, in, info, handler)
+}
+
+func _Whatsnew_UpdateZeroShotHypothesisLabel_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(UpdateZeroShotHypothesisLabelRequest)
+	if err := dec(in); err != nil {
+		return nil, err
+	}
+	if interceptor == nil {
+		return srv.(WhatsnewServer).UpdateZeroShotHypothesisLabel(ctx, in)
+	}
+	info := &grpc.UnaryServerInfo{
+		Server:     srv,
+		FullMethod: "/whatsnew.Whatsnew/UpdateZeroShotHypothesisLabel",
+	}
+	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
+		return srv.(WhatsnewServer).UpdateZeroShotHypothesisLabel(ctx, req.(*UpdateZeroShotHypothesisLabelRequest))
+	}
+	return interceptor(ctx, in, info, handler)
+}
+
+func _Whatsnew_DeleteZeroShotHypothesisLabel_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(DeleteZeroShotHypothesisLabelRequest)
+	if err := dec(in); err != nil {
+		return nil, err
+	}
+	if interceptor == nil {
+		return srv.(WhatsnewServer).DeleteZeroShotHypothesisLabel(ctx, in)
+	}
+	info := &grpc.UnaryServerInfo{
+		Server:     srv,
+		FullMethod: "/whatsnew.Whatsnew/DeleteZeroShotHypothesisLabel",
+	}
+	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
+		return srv.(WhatsnewServer).DeleteZeroShotHypothesisLabel(ctx, req.(*DeleteZeroShotHypothesisLabelRequest))
+	}
+	return interceptor(ctx, in, info, handler)
+}
+
 // Whatsnew_ServiceDesc is the grpc.ServiceDesc for Whatsnew service.
 // It's only intended for direct use with grpc.RegisterService,
 // and not to be introspected or modified (even as a copy)
@@ -706,6 +1058,50 @@ var Whatsnew_ServiceDesc = grpc.ServiceDesc{
 		{
 			MethodName: "DeleteQueryTwitterSource",
 			Handler:    _Whatsnew_DeleteQueryTwitterSource_Handler,
+		},
+		{
+			MethodName: "GetZeroShotHypothesisTemplates",
+			Handler:    _Whatsnew_GetZeroShotHypothesisTemplates_Handler,
+		},
+		{
+			MethodName: "CreateZeroShotHypothesisTemplates",
+			Handler:    _Whatsnew_CreateZeroShotHypothesisTemplates_Handler,
+		},
+		{
+			MethodName: "CreateZeroShotHypothesisTemplate",
+			Handler:    _Whatsnew_CreateZeroShotHypothesisTemplate_Handler,
+		},
+		{
+			MethodName: "GetZeroShotHypothesisTemplate",
+			Handler:    _Whatsnew_GetZeroShotHypothesisTemplate_Handler,
+		},
+		{
+			MethodName: "UpdateZeroShotHypothesisTemplate",
+			Handler:    _Whatsnew_UpdateZeroShotHypothesisTemplate_Handler,
+		},
+		{
+			MethodName: "DeleteZeroShotHypothesisTemplate",
+			Handler:    _Whatsnew_DeleteZeroShotHypothesisTemplate_Handler,
+		},
+		{
+			MethodName: "CreateZeroShotHypothesisLabels",
+			Handler:    _Whatsnew_CreateZeroShotHypothesisLabels_Handler,
+		},
+		{
+			MethodName: "CreateZeroShotHypothesisLabel",
+			Handler:    _Whatsnew_CreateZeroShotHypothesisLabel_Handler,
+		},
+		{
+			MethodName: "GetZeroShotHypothesisLabel",
+			Handler:    _Whatsnew_GetZeroShotHypothesisLabel_Handler,
+		},
+		{
+			MethodName: "UpdateZeroShotHypothesisLabel",
+			Handler:    _Whatsnew_UpdateZeroShotHypothesisLabel_Handler,
+		},
+		{
+			MethodName: "DeleteZeroShotHypothesisLabel",
+			Handler:    _Whatsnew_DeleteZeroShotHypothesisLabel_Handler,
 		},
 	},
 	Streams:  []grpc.StreamDesc{},

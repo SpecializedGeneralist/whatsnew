@@ -257,6 +257,160 @@ message DeleteQueryTwitterSourceData {
   string deleted_query_twitter_source_id = 1;
 }
 
+message GetZeroShotHypothesisTemplatesResponse {
+  GetZeroShotHypothesisTemplatesData data = 1;
+
+  ResponseErrors errors = 2;
+}
+
+message GetZeroShotHypothesisTemplatesData {
+  repeated ZeroShotHypothesisTemplate zero_shot_hypothesis_templates = 1;
+}
+
+message NewZeroShotHypothesisTemplates {
+  repeated NewZeroShotHypothesisTemplate zero_shot_hypothesis_templates = 1;
+}
+
+message NewZeroShotHypothesisTemplate {
+  bool enabled = 1;
+
+  string text = 2;
+
+  bool multi_class = 3;
+
+  repeated NewZeroShotHypothesisTemplateLabel labels = 4;
+}
+
+message NewZeroShotHypothesisTemplateLabel {
+  bool enabled = 1;
+
+  string text = 2;
+}
+
+message CreateZeroShotHypothesisTemplatesResponse {
+  CreateZeroShotHypothesisTemplatesData data = 1;
+
+  ResponseErrors errors = 2;
+}
+
+message CreateZeroShotHypothesisTemplatesData {
+  repeated string zero_shot_hypothesis_template_ids = 1;
+}
+
+message CreateZeroShotHypothesisTemplateResponse {
+  CreateZeroShotHypothesisTemplateData data = 1;
+
+  ResponseErrors errors = 2;
+}
+
+message CreateZeroShotHypothesisTemplateData {
+  string zero_shot_hypothesis_template_id = 1;
+}
+
+message GetZeroShotHypothesisTemplateResponse {
+  GetZeroShotHypothesisTemplateData data = 1;
+
+  ResponseErrors errors = 2;
+}
+
+message GetZeroShotHypothesisTemplateData {
+  ZeroShotHypothesisTemplate zero_shot_hypothesis_template = 1;
+}
+
+message UpdatedZeroShotHypothesisTemplate {
+  bool enabled = 1;
+
+  string text = 2;
+
+  bool multi_class = 3;
+}
+
+message UpdateZeroShotHypothesisTemplateResponse {
+  UpdateZeroShotHypothesisTemplateData data = 1;
+
+  ResponseErrors errors = 2;
+}
+
+message UpdateZeroShotHypothesisTemplateData {
+  ZeroShotHypothesisTemplate zero_shot_hypothesis_template = 1;
+}
+
+message DeleteZeroShotHypothesisTemplateResponse {
+  DeleteZeroShotHypothesisTemplateData data = 1;
+
+  ResponseErrors errors = 2;
+}
+
+message DeleteZeroShotHypothesisTemplateData {
+  string deleted_zero_shot_hypothesis_template_id = 1;
+}
+
+message NewZeroShotHypothesisLabels {
+  repeated NewZeroShotHypothesisLabel zero_shot_hypothesis_labels = 1;
+}
+
+message NewZeroShotHypothesisLabel {
+  bool enabled = 1;
+
+  string text = 2;
+}
+
+message CreateZeroShotHypothesisLabelsResponse {
+  CreateZeroShotHypothesisLabelsData data = 1;
+
+  ResponseErrors errors = 2;
+}
+
+message CreateZeroShotHypothesisLabelsData {
+  repeated string zero_shot_hypothesis_label_ids = 1;
+}
+
+message CreateZeroShotHypothesisLabelResponse {
+  CreateZeroShotHypothesisLabelData data = 1;
+
+  ResponseErrors errors = 2;
+}
+
+message CreateZeroShotHypothesisLabelData {
+  string zero_shot_hypothesis_label_id = 1;
+}
+
+message GetZeroShotHypothesisLabelResponse {
+  GetZeroShotHypothesisLabelData data = 1;
+
+  ResponseErrors errors = 2;
+}
+
+message GetZeroShotHypothesisLabelData {
+  ZeroShotHypothesisLabel zero_shot_hypothesis_label = 1;
+}
+
+message UpdatedZeroShotHypothesisLabel {
+  bool enabled = 1;
+
+  string text = 2;
+}
+
+message UpdateZeroShotHypothesisLabelResponse {
+  UpdateZeroShotHypothesisLabelData data = 1;
+
+  ResponseErrors errors = 2;
+}
+
+message UpdateZeroShotHypothesisLabelData {
+  ZeroShotHypothesisLabel zero_shot_hypothesis_label = 1;
+}
+
+message DeleteZeroShotHypothesisLabelResponse {
+  DeleteZeroShotHypothesisLabelData data = 1;
+
+  ResponseErrors errors = 2;
+}
+
+message DeleteZeroShotHypothesisLabelData {
+  string deleted_zero_shot_hypothesis_label_id = 1;
+}
+
 message Feed {
   string id = 1;
 
@@ -309,6 +463,34 @@ message QueryTwitterSource {
   int64 failures_count = 7;
 
   string last_error = 8;
+}
+
+message ZeroShotHypothesisTemplate {
+  string id = 1;
+
+  string created_at = 2;
+
+  string updated_at = 3;
+
+  bool enabled = 4;
+
+  string text = 5;
+
+  bool multi_class = 6;
+
+  repeated ZeroShotHypothesisLabel labels = 7;
+}
+
+message ZeroShotHypothesisLabel {
+  string id = 1;
+
+  string created_at = 2;
+
+  string updated_at = 3;
+
+  bool enabled = 4;
+
+  string text = 5;
 }
 
 //GetFeedsParameters holds parameters to GetFeeds
@@ -413,6 +595,77 @@ message DeleteQueryTwitterSourceRequest {
   string id = 1;
 }
 
+//GetZeroShotHypothesisTemplatesParameters holds parameters to GetZeroShotHypothesisTemplates
+message GetZeroShotHypothesisTemplatesRequest {
+  int64 first = 1;
+
+  string after = 2;
+}
+
+//CreateZeroShotHypothesisTemplatesParameters holds parameters to CreateZeroShotHypothesisTemplates
+message CreateZeroShotHypothesisTemplatesRequest {
+  NewZeroShotHypothesisTemplates new_zero_shot_hypothesis_templates = 1;
+}
+
+//CreateZeroShotHypothesisTemplateParameters holds parameters to CreateZeroShotHypothesisTemplate
+message CreateZeroShotHypothesisTemplateRequest {
+  NewZeroShotHypothesisTemplate new_zero_shot_hypothesis_template = 1;
+}
+
+//GetZeroShotHypothesisTemplateParameters holds parameters to GetZeroShotHypothesisTemplate
+message GetZeroShotHypothesisTemplateRequest {
+  string id = 1;
+}
+
+//UpdateZeroShotHypothesisTemplateParameters holds parameters to UpdateZeroShotHypothesisTemplate
+message UpdateZeroShotHypothesisTemplateRequest {
+  string id = 1;
+
+  UpdatedZeroShotHypothesisTemplate updated_zero_shot_hypothesis_template = 2;
+}
+
+//DeleteZeroShotHypothesisTemplateParameters holds parameters to DeleteZeroShotHypothesisTemplate
+message DeleteZeroShotHypothesisTemplateRequest {
+  string id = 1;
+}
+
+//CreateZeroShotHypothesisLabelsParameters holds parameters to CreateZeroShotHypothesisLabels
+message CreateZeroShotHypothesisLabelsRequest {
+  string template_id = 1;
+
+  NewZeroShotHypothesisLabels new_zero_shot_hypothesis_labels = 2;
+}
+
+//CreateZeroShotHypothesisLabelParameters holds parameters to CreateZeroShotHypothesisLabel
+message CreateZeroShotHypothesisLabelRequest {
+  string template_id = 1;
+
+  NewZeroShotHypothesisLabel new_zero_shot_hypothesis_label = 2;
+}
+
+//GetZeroShotHypothesisLabelParameters holds parameters to GetZeroShotHypothesisLabel
+message GetZeroShotHypothesisLabelRequest {
+  string template_id = 1;
+
+  string label_id = 2;
+}
+
+//UpdateZeroShotHypothesisLabelParameters holds parameters to UpdateZeroShotHypothesisLabel
+message UpdateZeroShotHypothesisLabelRequest {
+  string template_id = 1;
+
+  string label_id = 2;
+
+  UpdatedZeroShotHypothesisLabel updated_zero_shot_hypothesis_label = 3;
+}
+
+//DeleteZeroShotHypothesisLabelParameters holds parameters to DeleteZeroShotHypothesisLabel
+message DeleteZeroShotHypothesisLabelRequest {
+  string template_id = 1;
+
+  string label_id = 2;
+}
+
 service Whatsnew {
   rpc GetFeeds ( GetFeedsRequest ) returns ( GetFeedsResponse ) {
     option (google.api.http) = { get:"/feeds"  };
@@ -484,6 +737,50 @@ service Whatsnew {
 
   rpc DeleteQueryTwitterSource ( DeleteQueryTwitterSourceRequest ) returns ( DeleteQueryTwitterSourceResponse ) {
     option (google.api.http) = { delete:"/twitter_sources/query/{id}"  };
+  }
+
+  rpc GetZeroShotHypothesisTemplates ( GetZeroShotHypothesisTemplatesRequest ) returns ( GetZeroShotHypothesisTemplatesResponse ) {
+    option (google.api.http) = { get:"/zero_shot_hypothesis_templates"  };
+  }
+
+  rpc CreateZeroShotHypothesisTemplates ( CreateZeroShotHypothesisTemplatesRequest ) returns ( CreateZeroShotHypothesisTemplatesResponse ) {
+    option (google.api.http) = { post:"/zero_shot_hypothesis_templates" body:"new_zero_shot_hypothesis_templates"  };
+  }
+
+  rpc CreateZeroShotHypothesisTemplate ( CreateZeroShotHypothesisTemplateRequest ) returns ( CreateZeroShotHypothesisTemplateResponse ) {
+    option (google.api.http) = { post:"/zero_shot_hypothesis_template" body:"new_zero_shot_hypothesis_template"  };
+  }
+
+  rpc GetZeroShotHypothesisTemplate ( GetZeroShotHypothesisTemplateRequest ) returns ( GetZeroShotHypothesisTemplateResponse ) {
+    option (google.api.http) = { get:"/zero_shot_hypothesis_template/{id}"  };
+  }
+
+  rpc UpdateZeroShotHypothesisTemplate ( UpdateZeroShotHypothesisTemplateRequest ) returns ( UpdateZeroShotHypothesisTemplateResponse ) {
+    option (google.api.http) = { put:"/zero_shot_hypothesis_template/{id}" body:"updated_zero_shot_hypothesis_template"  };
+  }
+
+  rpc DeleteZeroShotHypothesisTemplate ( DeleteZeroShotHypothesisTemplateRequest ) returns ( DeleteZeroShotHypothesisTemplateResponse ) {
+    option (google.api.http) = { delete:"/zero_shot_hypothesis_template/{id}"  };
+  }
+
+  rpc CreateZeroShotHypothesisLabels ( CreateZeroShotHypothesisLabelsRequest ) returns ( CreateZeroShotHypothesisLabelsResponse ) {
+    option (google.api.http) = { post:"/zero_shot_hypothesis_template/{template_id}/labels" body:"new_zero_shot_hypothesis_labels"  };
+  }
+
+  rpc CreateZeroShotHypothesisLabel ( CreateZeroShotHypothesisLabelRequest ) returns ( CreateZeroShotHypothesisLabelResponse ) {
+    option (google.api.http) = { post:"/zero_shot_hypothesis_template/{template_id}/label" body:"new_zero_shot_hypothesis_label"  };
+  }
+
+  rpc GetZeroShotHypothesisLabel ( GetZeroShotHypothesisLabelRequest ) returns ( GetZeroShotHypothesisLabelResponse ) {
+    option (google.api.http) = { get:"/zero_shot_hypothesis_template/{template_id}/label/{label_id}"  };
+  }
+
+  rpc UpdateZeroShotHypothesisLabel ( UpdateZeroShotHypothesisLabelRequest ) returns ( UpdateZeroShotHypothesisLabelResponse ) {
+    option (google.api.http) = { put:"/zero_shot_hypothesis_template/{template_id}/label/{label_id}" body:"updated_zero_shot_hypothesis_label"  };
+  }
+
+  rpc DeleteZeroShotHypothesisLabel ( DeleteZeroShotHypothesisLabelRequest ) returns ( DeleteZeroShotHypothesisLabelResponse ) {
+    option (google.api.http) = { delete:"/zero_shot_hypothesis_template/{template_id}/label/{label_id}"  };
   }
 }
 
