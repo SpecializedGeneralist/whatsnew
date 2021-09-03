@@ -30,21 +30,42 @@ services:
       - '4001:8080'
     volumes:
       - 'spago:/models'
-    command: 'bart-server server --address 0.0.0.0:8081 --grpc-address 0.0.0.0:8080 --repo /models --model valhalla/distilbart-mnli-12-9 --tls-disable true'
+    command:
+      - 'bart-server'
+      - 'server'
+      - '--address=0.0.0.0:8081'
+      - '--grpc-address=0.0.0.0:8080'
+      - '--repo=/models'
+      - '--model=valhalla/distilbart-mnli-12-9'
+      - '--tls-disable=true'
   spago-labse:
     image: 'nlpodyssey/spago:0.7.0'
     ports:
       - '1976:8080'
     volumes:
       - 'spago:/models'
-    command: 'bert-server server --address 0.0.0.0:8081 --grpc-address 0.0.0.0:8080 --repo /models --model pvl/labse_bert --tls-disable true'
+    command:
+      - 'bert-server'
+      - 'server'
+      - '--address=0.0.0.0:8081'
+      - '--grpc-address=0.0.0.0:8080'
+      - '--repo=/models'
+      - '--model=pvl/labse_bert'
+      - '--tls-disable=true'
   spago-qa:
     image: 'nlpodyssey/spago:0.7.0'
     ports:
       - '5831:8080'
     volumes:
       - 'spago:/models'
-    command: 'bert-server server --address 0.0.0.0:8081 --grpc-address 0.0.0.0:8080 --repo /models --model deepset/bert-base-cased-squad2 --tls-disable true'
+    command:
+      - 'bert-server'
+      - 'server'
+      - '--address=0.0.0.0:8081'
+      - '--grpc-address=0.0.0.0:8080'
+      - '--repo=/models'
+      - '--model=deepset/bert-base-cased-squad2'
+      - '--tls-disable=true'
   translator:
     image: 'specializedgeneralist/translator:0.1-alpha'
     ports:

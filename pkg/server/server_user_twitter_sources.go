@@ -15,7 +15,10 @@ import (
 )
 
 // GetUserTwitterSources gets all User Twitter Sources.
-func (s *Server) GetUserTwitterSources(_ context.Context, req *whatsnew.GetUserTwitterSourcesRequest) (*whatsnew.GetUserTwitterSourcesResponse, error) {
+func (s *Server) GetUserTwitterSources(
+	_ context.Context,
+	req *whatsnew.GetUserTwitterSourcesRequest,
+) (*whatsnew.GetUserTwitterSourcesResponse, error) {
 	query := s.db.Order("id").Where("type = ?", models.UserTwitterSource)
 	if len(req.GetAfter()) > 0 {
 		query = query.Where("id > ?", req.GetAfter())
@@ -44,7 +47,10 @@ func (s *Server) GetUserTwitterSources(_ context.Context, req *whatsnew.GetUserT
 }
 
 // CreateUserTwitterSources creates new User Twitter Sources.
-func (s *Server) CreateUserTwitterSources(_ context.Context, req *whatsnew.CreateUserTwitterSourcesRequest) (*whatsnew.CreateUserTwitterSourcesResponse, error) {
+func (s *Server) CreateUserTwitterSources(
+	_ context.Context,
+	req *whatsnew.CreateUserTwitterSourcesRequest,
+) (*whatsnew.CreateUserTwitterSourcesResponse, error) {
 	reqSources := req.GetNewUserTwitterSources().GetUserTwitterSources()
 	sources := make([]models.TwitterSource, len(reqSources))
 	for i, reqSource := range reqSources {
@@ -73,7 +79,10 @@ func (s *Server) CreateUserTwitterSources(_ context.Context, req *whatsnew.Creat
 }
 
 // CreateUserTwitterSource creates a new User Twitter Source.
-func (s *Server) CreateUserTwitterSource(_ context.Context, req *whatsnew.CreateUserTwitterSourceRequest) (*whatsnew.CreateUserTwitterSourceResponse, error) {
+func (s *Server) CreateUserTwitterSource(
+	_ context.Context,
+	req *whatsnew.CreateUserTwitterSourceRequest,
+) (*whatsnew.CreateUserTwitterSourceResponse, error) {
 	ts := &models.TwitterSource{
 		Type: models.UserTwitterSource,
 		Text: req.GetNewUserTwitterSource().GetUsername(),
@@ -93,7 +102,10 @@ func (s *Server) CreateUserTwitterSource(_ context.Context, req *whatsnew.Create
 }
 
 // GetUserTwitterSource gets a User Twitter Source.
-func (s *Server) GetUserTwitterSource(_ context.Context, req *whatsnew.GetUserTwitterSourceRequest) (*whatsnew.GetUserTwitterSourceResponse, error) {
+func (s *Server) GetUserTwitterSource(
+	_ context.Context,
+	req *whatsnew.GetUserTwitterSourceRequest,
+) (*whatsnew.GetUserTwitterSourceResponse, error) {
 	var ts models.TwitterSource
 	ret := s.db.First(&ts, "type = ? AND id = ?", models.UserTwitterSource, req.GetId())
 	if ret.Error != nil {
@@ -108,11 +120,15 @@ func (s *Server) GetUserTwitterSource(_ context.Context, req *whatsnew.GetUserTw
 }
 
 // UpdateUserTwitterSource updates a User Twitter Source.
-func (s *Server) UpdateUserTwitterSource(ctx context.Context, req *whatsnew.UpdateUserTwitterSourceRequest) (*whatsnew.UpdateUserTwitterSourceResponse, error) {
+func (s *Server) UpdateUserTwitterSource(
+	ctx context.Context,
+	req *whatsnew.UpdateUserTwitterSourceRequest,
+) (*whatsnew.UpdateUserTwitterSourceResponse, error) {
 	var ts models.TwitterSource
 
 	err := s.db.WithContext(ctx).Transaction(func(tx *gorm.DB) error {
-		ret := tx.Clauses(clause.Locking{Strength: "UPDATE"}).First(&ts, "type = ? AND id = ?", models.UserTwitterSource, req.GetId())
+		ret := tx.Clauses(clause.Locking{Strength: "UPDATE"}).
+			First(&ts, "type = ? AND id = ?", models.UserTwitterSource, req.GetId())
 		if ret.Error != nil {
 			return ret.Error
 		}
@@ -149,11 +165,15 @@ func (s *Server) UpdateUserTwitterSource(ctx context.Context, req *whatsnew.Upda
 }
 
 // DeleteUserTwitterSource deletes a User Twitter Source.
-func (s *Server) DeleteUserTwitterSource(ctx context.Context, req *whatsnew.DeleteUserTwitterSourceRequest) (*whatsnew.DeleteUserTwitterSourceResponse, error) {
+func (s *Server) DeleteUserTwitterSource(
+	ctx context.Context,
+	req *whatsnew.DeleteUserTwitterSourceRequest,
+) (*whatsnew.DeleteUserTwitterSourceResponse, error) {
 	var ts models.TwitterSource
 
 	err := s.db.WithContext(ctx).Transaction(func(tx *gorm.DB) error {
-		ret := tx.Clauses(clause.Locking{Strength: "UPDATE"}).First(&ts, "type = ? AND id = ?", models.UserTwitterSource, req.GetId())
+		ret := tx.Clauses(clause.Locking{Strength: "UPDATE"}).
+			First(&ts, "type = ? AND id = ?", models.UserTwitterSource, req.GetId())
 		if ret.Error != nil {
 			return ret.Error
 		}

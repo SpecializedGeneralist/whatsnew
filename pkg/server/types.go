@@ -51,15 +51,15 @@ func makeAPIUserTwitterSource(source models.TwitterSource) *whatsnew.UserTwitter
 	}
 }
 
-func makeAPIZeroShotHypothesisTemplate(template models.ZeroShotHypothesisTemplate) *whatsnew.ZeroShotHypothesisTemplate {
+func makeAPIZeroShotHypothesisTemplate(t models.ZeroShotHypothesisTemplate) *whatsnew.ZeroShotHypothesisTemplate {
 	return &whatsnew.ZeroShotHypothesisTemplate{
-		Id:         fmt.Sprintf("%d", template.ID),
-		CreatedAt:  template.CreatedAt.Format(time.RFC3339),
-		UpdatedAt:  template.UpdatedAt.Format(time.RFC3339),
-		Enabled:    template.Enabled,
-		Text:       template.Text,
-		MultiClass: template.MultiClass,
-		Labels:     makeAPIZeroShotHypothesisLabels(template.Labels),
+		Id:         fmt.Sprintf("%d", t.ID),
+		CreatedAt:  t.CreatedAt.Format(time.RFC3339),
+		UpdatedAt:  t.UpdatedAt.Format(time.RFC3339),
+		Enabled:    t.Enabled,
+		Text:       t.Text,
+		MultiClass: t.MultiClass,
+		Labels:     makeAPIZeroShotHypothesisLabels(t.Labels),
 	}
 }
 

@@ -232,7 +232,15 @@
               "$ref": "#/definitions/loglevel"
             }
           },
-          "required": ["queues", "concurrency", "new_web_resource_jobs", "language_filter", "max_allowed_failures", "omit_items_published_before", "loglevel"]
+          "required": [
+            "queues",
+            "concurrency",
+            "new_web_resource_jobs",
+            "language_filter",
+            "max_allowed_failures",
+            "omit_items_published_before",
+            "loglevel"
+          ]
         },
         "twitter_scraper": {
           "description": "Settings for the twitter-scraper worker.",
@@ -275,7 +283,15 @@
               "$ref": "#/definitions/loglevel"
             }
           },
-          "required": ["queues", "concurrency", "max_tweets_number", "new_web_article_jobs", "language_filter", "omit_tweets_published_before", "loglevel"]
+          "required": [
+            "queues",
+            "concurrency",
+            "max_tweets_number",
+            "new_web_article_jobs",
+            "language_filter",
+            "omit_tweets_published_before",
+            "loglevel"
+          ]
         },
         "web_scraper": {
           "description": "Settings for the web-scraper worker.",
@@ -309,7 +325,15 @@
               "$ref": "#/definitions/loglevel"
             }
           },
-          "required": ["queues", "concurrency", "new_web_article_jobs", "language_filter", "request_timeout", "user_agent", "loglevel"]
+          "required": [
+            "queues",
+            "concurrency",
+            "new_web_article_jobs",
+            "language_filter",
+            "request_timeout",
+            "user_agent",
+            "loglevel"
+          ]
         },
         "translator": {
           "description": "Settings for the translator worker.",
@@ -343,7 +367,15 @@
               "$ref": "#/definitions/loglevel"
             }
           },
-          "required": ["queues", "concurrency", "processed_web_article_jobs", "translator_server", "language_whitelist", "target_language", "loglevel"]
+          "required": [
+            "queues",
+            "concurrency",
+            "processed_web_article_jobs",
+            "translator_server",
+            "language_whitelist",
+            "target_language",
+            "loglevel"
+          ]
         },
         "zero_shot_classifier": {
           "description": "Settings for the zero-shot classifier worker.",
@@ -421,7 +453,14 @@
               "$ref": "#/definitions/loglevel"
             }
           },
-          "required": ["queues", "timeframe_days", "distance_threshold", "non_duplicate_web_article_jobs", "duplicate_web_article_jobs", "loglevel"]
+          "required": [
+            "queues",
+            "timeframe_days",
+            "distance_threshold",
+            "non_duplicate_web_article_jobs",
+            "duplicate_web_article_jobs",
+            "loglevel"
+          ]
         },
         "information_extractor": {
           "description": "Settings for the information extractor worker.",
@@ -470,10 +509,29 @@
           "required": ["queues", "concurrency", "spago_bert_server", "items", "processed_web_article_jobs", "loglevel"]
         }
       },
-      "required": ["feed_fetcher", "twitter_scraper", "web_scraper", "translator", "zero_shot_classifier", "vectorizer", "duplicate_detector", "information_extractor"]
+      "required": [
+        "feed_fetcher",
+        "twitter_scraper",
+        "web_scraper",
+        "translator",
+        "zero_shot_classifier",
+        "vectorizer",
+        "duplicate_detector",
+        "information_extractor"
+      ]
     }
   },
-  "required": ["db", "faktory", "hnsw", "feed_scheduler", "twitter_scheduler", "gdelt_fetcher", "jobs_recoverer", "server", "workers"],
+  "required": [
+    "db",
+    "faktory",
+    "hnsw",
+    "feed_scheduler",
+    "twitter_scheduler",
+    "gdelt_fetcher",
+    "jobs_recoverer",
+    "server",
+    "workers"
+  ],
   "definitions": {
     "loglevel": {
       "description": "Log level. The value is compatible with zerolog.Level.",

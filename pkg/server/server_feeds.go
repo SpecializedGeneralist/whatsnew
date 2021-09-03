@@ -44,7 +44,10 @@ func (s *Server) GetFeeds(_ context.Context, req *whatsnew.GetFeedsRequest) (*wh
 }
 
 // CreateFeeds creates new Feeds.
-func (s *Server) CreateFeeds(_ context.Context, req *whatsnew.CreateFeedsRequest) (*whatsnew.CreateFeedsResponse, error) {
+func (s *Server) CreateFeeds(
+	_ context.Context,
+	req *whatsnew.CreateFeedsRequest,
+) (*whatsnew.CreateFeedsResponse, error) {
 	reqFeeds := req.GetNewFeeds().GetFeeds()
 
 	feeds := make([]models.Feed, len(reqFeeds))
@@ -105,7 +108,10 @@ func (s *Server) GetFeed(_ context.Context, req *whatsnew.GetFeedRequest) (*what
 }
 
 // UpdateFeed updates a Feed.
-func (s *Server) UpdateFeed(ctx context.Context, req *whatsnew.UpdateFeedRequest) (*whatsnew.UpdateFeedResponse, error) {
+func (s *Server) UpdateFeed(
+	ctx context.Context,
+	req *whatsnew.UpdateFeedRequest,
+) (*whatsnew.UpdateFeedResponse, error) {
 	var feed models.Feed
 
 	err := s.db.WithContext(ctx).Transaction(func(tx *gorm.DB) error {
@@ -147,7 +153,10 @@ func (s *Server) UpdateFeed(ctx context.Context, req *whatsnew.UpdateFeedRequest
 }
 
 // DeleteFeed deletes a Feed.
-func (s *Server) DeleteFeed(ctx context.Context, req *whatsnew.DeleteFeedRequest) (*whatsnew.DeleteFeedResponse, error) {
+func (s *Server) DeleteFeed(
+	ctx context.Context,
+	req *whatsnew.DeleteFeedRequest,
+) (*whatsnew.DeleteFeedResponse, error) {
 	var feed models.Feed
 
 	err := s.db.WithContext(ctx).Transaction(func(tx *gorm.DB) error {

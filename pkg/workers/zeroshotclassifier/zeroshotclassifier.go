@@ -30,7 +30,12 @@ type ZeroShotClassifier struct {
 }
 
 // New creates a new ZeroShotClassifier.
-func New(conf config.ZeroShotClassifier, db *gorm.DB, bartConn *grpc.ClientConn, fk *faktory_worker.Manager) *ZeroShotClassifier {
+func New(
+	conf config.ZeroShotClassifier,
+	db *gorm.DB,
+	bartConn *grpc.ClientConn,
+	fk *faktory_worker.Manager,
+) *ZeroShotClassifier {
 	zsc := &ZeroShotClassifier{
 		conf:       conf,
 		bartClient: grpcapi.NewBARTClient(bartConn),
@@ -80,7 +85,12 @@ func getLockedWebArticle(tx *gorm.DB, id uint) (*models.WebArticle, error) {
 	return wa, nil
 }
 
-func (zsc *ZeroShotClassifier) processWebArticle(ctx context.Context, tx *gorm.DB, wa *models.WebArticle, js *jobscheduler.JobScheduler) error {
+func (zsc *ZeroShotClassifier) processWebArticle(
+	ctx context.Context,
+	tx *gorm.DB,
+	wa *models.WebArticle,
+	js *jobscheduler.JobScheduler,
+) error {
 	logger := zsc.Log.With().Uint("WebArticle", wa.ID).Logger()
 
 	if len(wa.ZeroShotClasses) > 0 {
@@ -127,7 +137,12 @@ func (zsc *ZeroShotClassifier) getHypotheses(tx *gorm.DB) ([]models.ZeroShotHypo
 	return templates, nil
 }
 
-func (zsc *ZeroShotClassifier) classify(ctx context.Context, webArticleID uint, text string, template models.ZeroShotHypothesisTemplate) ([]*models.ZeroShotClass, error) {
+func (zsc *ZeroShotClassifier) classify(
+	ctx context.Context,
+	webArticleID uint,
+	text string,
+	template models.ZeroShotHypothesisTemplate,
+) ([]*models.ZeroShotClass, error) {
 	if len(template.Labels) == 0 {
 		// This happens if a template has no enabled labels
 		return nil, nil

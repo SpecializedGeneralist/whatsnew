@@ -129,7 +129,12 @@ func getWebResourceWithRelations(tx *gorm.DB, wrID uint) (*models.WebResource, e
 	return wr, nil
 }
 
-func (ws *WebScraper) processWebResource(ctx context.Context, tx *gorm.DB, wr *models.WebResource, js *jobscheduler.JobScheduler) error {
+func (ws *WebScraper) processWebResource(
+	ctx context.Context,
+	tx *gorm.DB,
+	wr *models.WebResource,
+	js *jobscheduler.JobScheduler,
+) error {
 	logger := ws.Log.With().Uint("WebResource", wr.ID).Logger()
 
 	if wr.WebArticle != nil {

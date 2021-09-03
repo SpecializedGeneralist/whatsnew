@@ -34,7 +34,13 @@ type Vectorizer struct {
 }
 
 // New creates a new WebScraper.
-func New(conf config.Vectorizer, db *gorm.DB, bertConn *grpc.ClientConn, hnswClient *hnswclient.Client, fk *faktory_worker.Manager) *Vectorizer {
+func New(
+	conf config.Vectorizer,
+	db *gorm.DB,
+	bertConn *grpc.ClientConn,
+	hnswClient *hnswclient.Client,
+	fk *faktory_worker.Manager,
+) *Vectorizer {
 	v := &Vectorizer{
 		conf:       conf,
 		bertClient: bertgrpcapi.NewBERTClient(bertConn),
@@ -84,7 +90,12 @@ func getLockedWebArticle(tx *gorm.DB, id uint) (*models.WebArticle, error) {
 	return wa, nil
 }
 
-func (v *Vectorizer) processWebArticle(ctx context.Context, tx *gorm.DB, wa *models.WebArticle, js *jobscheduler.JobScheduler) error {
+func (v *Vectorizer) processWebArticle(
+	ctx context.Context,
+	tx *gorm.DB,
+	wa *models.WebArticle,
+	js *jobscheduler.JobScheduler,
+) error {
 	logger := v.Log.With().Uint("WebArticle", wa.ID).Logger()
 
 	if wa.Vector != nil {

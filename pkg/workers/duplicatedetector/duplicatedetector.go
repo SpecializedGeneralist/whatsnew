@@ -64,7 +64,12 @@ type SelectTopHitFn func(tx *gorm.DB, wa *models.WebArticle, hits hnswclient.Hit
 const day = 24 * time.Hour
 
 // New creates a new WebScraper.
-func New(conf config.DuplicateDetector, db *gorm.DB, hnswClient *hnswclient.Client, fk *faktory_worker.Manager) *DuplicateDetector {
+func New(
+	conf config.DuplicateDetector,
+	db *gorm.DB,
+	hnswClient *hnswclient.Client,
+	fk *faktory_worker.Manager,
+) *DuplicateDetector {
 	v := &DuplicateDetector{
 		SelectTopHit: DefaultSelectTopHit,
 		conf:         conf,
@@ -117,7 +122,12 @@ func getLockedWebArticle(tx *gorm.DB, id uint) (*models.WebArticle, error) {
 	return wa, nil
 }
 
-func (dd *DuplicateDetector) processWebArticle(ctx context.Context, tx *gorm.DB, wa *models.WebArticle, js *jobscheduler.JobScheduler) error {
+func (dd *DuplicateDetector) processWebArticle(
+	ctx context.Context,
+	tx *gorm.DB,
+	wa *models.WebArticle,
+	js *jobscheduler.JobScheduler,
+) error {
 	logger := dd.Log.With().Uint("WebArticle", wa.ID).Logger()
 
 	if wa.SimilarityInfo != nil {
@@ -155,7 +165,11 @@ func newSimilarityInfo(wa *models.WebArticle, hit *hnswclient.Hit) *models.Simil
 	return si
 }
 
-func (dd *DuplicateDetector) findSimilarHit(ctx context.Context, tx *gorm.DB, wa *models.WebArticle) (*hnswclient.Hit, error) {
+func (dd *DuplicateDetector) findSimilarHit(
+	ctx context.Context,
+	tx *gorm.DB,
+	wa *models.WebArticle,
+) (*hnswclient.Hit, error) {
 	vector, err := wa.Vector.DataAsFloat32Slice()
 	if err != nil {
 		return nil, err

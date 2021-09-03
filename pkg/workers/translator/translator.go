@@ -84,7 +84,12 @@ func getLockedWebArticle(tx *gorm.DB, id uint) (*models.WebArticle, error) {
 	return wa, nil
 }
 
-func (t *Translator) processWebArticle(ctx context.Context, tx *gorm.DB, wa *models.WebArticle, js *jobscheduler.JobScheduler) error {
+func (t *Translator) processWebArticle(
+	ctx context.Context,
+	tx *gorm.DB,
+	wa *models.WebArticle,
+	js *jobscheduler.JobScheduler,
+) error {
 	logger := t.Log.With().Uint("WebArticle", wa.ID).Logger()
 
 	if wa.TranslatedTitle.Valid && wa.TranslationLanguage.Valid {
@@ -99,7 +104,7 @@ func (t *Translator) processWebArticle(ctx context.Context, tx *gorm.DB, wa *mod
 	}
 
 	if t.languageWhitelist.Has(wa.Language) {
-		err := t.translateWebArticleTitle(ctx, tx, wa, title)
+		err := t.translateTitle(ctx, tx, wa, title)
 		if err != nil {
 			return err
 		}
@@ -108,7 +113,7 @@ func (t *Translator) processWebArticle(ctx context.Context, tx *gorm.DB, wa *mod
 	return js.AddJobs(t.conf.ProcessedWebArticleJobs, wa.ID)
 }
 
-func (t *Translator) translateWebArticleTitle(ctx context.Context, tx *gorm.DB, wa *models.WebArticle, title string) error {
+func (t *Translator) translateTitle(ctx context.Context, tx *gorm.DB, wa *models.WebArticle, title string) error {
 	resp, err := t.translatorClient.TranslateText(ctx, &translatorapi.TranslateTextRequest{
 		TranslateTextInput: &translatorapi.TranslateTextInput{
 			SourceLanguage: wa.Language,

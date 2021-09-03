@@ -15,7 +15,10 @@ import (
 
 // GetZeroShotHypothesisTemplates gets all ZeroShotHypothesisTemplates with
 // their related ZeroShotHypothesisLabels.
-func (s *Server) GetZeroShotHypothesisTemplates(_ context.Context, req *whatsnew.GetZeroShotHypothesisTemplatesRequest) (*whatsnew.GetZeroShotHypothesisTemplatesResponse, error) {
+func (s *Server) GetZeroShotHypothesisTemplates(
+	_ context.Context,
+	req *whatsnew.GetZeroShotHypothesisTemplatesRequest,
+) (*whatsnew.GetZeroShotHypothesisTemplatesResponse, error) {
 	query := s.db.Preload("Labels").Order("id")
 	if len(req.GetAfter()) > 0 {
 		query = query.Where("id > ?", req.GetAfter())
@@ -45,7 +48,10 @@ func (s *Server) GetZeroShotHypothesisTemplates(_ context.Context, req *whatsnew
 
 // CreateZeroShotHypothesisTemplates creates new ZeroShotHypothesisTemplates
 // with related ZeroShotHypothesisLabels.
-func (s *Server) CreateZeroShotHypothesisTemplates(_ context.Context, req *whatsnew.CreateZeroShotHypothesisTemplatesRequest) (*whatsnew.CreateZeroShotHypothesisTemplatesResponse, error) {
+func (s *Server) CreateZeroShotHypothesisTemplates(
+	_ context.Context,
+	req *whatsnew.CreateZeroShotHypothesisTemplatesRequest,
+) (*whatsnew.CreateZeroShotHypothesisTemplatesResponse, error) {
 	reqTemplates := req.GetNewZeroShotHypothesisTemplates().GetZeroShotHypothesisTemplates()
 
 	templates := make([]models.ZeroShotHypothesisTemplate, len(reqTemplates))
@@ -73,7 +79,10 @@ func (s *Server) CreateZeroShotHypothesisTemplates(_ context.Context, req *whats
 
 // CreateZeroShotHypothesisTemplate creates a new ZeroShotHypothesisTemplate
 // with related ZeroShotHypothesisLabels.
-func (s *Server) CreateZeroShotHypothesisTemplate(_ context.Context, req *whatsnew.CreateZeroShotHypothesisTemplateRequest) (*whatsnew.CreateZeroShotHypothesisTemplateResponse, error) {
+func (s *Server) CreateZeroShotHypothesisTemplate(
+	_ context.Context,
+	req *whatsnew.CreateZeroShotHypothesisTemplateRequest,
+) (*whatsnew.CreateZeroShotHypothesisTemplateResponse, error) {
 	template := makeZeroShotHypothesisTemplateModel(req.GetNewZeroShotHypothesisTemplate())
 	ret := s.db.Create(&template)
 	if ret.Error != nil {
@@ -89,7 +98,10 @@ func (s *Server) CreateZeroShotHypothesisTemplate(_ context.Context, req *whatsn
 
 // GetZeroShotHypothesisTemplate gets a ZeroShotHypothesisTemplate with
 // its related ZeroShotHypothesisLabels.
-func (s *Server) GetZeroShotHypothesisTemplate(_ context.Context, req *whatsnew.GetZeroShotHypothesisTemplateRequest) (*whatsnew.GetZeroShotHypothesisTemplateResponse, error) {
+func (s *Server) GetZeroShotHypothesisTemplate(
+	_ context.Context,
+	req *whatsnew.GetZeroShotHypothesisTemplateRequest,
+) (*whatsnew.GetZeroShotHypothesisTemplateResponse, error) {
 	var template models.ZeroShotHypothesisTemplate
 	ret := s.db.Preload("Labels").First(&template, "id = ?", req.GetId())
 	if ret.Error != nil {
@@ -104,7 +116,10 @@ func (s *Server) GetZeroShotHypothesisTemplate(_ context.Context, req *whatsnew.
 }
 
 // UpdateZeroShotHypothesisTemplate updates a ZeroShotHypothesisTemplate.
-func (s *Server) UpdateZeroShotHypothesisTemplate(ctx context.Context, req *whatsnew.UpdateZeroShotHypothesisTemplateRequest) (*whatsnew.UpdateZeroShotHypothesisTemplateResponse, error) {
+func (s *Server) UpdateZeroShotHypothesisTemplate(
+	ctx context.Context,
+	req *whatsnew.UpdateZeroShotHypothesisTemplateRequest,
+) (*whatsnew.UpdateZeroShotHypothesisTemplateResponse, error) {
 	var template models.ZeroShotHypothesisTemplate
 
 	err := s.db.WithContext(ctx).Transaction(func(tx *gorm.DB) error {
@@ -136,7 +151,10 @@ func (s *Server) UpdateZeroShotHypothesisTemplate(ctx context.Context, req *what
 }
 
 // DeleteZeroShotHypothesisTemplate deletes a ZeroShotHypothesisTemplate.
-func (s *Server) DeleteZeroShotHypothesisTemplate(ctx context.Context, req *whatsnew.DeleteZeroShotHypothesisTemplateRequest) (*whatsnew.DeleteZeroShotHypothesisTemplateResponse, error) {
+func (s *Server) DeleteZeroShotHypothesisTemplate(
+	ctx context.Context,
+	req *whatsnew.DeleteZeroShotHypothesisTemplateRequest,
+) (*whatsnew.DeleteZeroShotHypothesisTemplateResponse, error) {
 	var template models.ZeroShotHypothesisTemplate
 
 	err := s.db.WithContext(ctx).Transaction(func(tx *gorm.DB) error {
@@ -146,7 +164,9 @@ func (s *Server) DeleteZeroShotHypothesisTemplate(ctx context.Context, req *what
 		}
 
 		var classesCount int64
-		ret = tx.Model(&models.ZeroShotClass{}).Where("zero_shot_hypothesis_template_id = ?", template.ID).Limit(1).Count(&classesCount)
+		ret = tx.Model(&models.ZeroShotClass{}).
+			Where("zero_shot_hypothesis_template_id = ?", template.ID).
+			Limit(1).Count(&classesCount)
 		if ret.Error != nil {
 			return ret.Error
 		}
@@ -172,7 +192,10 @@ func (s *Server) DeleteZeroShotHypothesisTemplate(ctx context.Context, req *what
 }
 
 // CreateZeroShotHypothesisLabels creates new ZeroShotHypothesisLabels.
-func (s *Server) CreateZeroShotHypothesisLabels(ctx context.Context, req *whatsnew.CreateZeroShotHypothesisLabelsRequest) (*whatsnew.CreateZeroShotHypothesisLabelsResponse, error) {
+func (s *Server) CreateZeroShotHypothesisLabels(
+	ctx context.Context,
+	req *whatsnew.CreateZeroShotHypothesisLabelsRequest,
+) (*whatsnew.CreateZeroShotHypothesisLabelsResponse, error) {
 	var ids []string
 
 	err := s.db.WithContext(ctx).Transaction(func(tx *gorm.DB) error {
@@ -218,7 +241,10 @@ func (s *Server) CreateZeroShotHypothesisLabels(ctx context.Context, req *whatsn
 }
 
 // CreateZeroShotHypothesisLabel creates new ZeroShotHypothesisLabel.
-func (s *Server) CreateZeroShotHypothesisLabel(ctx context.Context, req *whatsnew.CreateZeroShotHypothesisLabelRequest) (*whatsnew.CreateZeroShotHypothesisLabelResponse, error) {
+func (s *Server) CreateZeroShotHypothesisLabel(
+	ctx context.Context,
+	req *whatsnew.CreateZeroShotHypothesisLabelRequest,
+) (*whatsnew.CreateZeroShotHypothesisLabelResponse, error) {
 	var label models.ZeroShotHypothesisLabel
 
 	err := s.db.WithContext(ctx).Transaction(func(tx *gorm.DB) error {
@@ -255,7 +281,10 @@ func (s *Server) CreateZeroShotHypothesisLabel(ctx context.Context, req *whatsne
 }
 
 // GetZeroShotHypothesisLabel gets a ZeroShotHypothesisLabel.
-func (s *Server) GetZeroShotHypothesisLabel(_ context.Context, req *whatsnew.GetZeroShotHypothesisLabelRequest) (*whatsnew.GetZeroShotHypothesisLabelResponse, error) {
+func (s *Server) GetZeroShotHypothesisLabel(
+	_ context.Context,
+	req *whatsnew.GetZeroShotHypothesisLabelRequest,
+) (*whatsnew.GetZeroShotHypothesisLabelResponse, error) {
 	var label models.ZeroShotHypothesisLabel
 	ret := s.db.First(&label, "id = ? AND zero_shot_hypothesis_template_id = ?", req.GetLabelId(), req.GetTemplateId())
 	if ret.Error != nil {
@@ -270,11 +299,15 @@ func (s *Server) GetZeroShotHypothesisLabel(_ context.Context, req *whatsnew.Get
 }
 
 // UpdateZeroShotHypothesisLabel updates a ZeroShotHypothesisLabel.
-func (s *Server) UpdateZeroShotHypothesisLabel(ctx context.Context, req *whatsnew.UpdateZeroShotHypothesisLabelRequest) (*whatsnew.UpdateZeroShotHypothesisLabelResponse, error) {
+func (s *Server) UpdateZeroShotHypothesisLabel(
+	ctx context.Context,
+	req *whatsnew.UpdateZeroShotHypothesisLabelRequest,
+) (*whatsnew.UpdateZeroShotHypothesisLabelResponse, error) {
 	var label models.ZeroShotHypothesisLabel
 
 	err := s.db.WithContext(ctx).Transaction(func(tx *gorm.DB) error {
-		ret := tx.Clauses(clause.Locking{Strength: "UPDATE"}).First(&label, "id = ? AND zero_shot_hypothesis_template_id = ?", req.GetLabelId(), req.GetTemplateId())
+		ret := tx.Clauses(clause.Locking{Strength: "UPDATE"}).
+			First(&label, "id = ? AND zero_shot_hypothesis_template_id = ?", req.GetLabelId(), req.GetTemplateId())
 		if ret.Error != nil {
 			return ret.Error
 		}
@@ -301,17 +334,23 @@ func (s *Server) UpdateZeroShotHypothesisLabel(ctx context.Context, req *whatsne
 }
 
 // DeleteZeroShotHypothesisLabel deletes a ZeroShotHypothesisLabel.
-func (s *Server) DeleteZeroShotHypothesisLabel(ctx context.Context, req *whatsnew.DeleteZeroShotHypothesisLabelRequest) (*whatsnew.DeleteZeroShotHypothesisLabelResponse, error) {
+func (s *Server) DeleteZeroShotHypothesisLabel(
+	ctx context.Context,
+	req *whatsnew.DeleteZeroShotHypothesisLabelRequest,
+) (*whatsnew.DeleteZeroShotHypothesisLabelResponse, error) {
 	var label models.ZeroShotHypothesisLabel
 
 	err := s.db.WithContext(ctx).Transaction(func(tx *gorm.DB) error {
-		ret := tx.Clauses(clause.Locking{Strength: "UPDATE"}).First(&label, "id = ? AND zero_shot_hypothesis_template_id = ?", req.GetLabelId(), req.GetTemplateId())
+		ret := tx.Clauses(clause.Locking{Strength: "UPDATE"}).
+			First(&label, "id = ? AND zero_shot_hypothesis_template_id = ?", req.GetLabelId(), req.GetTemplateId())
 		if ret.Error != nil {
 			return ret.Error
 		}
 
 		var classesCount int64
-		ret = tx.Model(&models.ZeroShotClass{}).Where("zero_shot_hypothesis_label_id = ?", label.ID).Limit(1).Count(&classesCount)
+		ret = tx.Model(&models.ZeroShotClass{}).
+			Where("zero_shot_hypothesis_label_id = ?", label.ID).
+			Limit(1).Count(&classesCount)
 		if ret.Error != nil {
 			return ret.Error
 		}
@@ -336,7 +375,9 @@ func (s *Server) DeleteZeroShotHypothesisLabel(ctx context.Context, req *whatsne
 	return resp, nil
 }
 
-func makeZeroShotHypothesisTemplateModel(reqTemplate *whatsnew.NewZeroShotHypothesisTemplate) models.ZeroShotHypothesisTemplate {
+func makeZeroShotHypothesisTemplateModel(
+	reqTemplate *whatsnew.NewZeroShotHypothesisTemplate,
+) models.ZeroShotHypothesisTemplate {
 	reqLabels := reqTemplate.GetLabels()
 	labels := make([]models.ZeroShotHypothesisLabel, len(reqLabels))
 	for j, reqLabel := range reqLabels {

@@ -107,7 +107,12 @@ func (ff *FeedFetcher) processFeed(tx *gorm.DB, feed *models.Feed, js *jobschedu
 	return nil
 }
 
-func (ff *FeedFetcher) processParsedFeedItem(tx *gorm.DB, feed *models.Feed, item *gofeed.Item, js *jobscheduler.JobScheduler) error {
+func (ff *FeedFetcher) processParsedFeedItem(
+	tx *gorm.DB,
+	feed *models.Feed,
+	item *gofeed.Item,
+	js *jobscheduler.JobScheduler,
+) error {
 	logger := ff.Log.With().Uint("Feed", feed.ID).Str("Link", item.Link).Logger()
 
 	if ff.itemIsTooOld(item) {

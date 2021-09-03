@@ -84,7 +84,12 @@ func getLockedTwitterSource(tx *gorm.DB, tsID uint) (*models.TwitterSource, erro
 	return src, nil
 }
 
-func (ts *TwitterScraper) processTwitterSource(ctx context.Context, tx *gorm.DB, src *models.TwitterSource, js *jobscheduler.JobScheduler) error {
+func (ts *TwitterScraper) processTwitterSource(
+	ctx context.Context,
+	tx *gorm.DB,
+	src *models.TwitterSource,
+	js *jobscheduler.JobScheduler,
+) error {
 	var ch <-chan *twitterscraper.TweetResult
 
 	switch src.Type {
@@ -112,7 +117,12 @@ func (ts *TwitterScraper) processTwitterSource(ctx context.Context, tx *gorm.DB,
 	return ts.resetSourceErrors(tx, src)
 }
 
-func (ts *TwitterScraper) processTweet(tx *gorm.DB, src *models.TwitterSource, scrapedTweet twitterscraper.Tweet, js *jobscheduler.JobScheduler) error {
+func (ts *TwitterScraper) processTweet(
+	tx *gorm.DB,
+	src *models.TwitterSource,
+	scrapedTweet twitterscraper.Tweet,
+	js *jobscheduler.JobScheduler,
+) error {
 	logger := ts.Log.With().Uint("TwitterSource", src.ID).Str("ScrapedTweet", scrapedTweet.ID).Logger()
 
 	if ts.tweetIsTooOld(scrapedTweet) {

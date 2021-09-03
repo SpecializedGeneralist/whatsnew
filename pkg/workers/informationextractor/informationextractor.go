@@ -31,7 +31,12 @@ type InformationExtractor struct {
 }
 
 // New creates a new InformationExtractor.
-func New(conf config.InformationExtractor, db *gorm.DB, bertConn *grpc.ClientConn, fk *faktory_worker.Manager) *InformationExtractor {
+func New(
+	conf config.InformationExtractor,
+	db *gorm.DB,
+	bertConn *grpc.ClientConn,
+	fk *faktory_worker.Manager,
+) *InformationExtractor {
 	ie := &InformationExtractor{
 		conf:       conf,
 		bertClient: bertgrpcapi.NewBERTClient(bertConn),
@@ -81,7 +86,12 @@ func getLockedWebArticle(tx *gorm.DB, id uint) (*models.WebArticle, error) {
 	return wa, nil
 }
 
-func (ie *InformationExtractor) processWebArticle(ctx context.Context, tx *gorm.DB, wa *models.WebArticle, js *jobscheduler.JobScheduler) error {
+func (ie *InformationExtractor) processWebArticle(
+	ctx context.Context,
+	tx *gorm.DB,
+	wa *models.WebArticle,
+	js *jobscheduler.JobScheduler,
+) error {
 	logger := ie.Log.With().Uint("WebArticle", wa.ID).Logger()
 
 	if len(wa.ExtractedInfos) > 0 {
@@ -107,7 +117,12 @@ func (ie *InformationExtractor) processWebArticle(ctx context.Context, tx *gorm.
 	return js.AddJobs(ie.conf.ProcessedWebArticleJobs, wa.ID)
 }
 
-func (ie *InformationExtractor) extractAndSaveInfo(ctx context.Context, tx *gorm.DB, wa *models.WebArticle, title string) error {
+func (ie *InformationExtractor) extractAndSaveInfo(
+	ctx context.Context,
+	tx *gorm.DB,
+	wa *models.WebArticle,
+	title string,
+) error {
 	infos := make([]*models.ExtractedInfo, 0, len(ie.conf.Items))
 
 	for _, item := range ie.conf.Items {
@@ -119,7 +134,8 @@ func (ie *InformationExtractor) extractAndSaveInfo(ctx context.Context, tx *gorm
 			continue
 		}
 		confidence := float32(ans.Confidence)
-		logger := ie.Log.With().Str("question", item.Question).Str("answer", ans.Text).Float32("confidence", confidence).Logger()
+		logger := ie.Log.With().Str("question", item.Question).Str("answer", ans.Text).
+			Float32("confidence", confidence).Logger()
 
 		if confidence < item.Threshold {
 			logger.Trace().Float32("threshold", item.Threshold).Msg("answer confidence below threshold")
@@ -151,7 +167,11 @@ func (ie *InformationExtractor) extractAndSaveInfo(ctx context.Context, tx *gorm
 	return nil
 }
 
-func (ie *InformationExtractor) getBestAnswer(ctx context.Context, passage, question string) (*bertgrpcapi.Answer, error) {
+func (ie *InformationExtractor) getBestAnswer(
+	ctx context.Context,
+	passage,
+	question string,
+) (*bertgrpcapi.Answer, error) {
 	reply, err := ie.bertClient.Answer(ctx, &bertgrpcapi.AnswerRequest{
 		Passage:  strings.ToLower(passage),
 		Question: strings.ToLower(question),
