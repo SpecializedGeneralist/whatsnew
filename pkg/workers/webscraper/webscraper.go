@@ -71,7 +71,7 @@ func (ws *WebScraper) perform(ctx context.Context, webResourceID uint) error {
 		// It's not possible to fetch and lock the WebResource while also
 		// joining it with its related models with a single query.
 		// We could lock the model and Preload the associations, but that would
-		// result in many separate queries.
+		// result in many queries.
 		// So we always perform exactly two queries. A first light query
 		// simply locks the WebResource record, without getting any data.
 		// Then we get the whole WebResource also joining all interesting

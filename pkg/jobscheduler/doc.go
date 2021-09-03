@@ -24,7 +24,7 @@
 //   2. create and push the new job "ProcessThing(1)"
 //
 // If something goes wrong in between those two steps, you would end up with
-// the new record on the DB, but the job would be never scheduled.
+// the new record on the DB, but the job would never be scheduled.
 //
 // If losing a job is not critical, or detecting a missed job can be done by
 // simply looking at the status of the data from the database, then this might

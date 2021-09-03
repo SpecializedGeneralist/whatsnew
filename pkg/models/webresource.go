@@ -5,7 +5,7 @@
 package models
 
 // WebResource represents a web resource, usually a web page, accessible
-// via an URL.
+// via a URL.
 type WebResource struct {
 	Model
 

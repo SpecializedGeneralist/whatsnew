@@ -19,7 +19,7 @@ import (
 // The jobscheduler package provides a general explanation of the problem
 // this object might help to solve.
 //
-// In practice, a JobScheduler is best suitable for scenarios where one or
+// In practice, a JobScheduler is suitable for scenarios where one or
 // more entities are created/updated on the database and one or more jobs
 // must be scheduled in relation to each new/modified entity.
 //
@@ -96,10 +96,10 @@ import (
 //   // You can do what you want with this error: there's nothing more to do
 //   // with the JobScheduler in any case.
 //   //
-//   // An error in jobs deletion will probably means that the PendingJob
+//   // An error in jobs deletion will probably mean that the PendingJob
 //   // records will still be present, despite the jobs being successfully
 //   // pushed above. This implies that a separate recovery job will still
-//   // find those records and attempt a reschedule. It's up to the
+//   // find those records and attempt rescheduling. It's up to the
 //   // implementation of the jobs and the recovery process to tolerate
 //   // and handle duplicated job scheduling, according to the specific needs
 //   // and requirements.

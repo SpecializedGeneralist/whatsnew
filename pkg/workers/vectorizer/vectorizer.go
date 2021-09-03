@@ -15,7 +15,7 @@ import (
 	"github.com/contribsys/faktory_worker_go"
 	"github.com/jackc/pgtype"
 	"github.com/nlpodyssey/spago/pkg/mat32"
-	bert_grpcapi "github.com/nlpodyssey/spago/pkg/nlp/transformers/bert/grpcapi"
+	bertgrpcapi "github.com/nlpodyssey/spago/pkg/nlp/transformers/bert/grpcapi"
 	"github.com/rs/zerolog"
 	"github.com/rs/zerolog/log"
 	"google.golang.org/grpc"
@@ -29,7 +29,7 @@ import (
 type Vectorizer struct {
 	basemodelworker.Worker
 	conf       config.Vectorizer
-	bertClient bert_grpcapi.BERTClient
+	bertClient bertgrpcapi.BERTClient
 	hnswClient *hnswclient.Client
 }
 
@@ -37,7 +37,7 @@ type Vectorizer struct {
 func New(conf config.Vectorizer, db *gorm.DB, bertConn *grpc.ClientConn, hnswClient *hnswclient.Client, fk *faktory_worker.Manager) *Vectorizer {
 	v := &Vectorizer{
 		conf:       conf,
-		bertClient: bert_grpcapi.NewBERTClient(bertConn),
+		bertClient: bertgrpcapi.NewBERTClient(bertConn),
 		hnswClient: hnswClient,
 	}
 	v.Worker = basemodelworker.Worker{
@@ -132,7 +132,7 @@ func (v *Vectorizer) processWebArticle(ctx context.Context, tx *gorm.DB, wa *mod
 // It simply calls the remote BERT Encode method to get a vector, which is
 // then normalized and returned.
 func (v *Vectorizer) vectorize(ctx context.Context, text string) ([]float32, error) {
-	request := &bert_grpcapi.EncodeRequest{Text: text}
+	request := &bertgrpcapi.EncodeRequest{Text: text}
 	encoding, err := v.bertClient.Encode(ctx, request)
 	if err != nil {
 		return nil, fmt.Errorf("BERT encoding error: %w", err)

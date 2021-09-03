@@ -12,7 +12,7 @@ import (
 	"github.com/SpecializedGeneralist/whatsnew/pkg/models"
 	"github.com/SpecializedGeneralist/whatsnew/pkg/workers/basemodelworker"
 	"github.com/contribsys/faktory_worker_go"
-	bert_grpcapi "github.com/nlpodyssey/spago/pkg/nlp/transformers/bert/grpcapi"
+	bertgrpcapi "github.com/nlpodyssey/spago/pkg/nlp/transformers/bert/grpcapi"
 	"github.com/rs/zerolog"
 	"github.com/rs/zerolog/log"
 	"google.golang.org/grpc"
@@ -23,18 +23,18 @@ import (
 )
 
 // InformationExtractor implements a Faktory worker for extracting information
-// fomr WebArticles using spaGO BERT Question Answering service.
+// from WebArticles using spaGO BERT Question Answering service.
 type InformationExtractor struct {
 	basemodelworker.Worker
 	conf       config.InformationExtractor
-	bertClient bert_grpcapi.BERTClient
+	bertClient bertgrpcapi.BERTClient
 }
 
 // New creates a new InformationExtractor.
 func New(conf config.InformationExtractor, db *gorm.DB, bertConn *grpc.ClientConn, fk *faktory_worker.Manager) *InformationExtractor {
 	ie := &InformationExtractor{
 		conf:       conf,
-		bertClient: bert_grpcapi.NewBERTClient(bertConn),
+		bertClient: bertgrpcapi.NewBERTClient(bertConn),
 	}
 
 	ie.Worker = basemodelworker.Worker{
@@ -151,8 +151,8 @@ func (ie *InformationExtractor) extractAndSaveInfo(ctx context.Context, tx *gorm
 	return nil
 }
 
-func (ie *InformationExtractor) getBestAnswer(ctx context.Context, passage, question string) (*bert_grpcapi.Answer, error) {
-	reply, err := ie.bertClient.Answer(ctx, &bert_grpcapi.AnswerRequest{
+func (ie *InformationExtractor) getBestAnswer(ctx context.Context, passage, question string) (*bertgrpcapi.Answer, error) {
+	reply, err := ie.bertClient.Answer(ctx, &bertgrpcapi.AnswerRequest{
 		Passage:  strings.ToLower(passage),
 		Question: strings.ToLower(question),
 	})

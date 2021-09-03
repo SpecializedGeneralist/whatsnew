@@ -6,7 +6,7 @@ package config_test
 
 import (
 	"fmt"
-	hnsw_grpcapi "github.com/SpecializedGeneralist/hnsw-grpc-server/pkg/grpcapi"
+	hnswgrpcapi "github.com/SpecializedGeneralist/hnsw-grpc-server/pkg/grpcapi"
 	"github.com/SpecializedGeneralist/whatsnew/pkg/config"
 	"github.com/rs/zerolog"
 	"github.com/stretchr/testify/assert"
@@ -78,7 +78,7 @@ func TestFromYAMLFile(t *testing.T) {
 					M:              48,
 					MaxElements:    100000,
 					Seed:           42,
-					SpaceType:      config.HNSWSpaceType(hnsw_grpcapi.CreateIndexRequest_COSINE),
+					SpaceType:      config.HNSWSpaceType(hnswgrpcapi.CreateIndexRequest_COSINE),
 				},
 			},
 			FeedScheduler: config.FeedScheduler{
@@ -359,9 +359,9 @@ func TestHNSWSpaceType_UnmarshalText(t *testing.T) {
 			text     string
 			expected config.HNSWSpaceType
 		}{
-			{"L2", config.HNSWSpaceType(hnsw_grpcapi.CreateIndexRequest_L2)},
-			{"IP", config.HNSWSpaceType(hnsw_grpcapi.CreateIndexRequest_IP)},
-			{"COSINE", config.HNSWSpaceType(hnsw_grpcapi.CreateIndexRequest_COSINE)},
+			{"L2", config.HNSWSpaceType(hnswgrpcapi.CreateIndexRequest_L2)},
+			{"IP", config.HNSWSpaceType(hnswgrpcapi.CreateIndexRequest_IP)},
+			{"COSINE", config.HNSWSpaceType(hnswgrpcapi.CreateIndexRequest_COSINE)},
 		}
 		for _, tc := range testCases {
 			t.Run(tc.text, func(t *testing.T) {

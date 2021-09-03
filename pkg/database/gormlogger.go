@@ -54,7 +54,7 @@ func (l gormLogger) Error(_ context.Context, msg string, data ...interface{}) {
 }
 
 // Trace print sql message
-func (l gormLogger) Trace(_ context.Context, begin time.Time, fc func() (string, int64), err error) {
+func (l gormLogger) Trace(_ context.Context, _ time.Time, fc func() (string, int64), err error) {
 	level := l.zl.GetLevel()
 	switch {
 	case err != nil && level <= zerolog.ErrorLevel:

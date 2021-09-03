@@ -12,7 +12,7 @@ import (
 	"gorm.io/gorm"
 )
 
-// Worker can be embed by specific worker implementations which
+// Worker can be embedded by specific worker implementations which
 // operate on database models.
 type Worker struct {
 	Name        string

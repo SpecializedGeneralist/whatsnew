@@ -41,7 +41,7 @@ const batchSize = 100
 
 var errStop = errors.New("stop")
 
-// Run starts the pending jobs recovery process.
+// Run starts the pending jobs' recovery process.
 //
 // This function should ideally run forever, unless an error is encountered
 // or the context is done.

@@ -8,7 +8,7 @@ import (
 	"context"
 	"database/sql"
 	"fmt"
-	translator_api "github.com/SpecializedGeneralist/translator/pkg/api"
+	translatorapi "github.com/SpecializedGeneralist/translator/pkg/api"
 	"github.com/SpecializedGeneralist/whatsnew/pkg/config"
 	"github.com/SpecializedGeneralist/whatsnew/pkg/jobscheduler"
 	"github.com/SpecializedGeneralist/whatsnew/pkg/models"
@@ -29,7 +29,7 @@ type Translator struct {
 	basemodelworker.Worker
 	conf              config.Translator
 	languageWhitelist sets.StringSet
-	translatorClient  translator_api.ApiClient
+	translatorClient  translatorapi.ApiClient
 }
 
 // New creates a new Translator.
@@ -37,7 +37,7 @@ func New(conf config.Translator, db *gorm.DB, translatorConn *grpc.ClientConn, f
 	t := &Translator{
 		conf:              conf,
 		languageWhitelist: sets.NewStringSetWithElements(conf.LanguageWhitelist...),
-		translatorClient:  translator_api.NewApiClient(translatorConn),
+		translatorClient:  translatorapi.NewApiClient(translatorConn),
 	}
 
 	t.Worker = basemodelworker.Worker{
@@ -109,8 +109,8 @@ func (t *Translator) processWebArticle(ctx context.Context, tx *gorm.DB, wa *mod
 }
 
 func (t *Translator) translateWebArticleTitle(ctx context.Context, tx *gorm.DB, wa *models.WebArticle, title string) error {
-	resp, err := t.translatorClient.TranslateText(ctx, &translator_api.TranslateTextRequest{
-		TranslateTextInput: &translator_api.TranslateTextInput{
+	resp, err := t.translatorClient.TranslateText(ctx, &translatorapi.TranslateTextRequest{
+		TranslateTextInput: &translatorapi.TranslateTextInput{
 			SourceLanguage: wa.Language,
 			TargetLanguage: t.conf.TargetLanguage,
 			Text:           title,
