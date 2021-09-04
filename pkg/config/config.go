@@ -11,7 +11,6 @@ import (
 	"gopkg.in/yaml.v3"
 	gormlogger "gorm.io/gorm/logger"
 	"os"
-	"regexp"
 	"strings"
 	"time"
 )
@@ -265,23 +264,6 @@ func (hst *HNSWSpaceType) UnmarshalText(text []byte) (err error) {
 		return fmt.Errorf("invalid HNSW space type: %#v", s)
 	}
 	*hst = HNSWSpaceType(st)
-	return nil
-}
-
-// Regexp is a redefinition of regexp.Regexp which satisfies
-// encoding.TextUnmarshaler, to be conveniently parsed from YAML.
-type Regexp regexp.Regexp
-
-// UnmarshalText satisfies the encoding.TextUnmarshaler interface, unmarshaling
-// the text to a Regexp.
-func (r *Regexp) UnmarshalText(text []byte) (err error) {
-	s := string(text)
-	re, err := regexp.Compile(s)
-	if err != nil {
-		return fmt.Errorf("invalid regular expression %#v: %w", s, err)
-	}
-
-	*r = Regexp(*re)
 	return nil
 }
 

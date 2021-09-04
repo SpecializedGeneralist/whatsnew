@@ -13,7 +13,6 @@ import (
 	"github.com/stretchr/testify/require"
 	gormlogger "gorm.io/gorm/logger"
 	"path/filepath"
-	"regexp"
 	"runtime"
 	"testing"
 	"time"
@@ -369,45 +368,6 @@ func TestHNSWSpaceType_UnmarshalText(t *testing.T) {
 		for _, tc := range testCases {
 			t.Run(fmt.Sprintf("%#v", tc), func(t *testing.T) {
 				l := new(config.HNSWSpaceType)
-				err := l.UnmarshalText([]byte(tc))
-				assert.Error(t, err)
-			})
-		}
-	})
-}
-
-func TestRegexp_UnmarshalText(t *testing.T) {
-	t.Parallel()
-
-	t.Run("positive cases", func(t *testing.T) {
-		t.Parallel()
-		testCases := []struct {
-			text     string
-			expected config.Regexp
-		}{
-			{"", config.Regexp(*regexp.MustCompile(``))},
-			{"foo", config.Regexp(*regexp.MustCompile(`foo`))},
-			{`^foo.bar$`, config.Regexp(*regexp.MustCompile(`^foo.bar$`))},
-		}
-		for _, tc := range testCases {
-			t.Run(tc.text, func(t *testing.T) {
-				l := new(config.Regexp)
-				err := l.UnmarshalText([]byte(tc.text))
-				assert.NoError(t, err)
-				assert.Equal(t, tc.expected, *l)
-			})
-		}
-	})
-
-	t.Run("negative cases", func(t *testing.T) {
-		t.Parallel()
-		testCases := []string{
-			`\`,
-			`foo(`,
-		}
-		for _, tc := range testCases {
-			t.Run(fmt.Sprintf("%#v", tc), func(t *testing.T) {
-				l := new(config.Regexp)
 				err := l.UnmarshalText([]byte(tc))
 				assert.Error(t, err)
 			})
