@@ -129,14 +129,5 @@ workers:
     spago_bert_server:
       target: '127.0.0.1:5831'
       tls_enabled: false
-    items:
-      - label: 'love'
-        question: 'What do I love?'
-        answer_regexp: '.+'
-        threshold: 0.8
-      - label: 'hate'
-        question: 'What do I hate?'
-        answer_regexp: '.+'
-        threshold: 0.8
     processed_web_article_jobs: []
     loglevel: 'info'

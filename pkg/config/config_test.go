@@ -241,20 +241,6 @@ func TestFromYAMLFile(t *testing.T) {
 						Target:     "127.0.0.1:5831",
 						TLSEnabled: false,
 					},
-					Items: []config.InformationExtractorItem{
-						{
-							Label:        "love",
-							Question:     "What do I love?",
-							AnswerRegexp: config.Regexp(*regexp.MustCompile(`.+`)),
-							Threshold:    0.8,
-						},
-						{
-							Label:        "hate",
-							Question:     "What do I hate?",
-							AnswerRegexp: config.Regexp(*regexp.MustCompile(`.+`)),
-							Threshold:    0.8,
-						},
-					},
 					ProcessedWebArticleJobs: []config.FaktoryJob{},
 					LogLevel:                config.LogLevel(zerolog.InfoLevel),
 				},

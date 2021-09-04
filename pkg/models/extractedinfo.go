@@ -10,9 +10,11 @@ type ExtractedInfo struct {
 	Model
 
 	// Association to the WebArticle.
-	WebArticleID uint `gorm:"not null;index"`
+	WebArticleID uint `gorm:"not null;index;index:idx_web_article_id_info_extraction_rule_id,unique"`
 
-	Label      string  `gorm:"not null"`
+	// Association to the InfoExtractionRule.
+	InfoExtractionRuleID uint `gorm:"not null;index;index:idx_web_article_id_info_extraction_rule_id,unique"`
+
 	Text       string  `gorm:"not null"`
 	Confidence float32 `gorm:"not null"`
 }

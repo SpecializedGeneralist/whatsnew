@@ -478,27 +478,6 @@
             "spago_bert_server": {
               "$ref": "#/definitions/grpc_server"
             },
-            "items": {
-              "type": "array",
-              "items": {
-                "type": "object",
-                "properties": {
-                  "label": {
-                    "type": "string"
-                  },
-                  "question": {
-                    "type": "string"
-                  },
-                  "answer_regexp": {
-                    "type": "string"
-                  },
-                  "threshold": {
-                    "type": "number"
-                  }
-                },
-                "required": ["label", "question", "answer_regexp", "threshold"]
-              }
-            },
             "processed_web_article_jobs": {
               "$ref": "#/definitions/faktory_jobs"
             },
@@ -506,7 +485,7 @@
               "$ref": "#/definitions/loglevel"
             }
           },
-          "required": ["queues", "concurrency", "spago_bert_server", "items", "processed_web_article_jobs", "loglevel"]
+          "required": ["queues", "concurrency", "spago_bert_server", "processed_web_article_jobs", "loglevel"]
         }
       },
       "required": [

@@ -18,7 +18,6 @@ import (
 	"google.golang.org/grpc"
 	"gorm.io/gorm"
 	"gorm.io/gorm/clause"
-	"regexp"
 	"strings"
 )
 
@@ -123,10 +122,18 @@ func (ie *InformationExtractor) extractAndSaveInfo(
 	wa *models.WebArticle,
 	title string,
 ) error {
-	infos := make([]*models.ExtractedInfo, 0, len(ie.conf.Items))
+	rules, err := ie.getRules(tx)
+	if err != nil {
+		return err
+	}
+	if len(rules) == 0 {
+		return nil
+	}
 
-	for _, item := range ie.conf.Items {
-		ans, err := ie.getBestAnswer(ctx, title, item.Question)
+	infos := make([]*models.ExtractedInfo, 0, len(rules))
+
+	for _, rule := range rules {
+		ans, err := ie.getBestAnswer(ctx, title, rule.Question)
 		if err != nil {
 			return err
 		}
@@ -134,25 +141,24 @@ func (ie *InformationExtractor) extractAndSaveInfo(
 			continue
 		}
 		confidence := float32(ans.Confidence)
-		logger := ie.Log.With().Str("question", item.Question).Str("answer", ans.Text).
+		logger := ie.Log.With().Uint("ruleID", rule.ID).Str("answer", ans.Text).
 			Float32("confidence", confidence).Logger()
 
-		if confidence < item.Threshold {
-			logger.Trace().Float32("threshold", item.Threshold).Msg("answer confidence below threshold")
+		if confidence < rule.Threshold {
+			logger.Trace().Msg("answer confidence below threshold")
 			continue
 		}
 
-		re := regexp.Regexp(item.AnswerRegexp)
-		if !(&re).MatchString(ans.Text) {
-			logger.Trace().Stringer("regexp", &re).Msg("no regexp match")
+		if !rule.AnswerRegexp.MatchString(ans.Text) {
+			logger.Trace().Msg("no regexp match")
 			continue
 		}
 
 		infos = append(infos, &models.ExtractedInfo{
-			WebArticleID: wa.ID,
-			Label:        item.Label,
-			Text:         ans.Text,
-			Confidence:   confidence,
+			WebArticleID:         wa.ID,
+			InfoExtractionRuleID: rule.ID,
+			Text:                 ans.Text,
+			Confidence:           confidence,
 		})
 	}
 
@@ -183,4 +189,13 @@ func (ie *InformationExtractor) getBestAnswer(
 		return nil, nil
 	}
 	return reply.Answers[0], nil
+}
+
+func (ie *InformationExtractor) getRules(tx *gorm.DB) ([]models.InfoExtractionRule, error) {
+	var rules []models.InfoExtractionRule
+	res := tx.Find(&rules, "enabled")
+	if res.Error != nil {
+		return nil, fmt.Errorf("error fetching InfoExtractionRules: %w", res.Error)
+	}
+	return rules, nil
 }

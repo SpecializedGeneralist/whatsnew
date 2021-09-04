@@ -188,21 +188,11 @@ type DuplicateDetector struct {
 
 // InformationExtractor holds settings for the information extractor worker.
 type InformationExtractor struct {
-	Queues                  []string                   `yaml:"queues"`
-	Concurrency             int                        `yaml:"concurrency"`
-	SpagoBERTServer         GRPCServer                 `yaml:"spago_bert_server"`
-	Items                   []InformationExtractorItem `yaml:"items"`
-	ProcessedWebArticleJobs []FaktoryJob               `yaml:"processed_web_article_jobs"`
-	LogLevel                LogLevel                   `yaml:"loglevel"`
-}
-
-// InformationExtractorItem is a single item for the information
-// extraction jobs.
-type InformationExtractorItem struct {
-	Label        string  `yaml:"label"`
-	Question     string  `yaml:"question"`
-	AnswerRegexp Regexp  `yaml:"answer_regexp"`
-	Threshold    float32 `yaml:"threshold"`
+	Queues                  []string     `yaml:"queues"`
+	Concurrency             int          `yaml:"concurrency"`
+	SpagoBERTServer         GRPCServer   `yaml:"spago_bert_server"`
+	ProcessedWebArticleJobs []FaktoryJob `yaml:"processed_web_article_jobs"`
+	LogLevel                LogLevel     `yaml:"loglevel"`
 }
 
 // OmitItemsPublishedBefore is part of FeedFetcher settings.
