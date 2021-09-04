@@ -565,6 +565,115 @@ paths:
             application/json:
               schema:
                 $ref: '#/components/schemas/DeleteZeroShotHypothesisLabelResponse'
+  /info_extraction_rules:
+    get:
+      description: Get all InfoExtractionRules
+      operationId: getInfoExtractionRules
+      parameters:
+        - name: first
+          description: Maximum number of results. Zero (0) means no limits (default).
+          required: false
+          in: query
+          schema:
+            type: integer
+        - name: after
+          description: Return results after this ID. Empty value ("") or zero ("0") let the results start from the beginning (default).
+          required: false
+          in: query
+          schema:
+            type: string
+      responses:
+        default:
+          description: The list of all InfoExtractionRules
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/GetInfoExtractionRulesResponse'
+    post:
+      description: Create new InfoExtractionRules
+      operationId: createInfoExtractionRules
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/NewInfoExtractionRules'
+      responses:
+        default:
+          description: The IDs of the new InfoExtractionRules
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/CreateInfoExtractionRulesResponse'
+  /info_extraction_rule:
+    post:
+      description: Create a new InfoExtractionRule
+      operationId: createInfoExtractionRule
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/NewInfoExtractionRule'
+      responses:
+        default:
+          description: The ID of the new InfoExtractionRule
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/CreateInfoExtractionRuleResponse'
+  /info_extraction_rule/{id}:
+    get:
+      description: Get a InfoExtractionRule
+      operationId: getInfoExtractionRule
+      parameters:
+        - name: id
+          required: true
+          in: path
+          schema:
+            type: string
+      responses:
+        default:
+          description: The InfoExtractionRule
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/GetInfoExtractionRuleResponse'
+    put:
+      description: Update a InfoExtractionRule
+      operationId: updateInfoExtractionRule
+      parameters:
+        - name: id
+          required: true
+          in: path
+          schema:
+            type: string
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/UpdatedInfoExtractionRule'
+      responses:
+        default:
+          description: The modified InfoExtractionRule
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/UpdateInfoExtractionRuleResponse'
+    delete:
+      description: Delete a InfoExtractionRule
+      operationId: deleteInfoExtractionRule
+      parameters:
+        - name: id
+          required: true
+          in: path
+          schema:
+            type: string
+      responses:
+        default:
+          description: The ID of the deleted InfoExtractionRule
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/DeleteInfoExtractionRuleResponse'
 components:
   schemas:
     ResponseErrors:
@@ -1146,6 +1255,130 @@ components:
         deleted_zero_shot_hypothesis_label_id:
           type: string
       additionalProperties: false
+    NewInfoExtractionRules:
+      type: object
+      properties:
+        info_extraction_rules:
+          type: array
+          items:
+            $ref: '#/components/schemas/NewInfoExtractionRule'
+      additionalProperties: false
+    NewInfoExtractionRule:
+      type: object
+      properties:
+        label:
+          type: string
+        question:
+          type: string
+        answer_regexp:
+          type: string
+        threshold:
+          type: number
+        enabled:
+          type: boolean
+      additionalProperties: false
+    CreateInfoExtractionRulesResponse:
+      type: object
+      properties:
+        data:
+          $ref: '#/components/schemas/CreateInfoExtractionRulesData'
+        errors:
+          $ref: '#/components/schemas/ResponseErrors'
+      additionalProperties: false
+    CreateInfoExtractionRulesData:
+      type: object
+      properties:
+        info_extraction_rule_ids:
+          type: array
+          items:
+            type: string
+      additionalProperties: false
+    GetInfoExtractionRulesResponse:
+      type: object
+      properties:
+        data:
+          $ref: '#/components/schemas/GetInfoExtractionRulesData'
+        errors:
+          $ref: '#/components/schemas/ResponseErrors'
+      additionalProperties: false
+    GetInfoExtractionRulesData:
+      type: object
+      properties:
+        info_extraction_rules:
+          type: array
+          items:
+            $ref: '#/components/schemas/InfoExtractionRule'
+      additionalProperties: false
+    CreateInfoExtractionRuleResponse:
+      type: object
+      properties:
+        data:
+          $ref: '#/components/schemas/CreateInfoExtractionRuleData'
+        errors:
+          $ref: '#/components/schemas/ResponseErrors'
+      additionalProperties: false
+    CreateInfoExtractionRuleData:
+      type: object
+      properties:
+        info_extraction_rule_id:
+          type: string
+      additionalProperties: false
+    GetInfoExtractionRuleResponse:
+      type: object
+      properties:
+        data:
+          $ref: '#/components/schemas/GetInfoExtractionRuleData'
+        errors:
+          $ref: '#/components/schemas/ResponseErrors'
+      additionalProperties: false
+    GetInfoExtractionRuleData:
+      type: object
+      properties:
+        info_extraction_rule:
+          $ref: '#/components/schemas/InfoExtractionRule'
+      additionalProperties: false
+    UpdatedInfoExtractionRule:
+      type: object
+      properties:
+        label:
+          type: string
+        question:
+          type: string
+        answer_regexp:
+          type: string
+        threshold:
+          type: number
+        enabled:
+          type: boolean
+      additionalProperties: false
+    UpdateInfoExtractionRuleResponse:
+      type: object
+      properties:
+        data:
+          $ref: '#/components/schemas/UpdateInfoExtractionRuleData'
+        errors:
+          $ref: '#/components/schemas/ResponseErrors'
+      additionalProperties: false
+    UpdateInfoExtractionRuleData:
+      type: object
+      properties:
+        info_extraction_rule:
+          $ref: '#/components/schemas/InfoExtractionRule'
+      additionalProperties: false
+    DeleteInfoExtractionRuleResponse:
+      type: object
+      properties:
+        data:
+          $ref: '#/components/schemas/DeleteInfoExtractionRuleData'
+        errors:
+          $ref: '#/components/schemas/ResponseErrors'
+      additionalProperties: false
+    DeleteInfoExtractionRuleData:
+      type: object
+      properties:
+        deleted_info_extraction_rule_id:
+          type: string
+      additionalProperties: false
     Feed:
       type: object
       properties:
@@ -1239,4 +1472,24 @@ components:
           type: boolean
         text:
           type: string
+      additionalProperties: false
+    InfoExtractionRule:
+      type: object
+      properties:
+        id:
+          type: string
+        created_at:
+          type: string
+        updated_at:
+          type: string
+        label:
+          type: string
+        question:
+          type: string
+        answer_regexp:
+          type: string
+        threshold:
+          type: number
+        enabled:
+          type: boolean
       additionalProperties: false

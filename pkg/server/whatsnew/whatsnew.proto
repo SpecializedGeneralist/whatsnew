@@ -411,6 +411,94 @@ message DeleteZeroShotHypothesisLabelData {
   string deleted_zero_shot_hypothesis_label_id = 1;
 }
 
+message NewInfoExtractionRules {
+  repeated NewInfoExtractionRule info_extraction_rules = 1;
+}
+
+message NewInfoExtractionRule {
+  string label = 1;
+
+  string question = 2;
+
+  string answer_regexp = 3;
+
+  float threshold = 4;
+
+  bool enabled = 5;
+}
+
+message CreateInfoExtractionRulesResponse {
+  CreateInfoExtractionRulesData data = 1;
+
+  ResponseErrors errors = 2;
+}
+
+message CreateInfoExtractionRulesData {
+  repeated string info_extraction_rule_ids = 1;
+}
+
+message GetInfoExtractionRulesResponse {
+  GetInfoExtractionRulesData data = 1;
+
+  ResponseErrors errors = 2;
+}
+
+message GetInfoExtractionRulesData {
+  repeated InfoExtractionRule info_extraction_rules = 1;
+}
+
+message CreateInfoExtractionRuleResponse {
+  CreateInfoExtractionRuleData data = 1;
+
+  ResponseErrors errors = 2;
+}
+
+message CreateInfoExtractionRuleData {
+  string info_extraction_rule_id = 1;
+}
+
+message GetInfoExtractionRuleResponse {
+  GetInfoExtractionRuleData data = 1;
+
+  ResponseErrors errors = 2;
+}
+
+message GetInfoExtractionRuleData {
+  InfoExtractionRule info_extraction_rule = 1;
+}
+
+message UpdatedInfoExtractionRule {
+  string label = 1;
+
+  string question = 2;
+
+  string answer_regexp = 3;
+
+  float threshold = 4;
+
+  bool enabled = 5;
+}
+
+message UpdateInfoExtractionRuleResponse {
+  UpdateInfoExtractionRuleData data = 1;
+
+  ResponseErrors errors = 2;
+}
+
+message UpdateInfoExtractionRuleData {
+  InfoExtractionRule info_extraction_rule = 1;
+}
+
+message DeleteInfoExtractionRuleResponse {
+  DeleteInfoExtractionRuleData data = 1;
+
+  ResponseErrors errors = 2;
+}
+
+message DeleteInfoExtractionRuleData {
+  string deleted_info_extraction_rule_id = 1;
+}
+
 message Feed {
   string id = 1;
 
@@ -491,6 +579,24 @@ message ZeroShotHypothesisLabel {
   bool enabled = 4;
 
   string text = 5;
+}
+
+message InfoExtractionRule {
+  string id = 1;
+
+  string created_at = 2;
+
+  string updated_at = 3;
+
+  string label = 4;
+
+  string question = 5;
+
+  string answer_regexp = 6;
+
+  float threshold = 7;
+
+  bool enabled = 8;
 }
 
 //GetFeedsParameters holds parameters to GetFeeds
@@ -666,6 +772,40 @@ message DeleteZeroShotHypothesisLabelRequest {
   string label_id = 2;
 }
 
+//GetInfoExtractionRulesParameters holds parameters to GetInfoExtractionRules
+message GetInfoExtractionRulesRequest {
+  int64 first = 1;
+
+  string after = 2;
+}
+
+//CreateInfoExtractionRulesParameters holds parameters to CreateInfoExtractionRules
+message CreateInfoExtractionRulesRequest {
+  NewInfoExtractionRules new_info_extraction_rules = 1;
+}
+
+//CreateInfoExtractionRuleParameters holds parameters to CreateInfoExtractionRule
+message CreateInfoExtractionRuleRequest {
+  NewInfoExtractionRule new_info_extraction_rule = 1;
+}
+
+//GetInfoExtractionRuleParameters holds parameters to GetInfoExtractionRule
+message GetInfoExtractionRuleRequest {
+  string id = 1;
+}
+
+//UpdateInfoExtractionRuleParameters holds parameters to UpdateInfoExtractionRule
+message UpdateInfoExtractionRuleRequest {
+  string id = 1;
+
+  UpdatedInfoExtractionRule updated_info_extraction_rule = 2;
+}
+
+//DeleteInfoExtractionRuleParameters holds parameters to DeleteInfoExtractionRule
+message DeleteInfoExtractionRuleRequest {
+  string id = 1;
+}
+
 service Whatsnew {
   rpc GetFeeds ( GetFeedsRequest ) returns ( GetFeedsResponse ) {
     option (google.api.http) = { get:"/feeds"  };
@@ -781,6 +921,30 @@ service Whatsnew {
 
   rpc DeleteZeroShotHypothesisLabel ( DeleteZeroShotHypothesisLabelRequest ) returns ( DeleteZeroShotHypothesisLabelResponse ) {
     option (google.api.http) = { delete:"/zero_shot_hypothesis_template/{template_id}/label/{label_id}"  };
+  }
+
+  rpc GetInfoExtractionRules ( GetInfoExtractionRulesRequest ) returns ( GetInfoExtractionRulesResponse ) {
+    option (google.api.http) = { get:"/info_extraction_rules"  };
+  }
+
+  rpc CreateInfoExtractionRules ( CreateInfoExtractionRulesRequest ) returns ( CreateInfoExtractionRulesResponse ) {
+    option (google.api.http) = { post:"/info_extraction_rules" body:"new_info_extraction_rules"  };
+  }
+
+  rpc CreateInfoExtractionRule ( CreateInfoExtractionRuleRequest ) returns ( CreateInfoExtractionRuleResponse ) {
+    option (google.api.http) = { post:"/info_extraction_rule" body:"new_info_extraction_rule"  };
+  }
+
+  rpc GetInfoExtractionRule ( GetInfoExtractionRuleRequest ) returns ( GetInfoExtractionRuleResponse ) {
+    option (google.api.http) = { get:"/info_extraction_rule/{id}"  };
+  }
+
+  rpc UpdateInfoExtractionRule ( UpdateInfoExtractionRuleRequest ) returns ( UpdateInfoExtractionRuleResponse ) {
+    option (google.api.http) = { put:"/info_extraction_rule/{id}" body:"updated_info_extraction_rule"  };
+  }
+
+  rpc DeleteInfoExtractionRule ( DeleteInfoExtractionRuleRequest ) returns ( DeleteInfoExtractionRuleResponse ) {
+    option (google.api.http) = { delete:"/info_extraction_rule/{id}"  };
   }
 }
 

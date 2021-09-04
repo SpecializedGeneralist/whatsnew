@@ -81,6 +81,19 @@ func makeAPIZeroShotHypothesisLabel(label models.ZeroShotHypothesisLabel) *whats
 	}
 }
 
+func makeAPIInfoExtractionRule(rule models.InfoExtractionRule) *whatsnew.InfoExtractionRule {
+	return &whatsnew.InfoExtractionRule{
+		Id:           fmt.Sprintf("%d", rule.ID),
+		CreatedAt:    rule.CreatedAt.Format(time.RFC3339),
+		UpdatedAt:    rule.UpdatedAt.Format(time.RFC3339),
+		Label:        rule.Label,
+		Question:     rule.Question,
+		AnswerRegexp: rule.AnswerRegexp.String(),
+		Threshold:    rule.Threshold,
+		Enabled:      rule.Enabled,
+	}
+}
+
 func nullTimeToString(t sql.NullTime) string {
 	if !t.Valid {
 		return ""

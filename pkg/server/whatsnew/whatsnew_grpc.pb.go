@@ -47,6 +47,12 @@ type WhatsnewClient interface {
 	GetZeroShotHypothesisLabel(ctx context.Context, in *GetZeroShotHypothesisLabelRequest, opts ...grpc.CallOption) (*GetZeroShotHypothesisLabelResponse, error)
 	UpdateZeroShotHypothesisLabel(ctx context.Context, in *UpdateZeroShotHypothesisLabelRequest, opts ...grpc.CallOption) (*UpdateZeroShotHypothesisLabelResponse, error)
 	DeleteZeroShotHypothesisLabel(ctx context.Context, in *DeleteZeroShotHypothesisLabelRequest, opts ...grpc.CallOption) (*DeleteZeroShotHypothesisLabelResponse, error)
+	GetInfoExtractionRules(ctx context.Context, in *GetInfoExtractionRulesRequest, opts ...grpc.CallOption) (*GetInfoExtractionRulesResponse, error)
+	CreateInfoExtractionRules(ctx context.Context, in *CreateInfoExtractionRulesRequest, opts ...grpc.CallOption) (*CreateInfoExtractionRulesResponse, error)
+	CreateInfoExtractionRule(ctx context.Context, in *CreateInfoExtractionRuleRequest, opts ...grpc.CallOption) (*CreateInfoExtractionRuleResponse, error)
+	GetInfoExtractionRule(ctx context.Context, in *GetInfoExtractionRuleRequest, opts ...grpc.CallOption) (*GetInfoExtractionRuleResponse, error)
+	UpdateInfoExtractionRule(ctx context.Context, in *UpdateInfoExtractionRuleRequest, opts ...grpc.CallOption) (*UpdateInfoExtractionRuleResponse, error)
+	DeleteInfoExtractionRule(ctx context.Context, in *DeleteInfoExtractionRuleRequest, opts ...grpc.CallOption) (*DeleteInfoExtractionRuleResponse, error)
 }
 
 type whatsnewClient struct {
@@ -318,6 +324,60 @@ func (c *whatsnewClient) DeleteZeroShotHypothesisLabel(ctx context.Context, in *
 	return out, nil
 }
 
+func (c *whatsnewClient) GetInfoExtractionRules(ctx context.Context, in *GetInfoExtractionRulesRequest, opts ...grpc.CallOption) (*GetInfoExtractionRulesResponse, error) {
+	out := new(GetInfoExtractionRulesResponse)
+	err := c.cc.Invoke(ctx, "/whatsnew.Whatsnew/GetInfoExtractionRules", in, out, opts...)
+	if err != nil {
+		return nil, err
+	}
+	return out, nil
+}
+
+func (c *whatsnewClient) CreateInfoExtractionRules(ctx context.Context, in *CreateInfoExtractionRulesRequest, opts ...grpc.CallOption) (*CreateInfoExtractionRulesResponse, error) {
+	out := new(CreateInfoExtractionRulesResponse)
+	err := c.cc.Invoke(ctx, "/whatsnew.Whatsnew/CreateInfoExtractionRules", in, out, opts...)
+	if err != nil {
+		return nil, err
+	}
+	return out, nil
+}
+
+func (c *whatsnewClient) CreateInfoExtractionRule(ctx context.Context, in *CreateInfoExtractionRuleRequest, opts ...grpc.CallOption) (*CreateInfoExtractionRuleResponse, error) {
+	out := new(CreateInfoExtractionRuleResponse)
+	err := c.cc.Invoke(ctx, "/whatsnew.Whatsnew/CreateInfoExtractionRule", in, out, opts...)
+	if err != nil {
+		return nil, err
+	}
+	return out, nil
+}
+
+func (c *whatsnewClient) GetInfoExtractionRule(ctx context.Context, in *GetInfoExtractionRuleRequest, opts ...grpc.CallOption) (*GetInfoExtractionRuleResponse, error) {
+	out := new(GetInfoExtractionRuleResponse)
+	err := c.cc.Invoke(ctx, "/whatsnew.Whatsnew/GetInfoExtractionRule", in, out, opts...)
+	if err != nil {
+		return nil, err
+	}
+	return out, nil
+}
+
+func (c *whatsnewClient) UpdateInfoExtractionRule(ctx context.Context, in *UpdateInfoExtractionRuleRequest, opts ...grpc.CallOption) (*UpdateInfoExtractionRuleResponse, error) {
+	out := new(UpdateInfoExtractionRuleResponse)
+	err := c.cc.Invoke(ctx, "/whatsnew.Whatsnew/UpdateInfoExtractionRule", in, out, opts...)
+	if err != nil {
+		return nil, err
+	}
+	return out, nil
+}
+
+func (c *whatsnewClient) DeleteInfoExtractionRule(ctx context.Context, in *DeleteInfoExtractionRuleRequest, opts ...grpc.CallOption) (*DeleteInfoExtractionRuleResponse, error) {
+	out := new(DeleteInfoExtractionRuleResponse)
+	err := c.cc.Invoke(ctx, "/whatsnew.Whatsnew/DeleteInfoExtractionRule", in, out, opts...)
+	if err != nil {
+		return nil, err
+	}
+	return out, nil
+}
+
 // WhatsnewServer is the server API for Whatsnew service.
 // All implementations must embed UnimplementedWhatsnewServer
 // for forward compatibility
@@ -351,6 +411,12 @@ type WhatsnewServer interface {
 	GetZeroShotHypothesisLabel(context.Context, *GetZeroShotHypothesisLabelRequest) (*GetZeroShotHypothesisLabelResponse, error)
 	UpdateZeroShotHypothesisLabel(context.Context, *UpdateZeroShotHypothesisLabelRequest) (*UpdateZeroShotHypothesisLabelResponse, error)
 	DeleteZeroShotHypothesisLabel(context.Context, *DeleteZeroShotHypothesisLabelRequest) (*DeleteZeroShotHypothesisLabelResponse, error)
+	GetInfoExtractionRules(context.Context, *GetInfoExtractionRulesRequest) (*GetInfoExtractionRulesResponse, error)
+	CreateInfoExtractionRules(context.Context, *CreateInfoExtractionRulesRequest) (*CreateInfoExtractionRulesResponse, error)
+	CreateInfoExtractionRule(context.Context, *CreateInfoExtractionRuleRequest) (*CreateInfoExtractionRuleResponse, error)
+	GetInfoExtractionRule(context.Context, *GetInfoExtractionRuleRequest) (*GetInfoExtractionRuleResponse, error)
+	UpdateInfoExtractionRule(context.Context, *UpdateInfoExtractionRuleRequest) (*UpdateInfoExtractionRuleResponse, error)
+	DeleteInfoExtractionRule(context.Context, *DeleteInfoExtractionRuleRequest) (*DeleteInfoExtractionRuleResponse, error)
 	mustEmbedUnimplementedWhatsnewServer()
 }
 
@@ -444,6 +510,24 @@ func (UnimplementedWhatsnewServer) UpdateZeroShotHypothesisLabel(context.Context
 }
 func (UnimplementedWhatsnewServer) DeleteZeroShotHypothesisLabel(context.Context, *DeleteZeroShotHypothesisLabelRequest) (*DeleteZeroShotHypothesisLabelResponse, error) {
 	return nil, status.Errorf(codes.Unimplemented, "method DeleteZeroShotHypothesisLabel not implemented")
+}
+func (UnimplementedWhatsnewServer) GetInfoExtractionRules(context.Context, *GetInfoExtractionRulesRequest) (*GetInfoExtractionRulesResponse, error) {
+	return nil, status.Errorf(codes.Unimplemented, "method GetInfoExtractionRules not implemented")
+}
+func (UnimplementedWhatsnewServer) CreateInfoExtractionRules(context.Context, *CreateInfoExtractionRulesRequest) (*CreateInfoExtractionRulesResponse, error) {
+	return nil, status.Errorf(codes.Unimplemented, "method CreateInfoExtractionRules not implemented")
+}
+func (UnimplementedWhatsnewServer) CreateInfoExtractionRule(context.Context, *CreateInfoExtractionRuleRequest) (*CreateInfoExtractionRuleResponse, error) {
+	return nil, status.Errorf(codes.Unimplemented, "method CreateInfoExtractionRule not implemented")
+}
+func (UnimplementedWhatsnewServer) GetInfoExtractionRule(context.Context, *GetInfoExtractionRuleRequest) (*GetInfoExtractionRuleResponse, error) {
+	return nil, status.Errorf(codes.Unimplemented, "method GetInfoExtractionRule not implemented")
+}
+func (UnimplementedWhatsnewServer) UpdateInfoExtractionRule(context.Context, *UpdateInfoExtractionRuleRequest) (*UpdateInfoExtractionRuleResponse, error) {
+	return nil, status.Errorf(codes.Unimplemented, "method UpdateInfoExtractionRule not implemented")
+}
+func (UnimplementedWhatsnewServer) DeleteInfoExtractionRule(context.Context, *DeleteInfoExtractionRuleRequest) (*DeleteInfoExtractionRuleResponse, error) {
+	return nil, status.Errorf(codes.Unimplemented, "method DeleteInfoExtractionRule not implemented")
 }
 func (UnimplementedWhatsnewServer) mustEmbedUnimplementedWhatsnewServer() {}
 
@@ -980,6 +1064,114 @@ func _Whatsnew_DeleteZeroShotHypothesisLabel_Handler(srv interface{}, ctx contex
 	return interceptor(ctx, in, info, handler)
 }
 
+func _Whatsnew_GetInfoExtractionRules_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(GetInfoExtractionRulesRequest)
+	if err := dec(in); err != nil {
+		return nil, err
+	}
+	if interceptor == nil {
+		return srv.(WhatsnewServer).GetInfoExtractionRules(ctx, in)
+	}
+	info := &grpc.UnaryServerInfo{
+		Server:     srv,
+		FullMethod: "/whatsnew.Whatsnew/GetInfoExtractionRules",
+	}
+	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
+		return srv.(WhatsnewServer).GetInfoExtractionRules(ctx, req.(*GetInfoExtractionRulesRequest))
+	}
+	return interceptor(ctx, in, info, handler)
+}
+
+func _Whatsnew_CreateInfoExtractionRules_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(CreateInfoExtractionRulesRequest)
+	if err := dec(in); err != nil {
+		return nil, err
+	}
+	if interceptor == nil {
+		return srv.(WhatsnewServer).CreateInfoExtractionRules(ctx, in)
+	}
+	info := &grpc.UnaryServerInfo{
+		Server:     srv,
+		FullMethod: "/whatsnew.Whatsnew/CreateInfoExtractionRules",
+	}
+	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
+		return srv.(WhatsnewServer).CreateInfoExtractionRules(ctx, req.(*CreateInfoExtractionRulesRequest))
+	}
+	return interceptor(ctx, in, info, handler)
+}
+
+func _Whatsnew_CreateInfoExtractionRule_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(CreateInfoExtractionRuleRequest)
+	if err := dec(in); err != nil {
+		return nil, err
+	}
+	if interceptor == nil {
+		return srv.(WhatsnewServer).CreateInfoExtractionRule(ctx, in)
+	}
+	info := &grpc.UnaryServerInfo{
+		Server:     srv,
+		FullMethod: "/whatsnew.Whatsnew/CreateInfoExtractionRule",
+	}
+	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
+		return srv.(WhatsnewServer).CreateInfoExtractionRule(ctx, req.(*CreateInfoExtractionRuleRequest))
+	}
+	return interceptor(ctx, in, info, handler)
+}
+
+func _Whatsnew_GetInfoExtractionRule_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(GetInfoExtractionRuleRequest)
+	if err := dec(in); err != nil {
+		return nil, err
+	}
+	if interceptor == nil {
+		return srv.(WhatsnewServer).GetInfoExtractionRule(ctx, in)
+	}
+	info := &grpc.UnaryServerInfo{
+		Server:     srv,
+		FullMethod: "/whatsnew.Whatsnew/GetInfoExtractionRule",
+	}
+	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
+		return srv.(WhatsnewServer).GetInfoExtractionRule(ctx, req.(*GetInfoExtractionRuleRequest))
+	}
+	return interceptor(ctx, in, info, handler)
+}
+
+func _Whatsnew_UpdateInfoExtractionRule_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(UpdateInfoExtractionRuleRequest)
+	if err := dec(in); err != nil {
+		return nil, err
+	}
+	if interceptor == nil {
+		return srv.(WhatsnewServer).UpdateInfoExtractionRule(ctx, in)
+	}
+	info := &grpc.UnaryServerInfo{
+		Server:     srv,
+		FullMethod: "/whatsnew.Whatsnew/UpdateInfoExtractionRule",
+	}
+	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
+		return srv.(WhatsnewServer).UpdateInfoExtractionRule(ctx, req.(*UpdateInfoExtractionRuleRequest))
+	}
+	return interceptor(ctx, in, info, handler)
+}
+
+func _Whatsnew_DeleteInfoExtractionRule_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(DeleteInfoExtractionRuleRequest)
+	if err := dec(in); err != nil {
+		return nil, err
+	}
+	if interceptor == nil {
+		return srv.(WhatsnewServer).DeleteInfoExtractionRule(ctx, in)
+	}
+	info := &grpc.UnaryServerInfo{
+		Server:     srv,
+		FullMethod: "/whatsnew.Whatsnew/DeleteInfoExtractionRule",
+	}
+	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
+		return srv.(WhatsnewServer).DeleteInfoExtractionRule(ctx, req.(*DeleteInfoExtractionRuleRequest))
+	}
+	return interceptor(ctx, in, info, handler)
+}
+
 // Whatsnew_ServiceDesc is the grpc.ServiceDesc for Whatsnew service.
 // It's only intended for direct use with grpc.RegisterService,
 // and not to be introspected or modified (even as a copy)
@@ -1102,6 +1294,30 @@ var Whatsnew_ServiceDesc = grpc.ServiceDesc{
 		{
 			MethodName: "DeleteZeroShotHypothesisLabel",
 			Handler:    _Whatsnew_DeleteZeroShotHypothesisLabel_Handler,
+		},
+		{
+			MethodName: "GetInfoExtractionRules",
+			Handler:    _Whatsnew_GetInfoExtractionRules_Handler,
+		},
+		{
+			MethodName: "CreateInfoExtractionRules",
+			Handler:    _Whatsnew_CreateInfoExtractionRules_Handler,
+		},
+		{
+			MethodName: "CreateInfoExtractionRule",
+			Handler:    _Whatsnew_CreateInfoExtractionRule_Handler,
+		},
+		{
+			MethodName: "GetInfoExtractionRule",
+			Handler:    _Whatsnew_GetInfoExtractionRule_Handler,
+		},
+		{
+			MethodName: "UpdateInfoExtractionRule",
+			Handler:    _Whatsnew_UpdateInfoExtractionRule_Handler,
+		},
+		{
+			MethodName: "DeleteInfoExtractionRule",
+			Handler:    _Whatsnew_DeleteInfoExtractionRule_Handler,
 		},
 	},
 	Streams:  []grpc.StreamDesc{},
