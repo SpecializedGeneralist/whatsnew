@@ -9,6 +9,7 @@ import (
 	"errors"
 	"flag"
 	"github.com/SpecializedGeneralist/whatsnew/pkg/cli/command"
+	"github.com/SpecializedGeneralist/whatsnew/pkg/cli/command/classifytext"
 	"github.com/SpecializedGeneralist/whatsnew/pkg/cli/command/db"
 	"github.com/SpecializedGeneralist/whatsnew/pkg/cli/command/detectduplicates"
 	"github.com/SpecializedGeneralist/whatsnew/pkg/cli/command/extractinformation"
@@ -44,6 +45,7 @@ var (
 		scrapeweb.CmdScrapeWeb,
 		translate.CmdTranslate,
 		zeroshotclassify.CmdZeroShotClassify,
+		classifytext.CmdClassifyText,
 		vectorize.CmdVectorize,
 		detectduplicates.CmdDetectDuplicates,
 		extractinformation.CmdExtractInformation,
