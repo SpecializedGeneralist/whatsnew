@@ -195,12 +195,27 @@ func TestFromYAMLFile(t *testing.T) {
 					Concurrency: 4,
 					ProcessedWebArticleJobs: []config.FaktoryJob{
 						{
-							JobType: "Vectorizer",
-							Queue:   "wn_vectorizer",
+							JobType: "TextClassifier",
+							Queue:   "wn_text_classifier",
 						},
 					},
 					SpagoBARTServer: config.GRPCServer{
 						Target:     "127.0.0.1:4001",
+						TLSEnabled: false,
+					},
+					LogLevel: config.LogLevel(zerolog.InfoLevel),
+				},
+				TextClassifier: config.TextClassifier{
+					Queues:      []string{"wn_text_classifier"},
+					Concurrency: 4,
+					ProcessedWebArticleJobs: []config.FaktoryJob{
+						{
+							JobType: "Vectorizer",
+							Queue:   "wn_vectorizer",
+						},
+					},
+					ClassifierServer: config.GRPCServer{
+						Target:     "127.0.0.1:4002",
 						TLSEnabled: false,
 					},
 					LogLevel: config.LogLevel(zerolog.InfoLevel),

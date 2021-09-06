@@ -108,6 +108,7 @@ type Workers struct {
 	WebScraper           WebScraper           `yaml:"web_scraper"`
 	Translator           Translator           `yaml:"translator"`
 	ZeroShotClassifier   ZeroShotClassifier   `yaml:"zero_shot_classifier"`
+	TextClassifier       TextClassifier       `yaml:"text_classifier"`
 	Vectorizer           Vectorizer           `yaml:"vectorizer"`
 	DuplicateDetector    DuplicateDetector    `yaml:"duplicate_detector"`
 	InformationExtractor InformationExtractor `yaml:"information_extractor"`
@@ -163,6 +164,15 @@ type ZeroShotClassifier struct {
 	Concurrency             int          `yaml:"concurrency"`
 	ProcessedWebArticleJobs []FaktoryJob `yaml:"processed_web_article_jobs"`
 	SpagoBARTServer         GRPCServer   `yaml:"spago_bart_server"`
+	LogLevel                LogLevel     `yaml:"loglevel"`
+}
+
+// TextClassifier holds settings for the text classifier worker.
+type TextClassifier struct {
+	Queues                  []string     `yaml:"queues"`
+	Concurrency             int          `yaml:"concurrency"`
+	ProcessedWebArticleJobs []FaktoryJob `yaml:"processed_web_article_jobs"`
+	ClassifierServer        GRPCServer   `yaml:"classifier_server"`
 	LogLevel                LogLevel     `yaml:"loglevel"`
 }
 

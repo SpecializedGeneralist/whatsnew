@@ -98,10 +98,20 @@ workers:
     queues: ['wn_zero_shot_classifier']
     concurrency: 4
     processed_web_article_jobs:
-      - job_type: 'Vectorizer'
-        queue: 'wn_vectorizer'
+      - job_type: 'TextClassifier'
+        queue: 'wn_text_classifier'
     spago_bart_server:
       target: '127.0.0.1:4001'
+      tls_enabled: false
+    loglevel: 'info'
+  text_classifier:
+    queues: ['wn_text_classifier']
+    concurrency: 4
+    processed_web_article_jobs:
+      - job_type: 'Vectorizer'
+        queue: 'wn_vectorizer'
+    classifier_server:
+      target: '127.0.0.1:4002'
       tls_enabled: false
     loglevel: 'info'
   vectorizer:
