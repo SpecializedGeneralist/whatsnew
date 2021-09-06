@@ -1,0 +1,34 @@
+syntax = "proto3";
+
+package textclassification;
+
+option go_package = "github.com/SpecializedGeneralist/whatsnew/pkg/textclassification";
+
+// Classifier is a service for text classification.
+service Classifier {
+  // ClassifyText classifies a given text.
+  rpc ClassifyText (ClassifyTextRequest) returns (ClassifyTextReply) {}
+}
+
+// ClassifyTextRequest is the request for text classification.
+message ClassifyTextRequest {
+  // The text to be classified.
+  string text = 1;
+}
+
+// ClassifyTextRequest is the response for text classification.
+message ClassifyTextReply {
+  // List of text classification results.
+  repeated Class classes = 1;
+}
+
+// Class is a single text classification result.
+message Class {
+  // A label describing the type of this class (e.g. "sentiment").
+  string type = 1;
+  // A label representing the actual class (e.g. "positive" or "negative").
+  string label = 2;
+  // Prediction confidence, for example in case of a machine-learning system
+  // being used. It should be a number between 0 and 1.
+  float confidence = 3;
+}
