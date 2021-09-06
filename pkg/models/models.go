@@ -17,6 +17,7 @@ var allModels = []interface{}{
 	Tweet{},
 	PendingJob{},
 	ZeroShotClass{},
+	TextClass{},
 	Vector{},
 	SimilarityInfo{},
 	ExtractedInfo{},
