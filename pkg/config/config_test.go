@@ -94,7 +94,7 @@ func TestFromYAMLFile(t *testing.T) {
 					Jobs: []config.FaktoryJob{
 						{
 							JobType: "FeedFetcher",
-							Queue:   "wn_feed_fetcher",
+							Queue:   "feed_fetcher",
 						},
 					},
 					LogLevel: config.LogLevel(zerolog.InfoLevel),
@@ -104,7 +104,7 @@ func TestFromYAMLFile(t *testing.T) {
 					Jobs: []config.FaktoryJob{
 						{
 							JobType: "TwitterScraper",
-							Queue:   "wn_twitter_scraper",
+							Queue:   "twitter_scraper",
 						},
 					},
 					LogLevel: config.LogLevel(zerolog.InfoLevel),
@@ -115,7 +115,7 @@ func TestFromYAMLFile(t *testing.T) {
 					NewWebResourceJobs: []config.FaktoryJob{
 						{
 							JobType: "WebScraper",
-							Queue:   "wn_web_scraper",
+							Queue:   "web_scraper",
 						},
 					},
 					LogLevel: config.LogLevel(zerolog.InfoLevel),
@@ -128,12 +128,12 @@ func TestFromYAMLFile(t *testing.T) {
 			},
 			Workers: config.Workers{
 				FeedFetcher: config.FeedFetcher{
-					Queues:      []string{"wn_feed_fetcher"},
+					Queues:      []string{"feed_fetcher"},
 					Concurrency: 10,
 					NewWebResourceJobs: []config.FaktoryJob{
 						{
 							JobType: "WebScraper",
-							Queue:   "wn_web_scraper",
+							Queue:   "web_scraper",
 						},
 					},
 					MaxAllowedFailures: 15,
@@ -145,13 +145,13 @@ func TestFromYAMLFile(t *testing.T) {
 					LogLevel:       config.LogLevel(zerolog.InfoLevel),
 				},
 				TwitterScraper: config.TwitterScraper{
-					Queues:          []string{"wn_twitter_scraper"},
+					Queues:          []string{"twitter_scraper"},
 					Concurrency:     10,
 					MaxTweetsNumber: 1000,
 					NewWebArticleJobs: []config.FaktoryJob{
 						{
 							JobType: "Translator",
-							Queue:   "wn_translator",
+							Queue:   "translator",
 						},
 					},
 					OmitTweetsPublishedBefore: config.OmitItemsPublishedBefore{
@@ -162,12 +162,12 @@ func TestFromYAMLFile(t *testing.T) {
 					LogLevel:       config.LogLevel(zerolog.InfoLevel),
 				},
 				WebScraper: config.WebScraper{
-					Queues:      []string{"wn_web_scraper"},
+					Queues:      []string{"web_scraper"},
 					Concurrency: 10,
 					NewWebArticleJobs: []config.FaktoryJob{
 						{
 							JobType: "Translator",
-							Queue:   "wn_translator",
+							Queue:   "translator",
 						},
 					},
 					LanguageFilter: []string{"en", "es", "fr", "it"},
@@ -176,7 +176,7 @@ func TestFromYAMLFile(t *testing.T) {
 					LogLevel:       config.LogLevel(zerolog.InfoLevel),
 				},
 				Translator: config.Translator{
-					Queues:      []string{"wn_translator"},
+					Queues:      []string{"translator"},
 					Concurrency: 4,
 					TranslatorServer: config.GRPCServer{
 						Target:     "127.0.0.1:4557",
@@ -185,7 +185,7 @@ func TestFromYAMLFile(t *testing.T) {
 					ProcessedWebArticleJobs: []config.FaktoryJob{
 						{
 							JobType: "ZeroShotClassifier",
-							Queue:   "wn_zero_shot_classifier",
+							Queue:   "zero_shot_classifier",
 						},
 					},
 					LanguageWhitelist: []string{"fr", "it"},
@@ -193,12 +193,12 @@ func TestFromYAMLFile(t *testing.T) {
 					LogLevel:          config.LogLevel(zerolog.InfoLevel),
 				},
 				ZeroShotClassifier: config.ZeroShotClassifier{
-					Queues:      []string{"wn_zero_shot_classifier"},
+					Queues:      []string{"zero_shot_classifier"},
 					Concurrency: 4,
 					ProcessedWebArticleJobs: []config.FaktoryJob{
 						{
 							JobType: "TextClassifier",
-							Queue:   "wn_text_classifier",
+							Queue:   "text_classifier",
 						},
 					},
 					SpagoBARTServer: config.GRPCServer{
@@ -208,12 +208,12 @@ func TestFromYAMLFile(t *testing.T) {
 					LogLevel: config.LogLevel(zerolog.InfoLevel),
 				},
 				TextClassifier: config.TextClassifier{
-					Queues:      []string{"wn_text_classifier"},
+					Queues:      []string{"text_classifier"},
 					Concurrency: 4,
 					ProcessedWebArticleJobs: []config.FaktoryJob{
 						{
 							JobType: "GeoParser",
-							Queue:   "wn_geo_parser",
+							Queue:   "geo_parser",
 						},
 					},
 					ClassifierServer: config.GRPCServer{
@@ -223,24 +223,24 @@ func TestFromYAMLFile(t *testing.T) {
 					LogLevel: config.LogLevel(zerolog.InfoLevel),
 				},
 				GeoParser: config.GeoParser{
-					Queues:      []string{"wn_geo_parser"},
+					Queues:      []string{"geo_parser"},
 					Concurrency: 4,
 					ProcessedWebArticleJobs: []config.FaktoryJob{
 						{
 							JobType: "Vectorizer",
-							Queue:   "wn_vectorizer",
+							Queue:   "vectorizer",
 						},
 					},
 					CliffURI: "127.0.0.1:4003",
 					LogLevel: config.LogLevel(zerolog.InfoLevel),
 				},
 				Vectorizer: config.Vectorizer{
-					Queues:      []string{"wn_vectorizer"},
+					Queues:      []string{"vectorizer"},
 					Concurrency: 4,
 					VectorizedWebArticleJobs: []config.FaktoryJob{
 						{
 							JobType: "DuplicateDetector",
-							Queue:   "wn_duplicate_detector",
+							Queue:   "duplicate_detector",
 						},
 					},
 					SpagoBERTServer: config.GRPCServer{
@@ -250,20 +250,20 @@ func TestFromYAMLFile(t *testing.T) {
 					LogLevel: config.LogLevel(zerolog.InfoLevel),
 				},
 				DuplicateDetector: config.DuplicateDetector{
-					Queues:            []string{"wn_duplicate_detector"},
+					Queues:            []string{"duplicate_detector"},
 					TimeframeDays:     3,
 					DistanceThreshold: 0.3,
 					NonDuplicateWebArticleJobs: []config.FaktoryJob{
 						{
 							JobType: "InformationExtractor",
-							Queue:   "wn_information_extractor",
+							Queue:   "information_extractor",
 						},
 					},
 					DuplicateWebArticleJobs: []config.FaktoryJob{},
 					LogLevel:                config.LogLevel(zerolog.InfoLevel),
 				},
 				InformationExtractor: config.InformationExtractor{
-					Queues:      []string{"wn_information_extractor"},
+					Queues:      []string{"information_extractor"},
 					Concurrency: 4,
 					SpagoBERTServer: config.GRPCServer{
 						Target:     "127.0.0.1:5831",

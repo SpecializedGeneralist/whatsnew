@@ -29,20 +29,20 @@ tasks:
     time_interval: '5m'
     jobs:
       - job_type: 'FeedFetcher'
-        queue: 'wn_feed_fetcher'
+        queue: 'feed_fetcher'
     loglevel: 'info'
   twitter_scheduler:
     time_interval: '5m'
     jobs:
       - job_type: 'TwitterScraper'
-        queue: 'wn_twitter_scraper'
+        queue: 'twitter_scraper'
     loglevel: 'info'
   gdelt_fetcher:
     time_interval: '5m'
     event_root_code_whitelist: [ ]
     new_web_resource_jobs:
       - job_type: 'WebScraper'
-        queue: 'wn_web_scraper'
+        queue: 'web_scraper'
     loglevel: 'info'
   jobs_recoverer:
     time_interval: '1m'
@@ -50,11 +50,11 @@ tasks:
     loglevel: 'info'
 workers:
   feed_fetcher:
-    queues: ['wn_feed_fetcher']
+    queues: ['feed_fetcher']
     concurrency: 10
     new_web_resource_jobs:
       - job_type: 'WebScraper'
-        queue: 'wn_web_scraper'
+        queue: 'web_scraper'
     max_allowed_failures: 15
     omit_items_published_before:
       enabled: true
@@ -62,88 +62,88 @@ workers:
     language_filter: ['en', 'es', 'fr', 'it']
     loglevel: 'info'
   twitter_scraper:
-    queues: ['wn_twitter_scraper']
+    queues: ['twitter_scraper']
     concurrency: 10
     max_tweets_number: 1000
     new_web_article_jobs:
       - job_type: 'Translator'
-        queue: 'wn_translator'
+        queue: 'translator'
     omit_tweets_published_before:
       enabled: true
       time: '2021-07-01T00:00:00Z'
     language_filter: ['en', 'es', 'fr', 'it']
     loglevel: 'info'
   web_scraper:
-    queues: ['wn_web_scraper']
+    queues: ['web_scraper']
     concurrency: 10
     new_web_article_jobs:
       - job_type: 'Translator'
-        queue: 'wn_translator'
+        queue: 'translator'
     language_filter: ['en', 'es', 'fr', 'it']
     request_timeout: '30s'
     user_agent: 'WhatsNew/0.0.0'
     loglevel: 'info'
   translator:
-    queues: ['wn_translator']
+    queues: ['translator']
     concurrency: 4
     translator_server:
       target: '127.0.0.1:4557'
       tls_enabled: false
     processed_web_article_jobs:
       - job_type: 'ZeroShotClassifier'
-        queue: 'wn_zero_shot_classifier'
+        queue: 'zero_shot_classifier'
     language_whitelist: ['fr', 'it']
     target_language: 'en'
     loglevel: 'info'
   zero_shot_classifier:
-    queues: ['wn_zero_shot_classifier']
+    queues: ['zero_shot_classifier']
     concurrency: 4
     processed_web_article_jobs:
       - job_type: 'TextClassifier'
-        queue: 'wn_text_classifier'
+        queue: 'text_classifier'
     spago_bart_server:
       target: '127.0.0.1:4001'
       tls_enabled: false
     loglevel: 'info'
   text_classifier:
-    queues: ['wn_text_classifier']
+    queues: ['text_classifier']
     concurrency: 4
     processed_web_article_jobs:
       - job_type: 'GeoParser'
-        queue: 'wn_geo_parser'
+        queue: 'geo_parser'
     classifier_server:
       target: '127.0.0.1:4002'
       tls_enabled: false
     loglevel: 'info'
   geo_parser:
-    queues: ['wn_geo_parser']
+    queues: ['geo_parser']
     concurrency: 4
     processed_web_article_jobs:
       - job_type: 'Vectorizer'
-        queue: 'wn_vectorizer'
+        queue: 'vectorizer'
     cliff_uri: '127.0.0.1:4003'
     loglevel: 'info'
   vectorizer:
-    queues: ['wn_vectorizer']
+    queues: ['vectorizer']
     concurrency: 4
     vectorized_web_article_jobs:
       - job_type: 'DuplicateDetector'
-        queue: 'wn_duplicate_detector'
+        queue: 'duplicate_detector'
     spago_bert_server:
       target: '127.0.0.1:1976'
       tls_enabled: false
     loglevel: 'info'
   duplicate_detector:
-    queues: ['wn_duplicate_detector']
+    queues: ['duplicate_detector']
     timeframe_days: 3
     distance_threshold: 0.3
     non_duplicate_web_article_jobs:
       - job_type: 'InformationExtractor'
-        queue: 'wn_information_extractor'
+        queue: 'information_extractor'
     duplicate_web_article_jobs: []
     loglevel: 'info'
   information_extractor:
-    queues: ['wn_information_extractor']
+    queues: ['information_extractor']
     concurrency: 4
     spago_bert_server:
       target: '127.0.0.1:5831'
