@@ -17,7 +17,7 @@ require (
 	github.com/contribsys/faktory v1.5.2
 	github.com/contribsys/faktory_worker_go v1.4.2
 	github.com/go-resty/resty/v2 v2.6.0 // indirect
-	github.com/grpc-ecosystem/grpc-gateway/v2 v2.5.0
+	github.com/grpc-ecosystem/grpc-gateway/v2 v2.6.0
 	github.com/jackc/pgconn v1.10.0
 	github.com/jackc/pgtype v1.8.1
 	github.com/jackc/pgx/v4 v4.13.0 // indirect
@@ -30,19 +30,19 @@ require (
 	github.com/nlpodyssey/spago v0.7.0
 	github.com/olekukonko/tablewriter v0.0.5 // indirect
 	github.com/rs/cors v1.8.0
-	github.com/rs/zerolog v1.24.0
+	github.com/rs/zerolog v1.25.0
 	github.com/stretchr/testify v1.7.0
-	golang.org/x/crypto v0.0.0-20210711020723-a769d52b0f97 // indirect
-	golang.org/x/net v0.0.0-20210716203947-853a461950ff
-	golang.org/x/sys v0.0.0-20210630005230-0f9fa26af87c // indirect
-	golang.org/x/text v0.3.6
-	google.golang.org/genproto v0.0.0-20210903162649-d08c68adba83
+	golang.org/x/crypto v0.0.0-20210817164053-32db794688a5 // indirect
+	golang.org/x/net v0.0.0-20210908191846-a5e095526f91
+	golang.org/x/sys v0.0.0-20210908233432-aa78b53d3365 // indirect
+	golang.org/x/text v0.3.7
+	google.golang.org/genproto v0.0.0-20210909144509-af19c3c38cb7
 	google.golang.org/grpc v1.40.0
 	google.golang.org/protobuf v1.27.1
 	gopkg.in/yaml.v3 v3.0.0-20210107192922-496545a6307b
 	gorm.io/datatypes v1.0.1
 	gorm.io/driver/postgres v1.1.0
-	gorm.io/gorm v1.21.14
+	gorm.io/gorm v1.21.15
 )
 
 require (
