@@ -109,11 +109,19 @@ workers:
     queues: ['wn_text_classifier']
     concurrency: 4
     processed_web_article_jobs:
-      - job_type: 'Vectorizer'
-        queue: 'wn_vectorizer'
+      - job_type: 'GeoParser'
+        queue: 'wn_geo_parser'
     classifier_server:
       target: '127.0.0.1:4002'
       tls_enabled: false
+    loglevel: 'info'
+  geo_parser:
+    queues: ['wn_geo_parser']
+    concurrency: 4
+    processed_web_article_jobs:
+      - job_type: 'Vectorizer'
+        queue: 'wn_vectorizer'
+    cliff_uri: '127.0.0.1:4003'
     loglevel: 'info'
   vectorizer:
     queues: ['wn_vectorizer']

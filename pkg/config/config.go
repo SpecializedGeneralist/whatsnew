@@ -114,6 +114,7 @@ type Workers struct {
 	Translator           Translator           `yaml:"translator"`
 	ZeroShotClassifier   ZeroShotClassifier   `yaml:"zero_shot_classifier"`
 	TextClassifier       TextClassifier       `yaml:"text_classifier"`
+	GeoParser            GeoParser            `yaml:"geo_parser"`
 	Vectorizer           Vectorizer           `yaml:"vectorizer"`
 	DuplicateDetector    DuplicateDetector    `yaml:"duplicate_detector"`
 	InformationExtractor InformationExtractor `yaml:"information_extractor"`
@@ -178,6 +179,15 @@ type TextClassifier struct {
 	Concurrency             int          `yaml:"concurrency"`
 	ProcessedWebArticleJobs []FaktoryJob `yaml:"processed_web_article_jobs"`
 	ClassifierServer        GRPCServer   `yaml:"classifier_server"`
+	LogLevel                LogLevel     `yaml:"loglevel"`
+}
+
+// GeoParser holds settings for the geo-parser worker.
+type GeoParser struct {
+	Queues                  []string     `yaml:"queues"`
+	Concurrency             int          `yaml:"concurrency"`
+	ProcessedWebArticleJobs []FaktoryJob `yaml:"processed_web_article_jobs"`
+	CliffURI                string       `yaml:"cliff_uri"`
 	LogLevel                LogLevel     `yaml:"loglevel"`
 }
 

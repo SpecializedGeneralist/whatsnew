@@ -212,14 +212,26 @@ func TestFromYAMLFile(t *testing.T) {
 					Concurrency: 4,
 					ProcessedWebArticleJobs: []config.FaktoryJob{
 						{
-							JobType: "Vectorizer",
-							Queue:   "wn_vectorizer",
+							JobType: "GeoParser",
+							Queue:   "wn_geo_parser",
 						},
 					},
 					ClassifierServer: config.GRPCServer{
 						Target:     "127.0.0.1:4002",
 						TLSEnabled: false,
 					},
+					LogLevel: config.LogLevel(zerolog.InfoLevel),
+				},
+				GeoParser: config.GeoParser{
+					Queues:      []string{"wn_geo_parser"},
+					Concurrency: 4,
+					ProcessedWebArticleJobs: []config.FaktoryJob{
+						{
+							JobType: "Vectorizer",
+							Queue:   "wn_vectorizer",
+						},
+					},
+					CliffURI: "127.0.0.1:4003",
 					LogLevel: config.LogLevel(zerolog.InfoLevel),
 				},
 				Vectorizer: config.Vectorizer{

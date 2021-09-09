@@ -434,6 +434,31 @@
           },
           "required": ["queues", "concurrency", "processed_web_article_jobs", "classifier_server", "loglevel"]
         },
+        "geo_parser": {
+          "description": "Settings for the geo-parser worker.",
+          "type": "object",
+          "properties": {
+            "queues": {
+              "type": "array",
+              "items": {
+                "type": "string"
+              }
+            },
+            "concurrency": {
+              "type": "integer"
+            },
+            "processed_web_article_jobs": {
+              "$ref": "#/definitions/faktory_jobs"
+            },
+            "cliff_uri": {
+              "type": "string"
+            },
+            "loglevel": {
+              "$ref": "#/definitions/loglevel"
+            }
+          },
+          "required": ["queues", "concurrency", "processed_web_article_jobs", "cliff_uri", "loglevel"]
+        },
         "vectorizer": {
           "description": "Settings for the vectorizer worker.",
           "type": "object",
@@ -527,6 +552,7 @@
         "translator",
         "zero_shot_classifier",
         "text_classifier",
+        "geo_parser",
         "vectorizer",
         "duplicate_detector",
         "information_extractor"
