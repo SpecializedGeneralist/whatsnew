@@ -52,6 +52,6 @@ func Run(ctx context.Context, conf *config.Config, args []string) (err error) {
 		}
 	}()
 
-	fs := twitterscheduler.New(conf.TwitterScheduler, db, fk)
+	fs := twitterscheduler.New(conf.Tasks.TwitterScheduler, db, fk)
 	return fs.Run(ctx)
 }

@@ -51,6 +51,6 @@ func Run(ctx context.Context, conf *config.Config, args []string) (err error) {
 		}
 	}()
 
-	fs := feedscheduler.New(conf.FeedScheduler, db, fk)
+	fs := feedscheduler.New(conf.Tasks.FeedScheduler, db, fk)
 	return fs.Run(ctx)
 }

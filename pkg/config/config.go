@@ -17,15 +17,12 @@ import (
 
 // Config holds whatsnew application-wide configuration settings.
 type Config struct {
-	DB               DB               `yaml:"db"`
-	Faktory          Faktory          `yaml:"faktory"`
-	HNSW             HNSW             `yaml:"hnsw"`
-	FeedScheduler    FeedScheduler    `yaml:"feed_scheduler"`
-	TwitterScheduler TwitterScheduler `yaml:"twitter_scheduler"`
-	GDELTFetcher     GDELTFetcher     `yaml:"gdelt_fetcher"`
-	JobsRecoverer    JobsRecoverer    `yaml:"jobs_recoverer"`
-	Server           Server           `yaml:"server"`
-	Workers          Workers          `yaml:"workers"`
+	DB      DB      `yaml:"db"`
+	Faktory Faktory `yaml:"faktory"`
+	HNSW    HNSW    `yaml:"hnsw"`
+	Server  Server  `yaml:"server"`
+	Tasks   Tasks   `yaml:"tasks"`
+	Workers Workers `yaml:"workers"`
 }
 
 // DB holds database settings.
@@ -99,6 +96,14 @@ type Server struct {
 	TLSKey         string   `yaml:"tls_key"`
 	AllowedOrigins []string `yaml:"allowed_origins"`
 	LogLevel       LogLevel `yaml:"loglevel"`
+}
+
+// Tasks holds settings for various tasks.
+type Tasks struct {
+	FeedScheduler    FeedScheduler    `yaml:"feed_scheduler"`
+	TwitterScheduler TwitterScheduler `yaml:"twitter_scheduler"`
+	GDELTFetcher     GDELTFetcher     `yaml:"gdelt_fetcher"`
+	JobsRecoverer    JobsRecoverer    `yaml:"jobs_recoverer"`
 }
 
 // Workers holds settings for the various workers.

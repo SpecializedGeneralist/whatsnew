@@ -17,29 +17,6 @@ hnsw:
     max_elements: 100000
     seed: 42
     space_type: 'COSINE'
-feed_scheduler:
-  time_interval: '5m'
-  jobs:
-    - job_type: 'FeedFetcher'
-      queue: 'wn_feed_fetcher'
-  loglevel: 'info'
-twitter_scheduler:
-  time_interval: '5m'
-  jobs:
-    - job_type: 'TwitterScraper'
-      queue: 'wn_twitter_scraper'
-  loglevel: 'info'
-gdelt_fetcher:
-  time_interval: '5m'
-  event_root_code_whitelist: []
-  new_web_resource_jobs:
-    - job_type: 'WebScraper'
-      queue: 'wn_web_scraper'
-  loglevel: 'info'
-jobs_recoverer:
-  time_interval: '1m'
-  leeway_time: '1m'
-  loglevel: 'info'
 server:
   address: '0.0.0.0:10000'
   tls_enabled: false
@@ -47,6 +24,30 @@ server:
   tls_key: ''
   allowed_origins: ['*']
   loglevel: 'info'
+tasks:
+  feed_scheduler:
+    time_interval: '5m'
+    jobs:
+      - job_type: 'FeedFetcher'
+        queue: 'wn_feed_fetcher'
+    loglevel: 'info'
+  twitter_scheduler:
+    time_interval: '5m'
+    jobs:
+      - job_type: 'TwitterScraper'
+        queue: 'wn_twitter_scraper'
+    loglevel: 'info'
+  gdelt_fetcher:
+    time_interval: '5m'
+    event_root_code_whitelist: [ ]
+    new_web_resource_jobs:
+      - job_type: 'WebScraper'
+        queue: 'wn_web_scraper'
+    loglevel: 'info'
+  jobs_recoverer:
+    time_interval: '1m'
+    leeway_time: '1m'
+    loglevel: 'info'
 workers:
   feed_fetcher:
     queues: ['wn_feed_fetcher']

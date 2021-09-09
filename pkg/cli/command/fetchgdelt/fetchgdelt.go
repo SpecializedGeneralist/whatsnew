@@ -54,6 +54,6 @@ func Run(ctx context.Context, conf *config.Config, args []string) error {
 		}
 	}()
 
-	fs := gdeltfetcher.New(conf.GDELTFetcher, db, fk)
+	fs := gdeltfetcher.New(conf.Tasks.GDELTFetcher, db, fk)
 	return fs.Run(ctx)
 }

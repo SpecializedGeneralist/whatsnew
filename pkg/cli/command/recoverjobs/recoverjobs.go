@@ -51,6 +51,6 @@ func Run(ctx context.Context, conf *config.Config, args []string) (err error) {
 		}
 	}()
 
-	jr := jobsrecoverer.New(conf.JobsRecoverer, db, fk)
+	jr := jobsrecoverer.New(conf.Tasks.JobsRecoverer, db, fk)
 	return jr.Run(ctx)
 }

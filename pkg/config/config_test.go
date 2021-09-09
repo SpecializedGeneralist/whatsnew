@@ -80,42 +80,6 @@ func TestFromYAMLFile(t *testing.T) {
 					SpaceType:      config.HNSWSpaceType(hnswgrpcapi.CreateIndexRequest_COSINE),
 				},
 			},
-			FeedScheduler: config.FeedScheduler{
-				TimeInterval: 5 * time.Minute,
-				Jobs: []config.FaktoryJob{
-					{
-						JobType: "FeedFetcher",
-						Queue:   "wn_feed_fetcher",
-					},
-				},
-				LogLevel: config.LogLevel(zerolog.InfoLevel),
-			},
-			TwitterScheduler: config.TwitterScheduler{
-				TimeInterval: 5 * time.Minute,
-				Jobs: []config.FaktoryJob{
-					{
-						JobType: "TwitterScraper",
-						Queue:   "wn_twitter_scraper",
-					},
-				},
-				LogLevel: config.LogLevel(zerolog.InfoLevel),
-			},
-			GDELTFetcher: config.GDELTFetcher{
-				TimeInterval:           5 * time.Minute,
-				EventRootCodeWhitelist: make([]string, 0),
-				NewWebResourceJobs: []config.FaktoryJob{
-					{
-						JobType: "WebScraper",
-						Queue:   "wn_web_scraper",
-					},
-				},
-				LogLevel: config.LogLevel(zerolog.InfoLevel),
-			},
-			JobsRecoverer: config.JobsRecoverer{
-				TimeInterval: time.Minute,
-				LeewayTime:   time.Minute,
-				LogLevel:     config.LogLevel(zerolog.InfoLevel),
-			},
 			Server: config.Server{
 				Address:        "0.0.0.0:10000",
 				TLSEnabled:     false,
@@ -123,6 +87,44 @@ func TestFromYAMLFile(t *testing.T) {
 				TLSKey:         "",
 				AllowedOrigins: []string{"*"},
 				LogLevel:       config.LogLevel(zerolog.InfoLevel),
+			},
+			Tasks: config.Tasks{
+				FeedScheduler: config.FeedScheduler{
+					TimeInterval: 5 * time.Minute,
+					Jobs: []config.FaktoryJob{
+						{
+							JobType: "FeedFetcher",
+							Queue:   "wn_feed_fetcher",
+						},
+					},
+					LogLevel: config.LogLevel(zerolog.InfoLevel),
+				},
+				TwitterScheduler: config.TwitterScheduler{
+					TimeInterval: 5 * time.Minute,
+					Jobs: []config.FaktoryJob{
+						{
+							JobType: "TwitterScraper",
+							Queue:   "wn_twitter_scraper",
+						},
+					},
+					LogLevel: config.LogLevel(zerolog.InfoLevel),
+				},
+				GDELTFetcher: config.GDELTFetcher{
+					TimeInterval:           5 * time.Minute,
+					EventRootCodeWhitelist: make([]string, 0),
+					NewWebResourceJobs: []config.FaktoryJob{
+						{
+							JobType: "WebScraper",
+							Queue:   "wn_web_scraper",
+						},
+					},
+					LogLevel: config.LogLevel(zerolog.InfoLevel),
+				},
+				JobsRecoverer: config.JobsRecoverer{
+					TimeInterval: time.Minute,
+					LeewayTime:   time.Minute,
+					LogLevel:     config.LogLevel(zerolog.InfoLevel),
+				},
 			},
 			Workers: config.Workers{
 				FeedFetcher: config.FeedFetcher{

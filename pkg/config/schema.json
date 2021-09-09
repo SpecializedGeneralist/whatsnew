@@ -81,84 +81,6 @@
       },
       "required": ["server", "index"]
     },
-    "feed_scheduler": {
-      "description": "Settings for periodic scheduling of jobs for processing all feeds.",
-      "type": "object",
-      "properties": {
-        "time_interval": {
-          "description": "How frequently the 'jobs' should be scheduled, for each enabled feed. The value must be compatible with Go time.Duration.",
-          "type": "string"
-        },
-        "jobs": {
-          "description": "List of each job type to be periodically scheduled.",
-          "$ref": "#/definitions/faktory_jobs"
-        },
-        "loglevel": {
-          "$ref": "#/definitions/loglevel"
-        }
-      },
-      "required": ["time_interval", "jobs", "loglevel"]
-    },
-    "twitter_scheduler": {
-      "description": "Settings for periodic scheduling of jobs for processing all twitter sources.",
-      "type": "object",
-      "properties": {
-        "time_interval": {
-          "description": "How frequently the 'jobs' should be scheduled, for each enabled twitter source. The value must be compatible with Go time.Duration.",
-          "type": "string"
-        },
-        "jobs": {
-          "description": "List of each job type to be periodically scheduled.",
-          "$ref": "#/definitions/faktory_jobs"
-        },
-        "loglevel": {
-          "$ref": "#/definitions/loglevel"
-        }
-      },
-      "required": ["time_interval", "jobs", "loglevel"]
-    },
-    "gdelt_fetcher": {
-      "description": "Settings for periodic fetching of GDELT events and news reports extraction for further processing.",
-      "type": "object",
-      "properties": {
-        "time_interval": {
-          "description": "How frequently the GDELT events should be fetched and the 'jobs' scheduled, for each new piece of news. The value must be compatible with Go time.Duration.",
-          "type": "string"
-        },
-        "event_root_code_whitelist": {
-          "type": "array",
-          "items": {
-            "type": "string"
-          }
-        },
-        "new_web_resource_jobs": {
-          "description": "List of each job type to be scheduled for each piece of news.",
-          "$ref": "#/definitions/faktory_jobs"
-        },
-        "loglevel": {
-          "$ref": "#/definitions/loglevel"
-        }
-      },
-      "required": ["time_interval", "new_web_resource_jobs", "event_root_code_whitelist", "loglevel"]
-    },
-    "jobs_recoverer": {
-      "description": "Settings for periodic recovering of pending jobs.",
-      "type": "object",
-      "properties": {
-        "time_interval": {
-          "description": "How frequently the recovery process must run. The value must be compatible with Go time.Duration.",
-          "type": "string"
-        },
-        "leeway_time": {
-          "description": "Leeway time duration to exclude from recovery pending jobs created too recently. The value must be compatible with Go time.Duration.",
-          "type": "string"
-        },
-        "loglevel": {
-          "$ref": "#/definitions/loglevel"
-        }
-      },
-      "required": ["time_interval", "leeway_time", "loglevel"]
-    },
     "server": {
       "description": "Settings for HTTP and gRPC server.",
       "type": "object",
@@ -186,6 +108,91 @@
         }
       },
       "required": ["address", "tls_enabled", "tls_cert", "tls_key", "allowed_origins", "loglevel"]
+    },
+    "tasks": {
+      "description": "Settings for specific tasks.",
+      "type": "object",
+      "properties": {
+        "feed_scheduler": {
+          "description": "Settings for periodic scheduling of jobs for processing all feeds.",
+          "type": "object",
+          "properties": {
+            "time_interval": {
+              "description": "How frequently the 'jobs' should be scheduled, for each enabled feed. The value must be compatible with Go time.Duration.",
+              "type": "string"
+            },
+            "jobs": {
+              "description": "List of each job type to be periodically scheduled.",
+              "$ref": "#/definitions/faktory_jobs"
+            },
+            "loglevel": {
+              "$ref": "#/definitions/loglevel"
+            }
+          },
+          "required": ["time_interval", "jobs", "loglevel"]
+        },
+        "twitter_scheduler": {
+          "description": "Settings for periodic scheduling of jobs for processing all twitter sources.",
+          "type": "object",
+          "properties": {
+            "time_interval": {
+              "description": "How frequently the 'jobs' should be scheduled, for each enabled twitter source. The value must be compatible with Go time.Duration.",
+              "type": "string"
+            },
+            "jobs": {
+              "description": "List of each job type to be periodically scheduled.",
+              "$ref": "#/definitions/faktory_jobs"
+            },
+            "loglevel": {
+              "$ref": "#/definitions/loglevel"
+            }
+          },
+          "required": ["time_interval", "jobs", "loglevel"]
+        },
+        "gdelt_fetcher": {
+          "description": "Settings for periodic fetching of GDELT events and news reports extraction for further processing.",
+          "type": "object",
+          "properties": {
+            "time_interval": {
+              "description": "How frequently the GDELT events should be fetched and the 'jobs' scheduled, for each new piece of news. The value must be compatible with Go time.Duration.",
+              "type": "string"
+            },
+            "event_root_code_whitelist": {
+              "type": "array",
+              "items": {
+                "type": "string"
+              }
+            },
+            "new_web_resource_jobs": {
+              "description": "List of each job type to be scheduled for each piece of news.",
+              "$ref": "#/definitions/faktory_jobs"
+            },
+            "loglevel": {
+              "$ref": "#/definitions/loglevel"
+            }
+          },
+          "required": ["time_interval", "new_web_resource_jobs", "event_root_code_whitelist", "loglevel"]
+        },
+        "jobs_recoverer": {
+          "description": "Settings for periodic recovering of pending jobs.",
+          "type": "object",
+          "properties": {
+            "time_interval": {
+              "description": "How frequently the recovery process must run. The value must be compatible with Go time.Duration.",
+              "type": "string"
+            },
+            "leeway_time": {
+              "description": "Leeway time duration to exclude from recovery pending jobs created too recently. The value must be compatible with Go time.Duration.",
+              "type": "string"
+            },
+            "loglevel": {
+              "$ref": "#/definitions/loglevel"
+            }
+          },
+          "required": ["time_interval", "leeway_time", "loglevel"]
+        }
+      },
+      "required": ["feed_scheduler", "twitter_scheduler", "gdelt_fetcher", "jobs_recoverer"]
     },
     "workers": {
       "description": "Settings for specific workers.",
@@ -526,17 +533,7 @@
       ]
     }
   },
-  "required": [
-    "db",
-    "faktory",
-    "hnsw",
-    "feed_scheduler",
-    "twitter_scheduler",
-    "gdelt_fetcher",
-    "jobs_recoverer",
-    "server",
-    "workers"
-  ],
+  "required": ["db", "faktory", "hnsw", "server", "tasks", "workers"],
   "definitions": {
     "loglevel": {
       "description": "Log level. The value is compatible with zerolog.Level.",
