@@ -25,6 +25,8 @@ type WebArticle struct {
 	TranslatedTitle     sql.NullString
 	TranslationLanguage sql.NullString
 
+	CountryCode sql.NullString
+
 	// A WebArticle has many models.ZeroShotClass models.
 	ZeroShotClasses []ZeroShotClass `gorm:"constraint:OnDelete:CASCADE"`
 
