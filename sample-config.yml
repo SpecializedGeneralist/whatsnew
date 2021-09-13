@@ -121,7 +121,7 @@ workers:
     processed_web_article_jobs:
       - job_type: 'Vectorizer'
         queue: 'vectorizer'
-    cliff_uri: '127.0.0.1:4003'
+    cliff_uri: 'http://127.0.0.1:4003'
     loglevel: 'info'
   vectorizer:
     queues: ['vectorizer']

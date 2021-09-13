@@ -231,7 +231,7 @@ func TestFromYAMLFile(t *testing.T) {
 							Queue:   "vectorizer",
 						},
 					},
-					CliffURI: "127.0.0.1:4003",
+					CliffURI: "http://127.0.0.1:4003",
 					LogLevel: config.LogLevel(zerolog.InfoLevel),
 				},
 				Vectorizer: config.Vectorizer{
