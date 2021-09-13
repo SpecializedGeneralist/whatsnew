@@ -74,6 +74,10 @@ services:
       - './docker-compose:/config'
       - 'spago:/models'
     command: '-c /config/translator-config.yml'
+  cliff:
+    image: 'rahulbot/cliff-clavin:latest'
+    ports:
+      - '4003:8080'
 volumes:
   faktory:
   postgres:
