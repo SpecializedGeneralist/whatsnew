@@ -15,6 +15,7 @@ import (
 	"github.com/SpecializedGeneralist/whatsnew/pkg/cli/command/extractinformation"
 	"github.com/SpecializedGeneralist/whatsnew/pkg/cli/command/fetchfeeds"
 	"github.com/SpecializedGeneralist/whatsnew/pkg/cli/command/fetchgdelt"
+	"github.com/SpecializedGeneralist/whatsnew/pkg/cli/command/parsegeo"
 	"github.com/SpecializedGeneralist/whatsnew/pkg/cli/command/recoverjobs"
 	"github.com/SpecializedGeneralist/whatsnew/pkg/cli/command/schedulefeeds"
 	"github.com/SpecializedGeneralist/whatsnew/pkg/cli/command/scheduletwitter"
@@ -46,6 +47,7 @@ var (
 		translate.CmdTranslate,
 		zeroshotclassify.CmdZeroShotClassify,
 		classifytext.CmdClassifyText,
+		parsegeo.CmdParseGeo,
 		vectorize.CmdVectorize,
 		detectduplicates.CmdDetectDuplicates,
 		extractinformation.CmdExtractInformation,
