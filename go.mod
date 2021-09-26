@@ -33,11 +33,11 @@ require (
 	github.com/rs/zerolog v1.25.0
 	github.com/stretchr/testify v1.7.0
 	golang.org/x/crypto v0.0.0-20210921155107-089bfa567519 // indirect
-	golang.org/x/net v0.0.0-20210917221730-978cfadd31cf
-	golang.org/x/sys v0.0.0-20210921065528-437939a70204 // indirect
+	golang.org/x/net v0.0.0-20210924151903-3ad01bbaa167
+	golang.org/x/sys v0.0.0-20210925032602-92d5a993a665 // indirect
 	golang.org/x/text v0.3.7
-	google.golang.org/genproto v0.0.0-20210921142501-181ce0d877f6
-	google.golang.org/grpc v1.40.0
+	google.golang.org/genproto v0.0.0-20210924002016-3dee208752a0
+	google.golang.org/grpc v1.41.0
 	google.golang.org/protobuf v1.27.1
 	gopkg.in/yaml.v3 v3.0.0-20210107192922-496545a6307b
 	gorm.io/datatypes v1.0.2
