@@ -109,7 +109,8 @@ func (fs *TwitterScheduler) scheduleSourceJobs(source *models.TwitterSource) err
 	for _, fj := range fs.conf.Jobs {
 		job := faktory.NewJob(fj.JobType, source.ID)
 		job.Queue = fj.Queue
-		job.Retry = 0 // No retries, since it will be called periodically
+		job.ReserveFor = fj.ReserveFor
+		job.Retry = fj.Retry
 
 		fs.log.Trace().Interface("job", job).Msg("schedule new job")
 

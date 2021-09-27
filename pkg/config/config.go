@@ -233,8 +233,10 @@ type GRPCServer struct {
 
 // FaktoryJob describes a Faktory job to be scheduled for execution.
 type FaktoryJob struct {
-	JobType string `yaml:"job_type"`
-	Queue   string `yaml:"queue"`
+	JobType    string `yaml:"job_type"`
+	Queue      string `yaml:"queue"`
+	ReserveFor int    `yaml:"reserve_for"`
+	Retry      int    `yaml:"retry"`
 }
 
 // DBLogLevel is a redefinition of GORM logger.LogLevel which satisfies

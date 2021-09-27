@@ -595,9 +595,17 @@
       "type": "object",
       "properties": {
         "job_type": { "type": "string" },
-        "queue": { "type": "string" }
+        "queue": { "type": "string" },
+        "reserve_for": {
+          "description": "Reservation timeout for a job, in seconds.",
+          "type": "integer"
+        },
+        "retry": {
+          "description": "Number of retries to perform if this job fails. A value of 0 means the job will not be retried and will be discarded if it fails.  A value of -1 means don't retry but move the job immediately to the Dead set if it fails.",
+          "type": "integer"
+        }
       },
-      "required": ["job_type", "queue"]
+      "required": ["job_type", "queue", "reserve_for", "retry"]
     }
   }
 }

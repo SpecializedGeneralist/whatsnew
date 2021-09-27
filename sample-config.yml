@@ -30,12 +30,16 @@ tasks:
     jobs:
       - job_type: 'FeedFetcher'
         queue: 'feed_fetcher'
+        reserve_for: 300
+        retry: -1
     loglevel: 'info'
   twitter_scheduler:
     time_interval: '5m'
     jobs:
       - job_type: 'TwitterScraper'
         queue: 'twitter_scraper'
+        reserve_for: 300
+        retry: -1
     loglevel: 'info'
   gdelt_fetcher:
     time_interval: '5m'
@@ -43,6 +47,8 @@ tasks:
     new_web_resource_jobs:
       - job_type: 'WebScraper'
         queue: 'web_scraper'
+        reserve_for: 600
+        retry: 5
     loglevel: 'info'
   jobs_recoverer:
     time_interval: '1m'
@@ -55,6 +61,8 @@ workers:
     new_web_resource_jobs:
       - job_type: 'WebScraper'
         queue: 'web_scraper'
+        reserve_for: 600
+        retry: 5
     max_allowed_failures: 15
     omit_items_published_before:
       enabled: true
@@ -68,6 +76,8 @@ workers:
     new_web_article_jobs:
       - job_type: 'Translator'
         queue: 'translator'
+        reserve_for: 600
+        retry: 25
     omit_tweets_published_before:
       enabled: true
       time: '2021-07-01T00:00:00Z'
@@ -79,6 +89,8 @@ workers:
     new_web_article_jobs:
       - job_type: 'Translator'
         queue: 'translator'
+        reserve_for: 600
+        retry: 25
     language_filter: ['en', 'es', 'fr', 'it']
     request_timeout: '30s'
     user_agent: 'WhatsNew/0.0.0'
@@ -92,6 +104,8 @@ workers:
     processed_web_article_jobs:
       - job_type: 'ZeroShotClassifier'
         queue: 'zero_shot_classifier'
+        reserve_for: 600
+        retry: 25
     language_whitelist: ['fr', 'it']
     target_language: 'en'
     loglevel: 'info'
@@ -101,6 +115,8 @@ workers:
     processed_web_article_jobs:
       - job_type: 'TextClassifier'
         queue: 'text_classifier'
+        reserve_for: 600
+        retry: 25
     spago_bart_server:
       target: '127.0.0.1:4001'
       tls_enabled: false
@@ -111,6 +127,8 @@ workers:
     processed_web_article_jobs:
       - job_type: 'GeoParser'
         queue: 'geo_parser'
+        reserve_for: 600
+        retry: 25
     classifier_server:
       target: '127.0.0.1:4002'
       tls_enabled: false
@@ -121,6 +139,8 @@ workers:
     processed_web_article_jobs:
       - job_type: 'Vectorizer'
         queue: 'vectorizer'
+        reserve_for: 600
+        retry: 25
     cliff_uri: 'http://127.0.0.1:4003'
     loglevel: 'info'
   vectorizer:
@@ -129,6 +149,8 @@ workers:
     vectorized_web_article_jobs:
       - job_type: 'DuplicateDetector'
         queue: 'duplicate_detector'
+        reserve_for: 600
+        retry: 25
     spago_bert_server:
       target: '127.0.0.1:1976'
       tls_enabled: false
@@ -140,6 +162,8 @@ workers:
     non_duplicate_web_article_jobs:
       - job_type: 'InformationExtractor'
         queue: 'information_extractor'
+        reserve_for: 600
+        retry: 25
     duplicate_web_article_jobs: []
     loglevel: 'info'
   information_extractor:

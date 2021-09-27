@@ -93,8 +93,10 @@ func TestFromYAMLFile(t *testing.T) {
 					TimeInterval: 5 * time.Minute,
 					Jobs: []config.FaktoryJob{
 						{
-							JobType: "FeedFetcher",
-							Queue:   "feed_fetcher",
+							JobType:    "FeedFetcher",
+							Queue:      "feed_fetcher",
+							ReserveFor: 300,
+							Retry:      -1,
 						},
 					},
 					LogLevel: config.LogLevel(zerolog.InfoLevel),
@@ -103,8 +105,10 @@ func TestFromYAMLFile(t *testing.T) {
 					TimeInterval: 5 * time.Minute,
 					Jobs: []config.FaktoryJob{
 						{
-							JobType: "TwitterScraper",
-							Queue:   "twitter_scraper",
+							JobType:    "TwitterScraper",
+							Queue:      "twitter_scraper",
+							ReserveFor: 300,
+							Retry:      -1,
 						},
 					},
 					LogLevel: config.LogLevel(zerolog.InfoLevel),
@@ -114,8 +118,10 @@ func TestFromYAMLFile(t *testing.T) {
 					EventRootCodeWhitelist: make([]string, 0),
 					NewWebResourceJobs: []config.FaktoryJob{
 						{
-							JobType: "WebScraper",
-							Queue:   "web_scraper",
+							JobType:    "WebScraper",
+							Queue:      "web_scraper",
+							ReserveFor: 600,
+							Retry:      5,
 						},
 					},
 					LogLevel: config.LogLevel(zerolog.InfoLevel),
@@ -132,8 +138,10 @@ func TestFromYAMLFile(t *testing.T) {
 					Concurrency: 10,
 					NewWebResourceJobs: []config.FaktoryJob{
 						{
-							JobType: "WebScraper",
-							Queue:   "web_scraper",
+							JobType:    "WebScraper",
+							Queue:      "web_scraper",
+							ReserveFor: 600,
+							Retry:      5,
 						},
 					},
 					MaxAllowedFailures: 15,
@@ -150,8 +158,10 @@ func TestFromYAMLFile(t *testing.T) {
 					MaxTweetsNumber: 1000,
 					NewWebArticleJobs: []config.FaktoryJob{
 						{
-							JobType: "Translator",
-							Queue:   "translator",
+							JobType:    "Translator",
+							Queue:      "translator",
+							ReserveFor: 600,
+							Retry:      25,
 						},
 					},
 					OmitTweetsPublishedBefore: config.OmitItemsPublishedBefore{
@@ -166,8 +176,10 @@ func TestFromYAMLFile(t *testing.T) {
 					Concurrency: 10,
 					NewWebArticleJobs: []config.FaktoryJob{
 						{
-							JobType: "Translator",
-							Queue:   "translator",
+							JobType:    "Translator",
+							Queue:      "translator",
+							ReserveFor: 600,
+							Retry:      25,
 						},
 					},
 					LanguageFilter: []string{"en", "es", "fr", "it"},
@@ -184,8 +196,10 @@ func TestFromYAMLFile(t *testing.T) {
 					},
 					ProcessedWebArticleJobs: []config.FaktoryJob{
 						{
-							JobType: "ZeroShotClassifier",
-							Queue:   "zero_shot_classifier",
+							JobType:    "ZeroShotClassifier",
+							Queue:      "zero_shot_classifier",
+							ReserveFor: 600,
+							Retry:      25,
 						},
 					},
 					LanguageWhitelist: []string{"fr", "it"},
@@ -197,8 +211,10 @@ func TestFromYAMLFile(t *testing.T) {
 					Concurrency: 4,
 					ProcessedWebArticleJobs: []config.FaktoryJob{
 						{
-							JobType: "TextClassifier",
-							Queue:   "text_classifier",
+							JobType:    "TextClassifier",
+							Queue:      "text_classifier",
+							ReserveFor: 600,
+							Retry:      25,
 						},
 					},
 					SpagoBARTServer: config.GRPCServer{
@@ -212,8 +228,10 @@ func TestFromYAMLFile(t *testing.T) {
 					Concurrency: 4,
 					ProcessedWebArticleJobs: []config.FaktoryJob{
 						{
-							JobType: "GeoParser",
-							Queue:   "geo_parser",
+							JobType:    "GeoParser",
+							Queue:      "geo_parser",
+							ReserveFor: 600,
+							Retry:      25,
 						},
 					},
 					ClassifierServer: config.GRPCServer{
@@ -227,8 +245,10 @@ func TestFromYAMLFile(t *testing.T) {
 					Concurrency: 4,
 					ProcessedWebArticleJobs: []config.FaktoryJob{
 						{
-							JobType: "Vectorizer",
-							Queue:   "vectorizer",
+							JobType:    "Vectorizer",
+							Queue:      "vectorizer",
+							ReserveFor: 600,
+							Retry:      25,
 						},
 					},
 					CliffURI: "http://127.0.0.1:4003",
@@ -239,8 +259,10 @@ func TestFromYAMLFile(t *testing.T) {
 					Concurrency: 4,
 					VectorizedWebArticleJobs: []config.FaktoryJob{
 						{
-							JobType: "DuplicateDetector",
-							Queue:   "duplicate_detector",
+							JobType:    "DuplicateDetector",
+							Queue:      "duplicate_detector",
+							ReserveFor: 600,
+							Retry:      25,
 						},
 					},
 					SpagoBERTServer: config.GRPCServer{
@@ -255,8 +277,10 @@ func TestFromYAMLFile(t *testing.T) {
 					DistanceThreshold: 0.3,
 					NonDuplicateWebArticleJobs: []config.FaktoryJob{
 						{
-							JobType: "InformationExtractor",
-							Queue:   "information_extractor",
+							JobType:    "InformationExtractor",
+							Queue:      "information_extractor",
+							ReserveFor: 600,
+							Retry:      25,
 						},
 					},
 					DuplicateWebArticleJobs: []config.FaktoryJob{},
