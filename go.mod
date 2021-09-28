@@ -14,7 +14,7 @@ require (
 	github.com/abadojack/whatlanggo v1.0.1
 	github.com/advancedlogic/GoOse v0.0.0-20210820140952-9d5822d4a625
 	github.com/araddon/dateparse v0.0.0-20210429162001-6b43995a97de // indirect
-	github.com/contribsys/faktory v1.5.2
+	github.com/contribsys/faktory v1.5.4
 	github.com/contribsys/faktory_worker_go v1.5.0
 	github.com/go-resty/resty/v2 v2.6.0 // indirect
 	github.com/grpc-ecosystem/grpc-gateway/v2 v2.6.0
