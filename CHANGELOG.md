@@ -9,6 +9,10 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Allow setting reservation timeout and number of retries for each Faktory job
   from configuration.
 
+### Changed
+- Use the WebArticle translated title, when available, as preferred text data
+  source in text-classifier, vectorizer, and zero-shot-classifier workers. 
+
 ## [1.0.0-alpha] - 2021-09-26
 ### Changed
 - The whole project has been completely rewritten. Most notably, the simplistic

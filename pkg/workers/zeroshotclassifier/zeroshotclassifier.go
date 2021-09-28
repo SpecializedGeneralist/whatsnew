@@ -99,6 +99,10 @@ func (zsc *ZeroShotClassifier) processWebArticle(
 	}
 
 	title := strings.TrimSpace(wa.Title)
+	if wa.TranslatedTitle.Valid {
+		title = strings.TrimSpace(wa.TranslatedTitle.String)
+	}
+
 	if len(title) == 0 {
 		logger.Debug().Msg("empty title - web article skipped")
 		return nil
