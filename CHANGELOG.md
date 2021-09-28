@@ -12,6 +12,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ### Changed
 - Use the WebArticle translated title, when available, as preferred text data
   source in text-classifier, vectorizer, and zero-shot-classifier workers. 
+- Upgrade dependencies.
 
 ## [1.0.0-alpha] - 2021-09-26
 ### Changed

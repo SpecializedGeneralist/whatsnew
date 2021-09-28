@@ -9,7 +9,7 @@ go 1.17
 require (
 	github.com/PuerkitoBio/goquery v1.7.1 // indirect
 	github.com/SpecializedGeneralist/gdelt v0.3.0
-	github.com/SpecializedGeneralist/hnsw-grpc-server v1.0.0
+	github.com/SpecializedGeneralist/hnsw-grpc-server v1.1.0
 	github.com/SpecializedGeneralist/translator v0.0.0-20210830140609-8eb1a3cba7da
 	github.com/abadojack/whatlanggo v1.0.1
 	github.com/advancedlogic/GoOse v0.0.0-20210820140952-9d5822d4a625
@@ -33,15 +33,15 @@ require (
 	github.com/rs/zerolog v1.25.0
 	github.com/stretchr/testify v1.7.0
 	golang.org/x/crypto v0.0.0-20210921155107-089bfa567519 // indirect
-	golang.org/x/net v0.0.0-20210924151903-3ad01bbaa167
-	golang.org/x/sys v0.0.0-20210925032602-92d5a993a665 // indirect
+	golang.org/x/net v0.0.0-20210928044308-7d9f5e0b762b
+	golang.org/x/sys v0.0.0-20210927094055-39ccf1dd6fa6 // indirect
 	golang.org/x/text v0.3.7
-	google.golang.org/genproto v0.0.0-20210924002016-3dee208752a0
+	google.golang.org/genproto v0.0.0-20210928142010-c7af6a1a74c9
 	google.golang.org/grpc v1.41.0
 	google.golang.org/protobuf v1.27.1
 	gopkg.in/yaml.v3 v3.0.0-20210107192922-496545a6307b
 	gorm.io/datatypes v1.0.2
-	gorm.io/driver/postgres v1.1.1
+	gorm.io/driver/postgres v1.1.2
 	gorm.io/gorm v1.21.15
 )
 
