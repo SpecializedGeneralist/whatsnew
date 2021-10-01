@@ -11,12 +11,23 @@ import (
 	"fmt"
 	"github.com/SpecializedGeneralist/whatsnew/pkg/config"
 	"google.golang.org/grpc"
+	"google.golang.org/grpc/balancer/roundrobin"
 	"google.golang.org/grpc/credentials"
+	"google.golang.org/grpc/resolver"
 	"time"
 )
 
+func init() {
+	// DNS scheme is important for client-side round-robin load balancing.
+	resolver.SetDefaultScheme("dns")
+}
+
+var loadBalancingConfig = fmt.Sprintf(`{ "loadBalancingConfig": [{"%v": {}}] }`, roundrobin.Name)
+
 // Dial creates a client connection to the configured target, also respecting
 // the given TLS configuration.
+//
+// The connection is set up enabling client-side round-robin DNS load balancing.
 //
 // This function blocks until the underlying connection is up, within a
 // timeout of 30 seconds.
@@ -24,7 +35,10 @@ func Dial(ctx context.Context, conf config.GRPCServer) (*grpc.ClientConn, error)
 	ctxTO, cancel := context.WithTimeout(ctx, 30*time.Second)
 	defer cancel()
 
-	opts := []grpc.DialOption{grpc.WithBlock()}
+	opts := []grpc.DialOption{
+		grpc.WithBlock(),
+		grpc.WithDefaultServiceConfig(loadBalancingConfig),
+	}
 	if conf.TLSEnabled {
 		creds := credentials.NewTLS(&tls.Config{InsecureSkipVerify: true})
 		opts = append(opts, grpc.WithTransportCredentials(creds))
