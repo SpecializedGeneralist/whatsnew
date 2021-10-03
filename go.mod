@@ -26,17 +26,17 @@ require (
 	github.com/mattn/go-runewidth v0.0.13 // indirect
 	github.com/mmcdole/gofeed v1.1.3
 	github.com/mmcdole/goxpp v0.0.0-20200921145534-2f3784f67354 // indirect
-	github.com/n0madic/twitter-scraper v0.0.0-20210913143630-43a6fa96a592
+	github.com/n0madic/twitter-scraper v0.0.0-20210930145550-288746406a26
 	github.com/nlpodyssey/spago v0.7.0
 	github.com/olekukonko/tablewriter v0.0.5 // indirect
 	github.com/rs/cors v1.8.0
 	github.com/rs/zerolog v1.25.0
 	github.com/stretchr/testify v1.7.0
 	golang.org/x/crypto v0.0.0-20210921155107-089bfa567519 // indirect
-	golang.org/x/net v0.0.0-20210928044308-7d9f5e0b762b
-	golang.org/x/sys v0.0.0-20210927094055-39ccf1dd6fa6 // indirect
+	golang.org/x/net v0.0.0-20210929193557-e81a3d93ecf6
+	golang.org/x/sys v0.0.0-20211003122950-b1ebd4e1001c // indirect
 	golang.org/x/text v0.3.7
-	google.golang.org/genproto v0.0.0-20210928142010-c7af6a1a74c9
+	google.golang.org/genproto v0.0.0-20211001223012-bfb93cce50d9
 	google.golang.org/grpc v1.41.0
 	google.golang.org/protobuf v1.27.1
 	gopkg.in/yaml.v3 v3.0.0-20210107192922-496545a6307b
