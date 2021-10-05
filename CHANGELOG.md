@@ -8,6 +8,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ### Changed
 - Move `cmd/whatsnew.go` to the project's root path, so that the tool can be
   installed more easily with `go install` command.
+- Use `golang:1.17.1-alpine3.14` as base Builder image in the Dockerfile.
 - Upgrade dependencies.
 
 ## [1.0.0-alpha.2] - 2021-10-01

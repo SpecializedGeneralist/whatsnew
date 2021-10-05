@@ -2,7 +2,7 @@
 # Use of this source code is governed by a BSD-style
 # license that can be found in the LICENSE file.
 
-FROM golang:1.17.0-alpine3.14 as Builder
+FROM golang:1.17.1-alpine3.14 as Builder
 
 WORKDIR /go/src/whatsnew
 COPY . .
