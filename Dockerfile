@@ -11,7 +11,7 @@ RUN go mod download \
     && go build \
         -ldflags="-extldflags=-static" \
         -o /go/bin/whatsnew \
-        cmd/whatsnew.go
+        whatsnew.go
 
 FROM alpine:3.14.2
 
