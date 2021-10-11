@@ -1,0 +1,170 @@
+version: '3.9'
+
+volumes:
+  faktory:
+  postgres:
+  hnsw:
+  spago:
+
+services:
+  faktory:
+    restart: 'unless-stopped'
+    image: 'contribsys/faktory:1.5.4'
+    ports:
+      - '7420:7420'
+    volumes: ['faktory:/var/lib/faktory']
+    environment:
+      # Just for illustration purposes. Always use strong passwords!
+      FAKTORY_PASSWORD: 'faktory_password'
+    command: '/faktory -b :7419 -w :7420 -e production'
+
+  postgres:
+    restart: 'unless-stopped'
+    image: 'postgres:14.0-alpine3.14'
+    volumes: ['postgres:/var/lib/postgresql/data']
+    environment:
+      # Just for illustration purposes. Always use strong passwords!
+      POSTGRES_PASSWORD: 'postgres_password'
+
+  hnsw-server:
+    restart: 'unless-stopped'
+    image: 'specializedgeneralist/hnsw-grpc-server:1.1.0'
+    volumes: ['hnsw:/hnsw-grpc-server-data']
+
+  spago-distilbart: # used for zero-shot classification
+    restart: 'unless-stopped'
+    image: 'nlpodyssey/spago:0.7.0'
+    volumes: ['spago:/models']
+    command:
+      - 'bart-server'
+      - 'server'
+      - '--address=0.0.0.0:8081'
+      - '--grpc-address=0.0.0.0:8080'
+      - '--repo=/models'
+      - '--model=valhalla/distilbart-mnli-12-9'
+      - '--tls-disable=true'
+
+  spago-labse: # used for vectorization
+    restart: 'unless-stopped'
+    image: 'nlpodyssey/spago:0.7.0'
+    volumes: ['spago:/models']
+    command:
+      - 'bert-server'
+      - 'server'
+      - '--address=0.0.0.0:8081'
+      - '--grpc-address=0.0.0.0:8080'
+      - '--repo=/models'
+      - '--model=pvl/labse_bert'
+      - '--tls-disable=true'
+
+  spago-qa: # used for information extraction (QA means Question-Answering)
+    restart: 'unless-stopped'
+    image: 'nlpodyssey/spago:0.7.0'
+    volumes: ['spago:/models']
+    command:
+      - 'bert-server'
+      - 'server'
+      - '--address=0.0.0.0:8081'
+      - '--grpc-address=0.0.0.0:8080'
+      - '--repo=/models'
+      - '--model=deepset/bert-base-cased-squad2'
+      - '--tls-disable=true'
+
+  translator:
+    restart: 'unless-stopped'
+    image: 'specializedgeneralist/translator:0.1-alpha'
+    volumes:
+      - './config:/config'
+      - 'spago:/models'
+    command: '-c /config/translator-config.yml'
+
+  cliff: # geo-parsing
+    restart: 'unless-stopped'
+    image: 'rahulbot/cliff-clavin:latest'
+
+  # Note: you might want to add a service for your custom text classifier.
+
+  task-jobs-recoverer:
+    restart: 'unless-stopped'
+    image: 'specializedgeneralist/whatsnew:1.0.0-alpha.2'
+    volumes: ['./config:/config']
+    command: '-config=/config/whatsnew-config.yml recover-jobs'
+
+  task-feed-scheduler:
+    restart: 'unless-stopped'
+    image: 'specializedgeneralist/whatsnew:1.0.0-alpha.2'
+    volumes: ['./config:/config']
+    command: '-config=/config/whatsnew-config.yml schedule-feeds'
+
+  task-twitter-scheduler:
+    restart: 'unless-stopped'
+    image: 'specializedgeneralist/whatsnew:1.0.0-alpha.2'
+    volumes: ['./config:/config']
+    command: '-config=/config/whatsnew-config.yml schedule-twitter'
+
+  task-gdelt-fetcher:
+    restart: 'unless-stopped'
+    image: 'specializedgeneralist/whatsnew:1.0.0-alpha.2'
+    volumes: ['./config:/config']
+    command: '-config=/config/whatsnew-config.yml fetch-gdelt'
+
+  worker-feed-fetcher:
+    restart: 'unless-stopped'
+    image: 'specializedgeneralist/whatsnew:1.0.0-alpha.2'
+    volumes: ['./config:/config']
+    command: '-config=/config/whatsnew-config.yml fetch-feeds'
+
+  worker-twitter-scraper:
+    restart: 'unless-stopped'
+    image: 'specializedgeneralist/whatsnew:1.0.0-alpha.2'
+    volumes: ['./config:/config']
+    command: '-config=/config/whatsnew-config.yml scrape-twitter'
+
+  worker-web-scraper:
+    restart: 'unless-stopped'
+    image: 'specializedgeneralist/whatsnew:1.0.0-alpha.2'
+    volumes: ['./config:/config']
+    command: '-config=/config/whatsnew-config.yml scrape-web'
+
+  worker-translator:
+    restart: 'unless-stopped'
+    image: 'specializedgeneralist/whatsnew:1.0.0-alpha.2'
+    volumes: ['./config:/config']
+    command: '-config=/config/whatsnew-config.yml translate'
+
+  worker-zero-shot-classifier:
+    restart: 'unless-stopped'
+    image: 'specializedgeneralist/whatsnew:1.0.0-alpha.2'
+    volumes: ['./config:/config']
+    command: '-config=/config/whatsnew-config.yml zero-shot-classify'
+
+  # Note: you should remove this service if you don't have a custom text classifier.
+  worker-text-classifier:
+    restart: 'unless-stopped'
+    image: 'specializedgeneralist/whatsnew:1.0.0-alpha.2'
+    volumes: ['./config:/config']
+    command: '-config=/config/whatsnew-config.yml classify-text'
+
+  worker-geo-parser:
+    restart: 'unless-stopped'
+    image: 'specializedgeneralist/whatsnew:1.0.0-alpha.2'
+    volumes: ['./config:/config']
+    command: '-config=/config/whatsnew-config.yml parse-geo'
+
+  worker-vectorizer:
+    restart: 'unless-stopped'
+    image: 'specializedgeneralist/whatsnew:1.0.0-alpha.2'
+    volumes: ['./config:/config']
+    command: '-config=/config/whatsnew-config.yml vectorize'
+
+  worker-duplicate-detector:
+    restart: 'unless-stopped'
+    image: 'specializedgeneralist/whatsnew:1.0.0-alpha.2'
+    volumes: ['./config:/config']
+    command: '-config=/config/whatsnew-config.yml detect-duplicates'
+
+  worker-information-extractor:
+    restart: 'unless-stopped'
+    image: 'specializedgeneralist/whatsnew:1.0.0-alpha.2'
+    volumes: ['./config:/config']
+    command: '-config=/config/whatsnew-config.yml extract-information'

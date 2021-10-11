@@ -1,0 +1,184 @@
+db:
+  dsn: 'host=postgres port=5432 user=postgres password=postgres_password sslmode=disable statement_cache_mode=describe'
+  dbname: 'whatsnew'
+  loglevel: 'warn'
+faktory:
+  url: 'tcp://faktory:faktory_password@faktory:7419'
+  loglevel: 'info'
+hnsw:
+  server:
+    target: 'hnsw-server:19530'
+    tls_enabled: false
+  index:
+    name_prefix: 'whatsnew_'
+    dim: 768
+    ef_construction: 200
+    m: 48
+    max_elements: 100000
+    seed: 42
+    space_type: 'COSINE'
+server:
+  address: '0.0.0.0:10000'
+  tls_enabled: false
+  tls_cert: ''
+  tls_key: ''
+  allowed_origins: ['*']
+  loglevel: 'info'
+tasks:
+  feed_scheduler:
+    time_interval: '5m'
+    jobs:
+      - job_type: 'FeedFetcher'
+        queue: 'feed_fetcher'
+        reserve_for: 300
+        retry: -1
+    loglevel: 'info'
+  twitter_scheduler:
+    time_interval: '5m'
+    jobs:
+      - job_type: 'TwitterScraper'
+        queue: 'twitter_scraper'
+        reserve_for: 300
+        retry: -1
+    loglevel: 'info'
+  gdelt_fetcher:
+    time_interval: '5m'
+    event_root_code_whitelist: [ ]
+    new_web_resource_jobs:
+      - job_type: 'WebScraper'
+        queue: 'web_scraper'
+        reserve_for: 600
+        retry: 5
+    loglevel: 'info'
+  jobs_recoverer:
+    time_interval: '1m'
+    leeway_time: '1m'
+    loglevel: 'info'
+workers:
+  feed_fetcher:
+    queues: ['feed_fetcher']
+    concurrency: 10
+    new_web_resource_jobs:
+      - job_type: 'WebScraper'
+        queue: 'web_scraper'
+        reserve_for: 600
+        retry: 5
+    max_allowed_failures: 15
+    omit_items_published_before:
+      enabled: true
+      time: '2021-10-01T00:00:00Z'
+    language_filter: ['en', 'es', 'fr', 'it']
+    loglevel: 'info'
+  twitter_scraper:
+    queues: ['twitter_scraper']
+    concurrency: 10
+    max_tweets_number: 1000
+    new_web_article_jobs:
+      - job_type: 'Translator'
+        queue: 'translator'
+        reserve_for: 600
+        retry: 25
+    omit_tweets_published_before:
+      enabled: true
+      time: '2021-10-01T00:00:00Z'
+    language_filter: ['en', 'es', 'fr', 'it']
+    loglevel: 'info'
+  web_scraper:
+    queues: ['web_scraper']
+    concurrency: 10
+    new_web_article_jobs:
+      - job_type: 'Translator'
+        queue: 'translator'
+        reserve_for: 600
+        retry: 25
+    language_filter: ['en', 'es', 'fr', 'it']
+    request_timeout: '30s'
+    user_agent: 'WhatsNew/1.0.0-alpha.2'
+    loglevel: 'info'
+  translator:
+    queues: ['translator']
+    concurrency: 4
+    translator_server:
+      target: 'translator:8080'
+      tls_enabled: false
+    processed_web_article_jobs:
+      - job_type: 'ZeroShotClassifier'
+        queue: 'zero_shot_classifier'
+        reserve_for: 600
+        retry: 25
+    language_whitelist: ['es', 'fr', 'it']
+    target_language: 'en'
+    loglevel: 'info'
+  zero_shot_classifier:
+    queues: ['zero_shot_classifier']
+    concurrency: 4
+    processed_web_article_jobs:
+      - job_type: 'TextClassifier'
+        queue: 'text_classifier'
+        reserve_for: 600
+        retry: 25
+      # Note: if you don't have a text classification service,
+      # you can push a GeoParser job instead, for example:
+      #- job_type: 'GeoParser'
+      #  queue: 'geo_parser'
+      #  reserve_for: 600
+      #  retry: 25
+    spago_bart_server:
+      target: 'spago-distilbart:8080'
+      tls_enabled: false
+    loglevel: 'info'
+  text_classifier:
+    queues: ['text_classifier']
+    concurrency: 4
+    processed_web_article_jobs:
+      - job_type: 'GeoParser'
+        queue: 'geo_parser'
+        reserve_for: 600
+        retry: 25
+    classifier_server:
+      # Note: configure here your classifier server endpoint, otherwise
+      # you can ignore the whole section (see also the other note above).
+      target: ...
+      tls_enabled: false
+    loglevel: 'info'
+  geo_parser:
+    queues: ['geo_parser']
+    concurrency: 4
+    processed_web_article_jobs:
+      - job_type: 'Vectorizer'
+        queue: 'vectorizer'
+        reserve_for: 600
+        retry: 25
+    cliff_uri: 'http://cliff:8080'
+    loglevel: 'info'
+  vectorizer:
+    queues: ['vectorizer']
+    concurrency: 4
+    vectorized_web_article_jobs:
+      - job_type: 'DuplicateDetector'
+        queue: 'duplicate_detector'
+        reserve_for: 600
+        retry: 25
+    spago_bert_server:
+      target: 'spago-labse:8080'
+      tls_enabled: false
+    loglevel: 'info'
+  duplicate_detector:
+    queues: ['duplicate_detector']
+    timeframe_days: 3
+    distance_threshold: 0.3
+    non_duplicate_web_article_jobs:
+      - job_type: 'InformationExtractor'
+        queue: 'information_extractor'
+        reserve_for: 600
+        retry: 25
+    duplicate_web_article_jobs: []
+    loglevel: 'info'
+  information_extractor:
+    queues: ['information_extractor']
+    concurrency: 4
+    spago_bert_server:
+      target: 'spago-qa:8080'
+      tls_enabled: false
+    processed_web_article_jobs: []
+    loglevel: 'info'
