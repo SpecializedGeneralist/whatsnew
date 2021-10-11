@@ -5,6 +5,8 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
 ## [Unreleased]
+
+## [1.0.0-alpha.3] - 2021-10-12
 ### Added
 - Add documentation to the README.
 - AUTHORS.md
@@ -82,8 +84,10 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ## [0.1.0] - 2021-01-25
 First versioned release, ready to be tested.
 
-[Unreleased]: https://github.com/SpecializedGeneralist/whatsnew/compare/v1.0.0-alpha.1...HEAD
-[1.0.0-alpha.1]: https://github.com/SpecializedGeneralist/whatsnew/compare/v1.0.0-alpha...1.0.0-alpha.1
+[Unreleased]: https://github.com/SpecializedGeneralist/whatsnew/compare/v1.0.0-alpha.3...HEAD
+[1.0.0-alpha.3]: https://github.com/SpecializedGeneralist/whatsnew/compare/v1.0.0-alpha.2...v1.0.0-alpha.3
+[1.0.0-alpha.2]: https://github.com/SpecializedGeneralist/whatsnew/compare/v1.0.0-alpha.1...v1.0.0-alpha.2
+[1.0.0-alpha.1]: https://github.com/SpecializedGeneralist/whatsnew/compare/v1.0.0-alpha...v1.0.0-alpha.1
 [1.0.0-alpha]: https://github.com/SpecializedGeneralist/whatsnew/compare/v0.5.0...v1.0.0-alpha
 [0.5.0]: https://github.com/SpecializedGeneralist/whatsnew/compare/v0.4.0...v0.5.0
 [0.4.0]: https://github.com/SpecializedGeneralist/whatsnew/compare/v0.3.3...v0.4.0
