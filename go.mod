@@ -26,23 +26,23 @@ require (
 	github.com/mattn/go-runewidth v0.0.13 // indirect
 	github.com/mmcdole/gofeed v1.1.3
 	github.com/mmcdole/goxpp v0.0.0-20200921145534-2f3784f67354 // indirect
-	github.com/n0madic/twitter-scraper v0.0.0-20210930145550-288746406a26
+	github.com/n0madic/twitter-scraper v0.0.0-20211010133619-3848bb253911
 	github.com/nlpodyssey/spago v0.7.0
 	github.com/olekukonko/tablewriter v0.0.5 // indirect
 	github.com/rs/cors v1.8.0
 	github.com/rs/zerolog v1.25.0
 	github.com/stretchr/testify v1.7.0
 	golang.org/x/crypto v0.0.0-20210921155107-089bfa567519 // indirect
-	golang.org/x/net v0.0.0-20210929193557-e81a3d93ecf6
-	golang.org/x/sys v0.0.0-20211003122950-b1ebd4e1001c // indirect
+	golang.org/x/net v0.0.0-20211011170408-caeb26a5c8c0
+	golang.org/x/sys v0.0.0-20211007075335-d3039528d8ac // indirect
 	golang.org/x/text v0.3.7
-	google.golang.org/genproto v0.0.0-20211001223012-bfb93cce50d9
+	google.golang.org/genproto v0.0.0-20211011165927-a5fb3255271e
 	google.golang.org/grpc v1.41.0
 	google.golang.org/protobuf v1.27.1
 	gopkg.in/yaml.v3 v3.0.0-20210107192922-496545a6307b
 	gorm.io/datatypes v1.0.2
 	gorm.io/driver/postgres v1.1.2
-	gorm.io/gorm v1.21.15
+	gorm.io/gorm v1.21.16
 )
 
 require (
