@@ -5,6 +5,10 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
 ## [Unreleased]
+### Changed
+- Avoid long-living gRPC connections moving the dialing from commands
+  initialization to workers (see commit a61fcbc7a42955dfdffb65feb020f456588fab56
+  for details).
 
 ## [1.0.0-alpha.3] - 2021-10-12
 ### Added
