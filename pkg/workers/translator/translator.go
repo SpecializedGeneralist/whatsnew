@@ -10,6 +10,7 @@ import (
 	"fmt"
 	translatorapi "github.com/SpecializedGeneralist/translator/pkg/api"
 	"github.com/SpecializedGeneralist/whatsnew/pkg/config"
+	"github.com/SpecializedGeneralist/whatsnew/pkg/grpcconn"
 	"github.com/SpecializedGeneralist/whatsnew/pkg/jobscheduler"
 	"github.com/SpecializedGeneralist/whatsnew/pkg/models"
 	"github.com/SpecializedGeneralist/whatsnew/pkg/sets"
@@ -17,7 +18,6 @@ import (
 	"github.com/contribsys/faktory_worker_go"
 	"github.com/rs/zerolog"
 	"github.com/rs/zerolog/log"
-	"google.golang.org/grpc"
 	"gorm.io/gorm"
 	"gorm.io/gorm/clause"
 	"strings"
@@ -29,15 +29,13 @@ type Translator struct {
 	basemodelworker.Worker
 	conf              config.Translator
 	languageWhitelist sets.StringSet
-	translatorClient  translatorapi.ApiClient
 }
 
 // New creates a new Translator.
-func New(conf config.Translator, db *gorm.DB, translatorConn *grpc.ClientConn, fk *faktory_worker.Manager) *Translator {
+func New(conf config.Translator, db *gorm.DB, fk *faktory_worker.Manager) *Translator {
 	t := &Translator{
 		conf:              conf,
 		languageWhitelist: sets.NewStringSetWithElements(conf.LanguageWhitelist...),
-		translatorClient:  translatorapi.NewApiClient(translatorConn),
 	}
 
 	t.Worker = basemodelworker.Worker{
@@ -114,7 +112,18 @@ func (t *Translator) processWebArticle(
 }
 
 func (t *Translator) translateTitle(ctx context.Context, tx *gorm.DB, wa *models.WebArticle, title string) error {
-	resp, err := t.translatorClient.TranslateText(ctx, &translatorapi.TranslateTextRequest{
+	translatorConn, err := grpcconn.Dial(ctx, t.conf.TranslatorServer)
+	if err != nil {
+		return err
+	}
+	defer func() {
+		if err := translatorConn.Close(); err != nil {
+			t.Log.Err(err).Msg("error closing translator connection")
+		}
+	}()
+	translatorClient := translatorapi.NewApiClient(translatorConn)
+
+	resp, err := translatorClient.TranslateText(ctx, &translatorapi.TranslateTextRequest{
 		TranslateTextInput: &translatorapi.TranslateTextInput{
 			SourceLanguage: wa.Language,
 			TargetLanguage: t.conf.TargetLanguage,

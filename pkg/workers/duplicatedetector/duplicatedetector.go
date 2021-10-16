@@ -8,6 +8,7 @@ import (
 	"context"
 	"fmt"
 	"github.com/SpecializedGeneralist/whatsnew/pkg/config"
+	"github.com/SpecializedGeneralist/whatsnew/pkg/grpcconn"
 	"github.com/SpecializedGeneralist/whatsnew/pkg/hnswclient"
 	"github.com/SpecializedGeneralist/whatsnew/pkg/jobscheduler"
 	"github.com/SpecializedGeneralist/whatsnew/pkg/models"
@@ -29,8 +30,8 @@ type DuplicateDetector struct {
 	// The default value is DefaultSelectTopHit.
 	SelectTopHit SelectTopHitFn
 	basemodelworker.Worker
-	conf       config.DuplicateDetector
-	hnswClient *hnswclient.Client
+	conf     config.DuplicateDetector
+	hnswConf config.HNSW
 }
 
 // SelectTopHitFn is a function type for selecting the top similar
@@ -66,14 +67,14 @@ const day = 24 * time.Hour
 // New creates a new WebScraper.
 func New(
 	conf config.DuplicateDetector,
+	hnswConf config.HNSW,
 	db *gorm.DB,
-	hnswClient *hnswclient.Client,
 	fk *faktory_worker.Manager,
 ) *DuplicateDetector {
 	v := &DuplicateDetector{
 		SelectTopHit: DefaultSelectTopHit,
 		conf:         conf,
-		hnswClient:   hnswClient,
+		hnswConf:     hnswConf,
 	}
 	v.Worker = basemodelworker.Worker{
 		Name:        "DuplicateDetector",
@@ -175,7 +176,18 @@ func (dd *DuplicateDetector) findSimilarHit(
 		return nil, err
 	}
 
-	hits, err := dd.hnswClient.SearchKNN(ctx, hnswclient.SearchParams{
+	hnswConn, err := grpcconn.Dial(ctx, dd.hnswConf.Server)
+	if err != nil {
+		return nil, err
+	}
+	defer func() {
+		if err := hnswConn.Close(); err != nil {
+			dd.Log.Err(err).Msg("error closing HNSW connection")
+		}
+	}()
+	hnswClient := hnswclient.New(hnswConn, dd.hnswConf.Index)
+
+	hits, err := hnswClient.SearchKNN(ctx, hnswclient.SearchParams{
 		From:              wa.PublishDate.Add(-time.Duration(dd.conf.TimeframeDays) * day),
 		To:                wa.PublishDate,
 		Vector:            vector,

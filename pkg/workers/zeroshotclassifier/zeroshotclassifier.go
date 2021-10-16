@@ -8,6 +8,7 @@ import (
 	"context"
 	"fmt"
 	"github.com/SpecializedGeneralist/whatsnew/pkg/config"
+	"github.com/SpecializedGeneralist/whatsnew/pkg/grpcconn"
 	"github.com/SpecializedGeneralist/whatsnew/pkg/jobscheduler"
 	"github.com/SpecializedGeneralist/whatsnew/pkg/models"
 	"github.com/SpecializedGeneralist/whatsnew/pkg/workers/basemodelworker"
@@ -15,7 +16,6 @@ import (
 	"github.com/nlpodyssey/spago/pkg/nlp/transformers/bart/server/grpcapi"
 	"github.com/rs/zerolog"
 	"github.com/rs/zerolog/log"
-	"google.golang.org/grpc"
 	"gorm.io/gorm"
 	"gorm.io/gorm/clause"
 	"strings"
@@ -25,20 +25,17 @@ import (
 // WebArticles with spaGO BART zero-shot classification service.
 type ZeroShotClassifier struct {
 	basemodelworker.Worker
-	conf       config.ZeroShotClassifier
-	bartClient grpcapi.BARTClient
+	conf config.ZeroShotClassifier
 }
 
 // New creates a new ZeroShotClassifier.
 func New(
 	conf config.ZeroShotClassifier,
 	db *gorm.DB,
-	bartConn *grpc.ClientConn,
 	fk *faktory_worker.Manager,
 ) *ZeroShotClassifier {
 	zsc := &ZeroShotClassifier{
-		conf:       conf,
-		bartClient: grpcapi.NewBARTClient(bartConn),
+		conf: conf,
 	}
 
 	zsc.Worker = basemodelworker.Worker{
@@ -152,6 +149,17 @@ func (zsc *ZeroShotClassifier) classify(
 		return nil, nil
 	}
 
+	bartConn, err := grpcconn.Dial(ctx, zsc.conf.SpagoBARTServer)
+	if err != nil {
+		return nil, err
+	}
+	defer func() {
+		if err := bartConn.Close(); err != nil {
+			zsc.Log.Err(err).Msg("error closing BART connection")
+		}
+	}()
+	bartClient := grpcapi.NewBARTClient(bartConn)
+
 	possibleLabels := make([]string, len(template.Labels))
 	labelToID := make(map[string]uint, len(template.Labels))
 	for i, l := range template.Labels {
@@ -162,7 +170,7 @@ func (zsc *ZeroShotClassifier) classify(
 		labelToID[l.Text] = l.ID
 	}
 
-	reply, err := zsc.bartClient.ClassifyNLI(ctx, &grpcapi.ClassifyNLIRequest{
+	reply, err := bartClient.ClassifyNLI(ctx, &grpcapi.ClassifyNLIRequest{
 		Text:               text,
 		HypothesisTemplate: template.Text,
 		PossibleLabels:     possibleLabels,

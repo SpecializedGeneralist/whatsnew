@@ -9,8 +9,6 @@ import (
 	"github.com/SpecializedGeneralist/whatsnew/pkg/cli/command"
 	"github.com/SpecializedGeneralist/whatsnew/pkg/config"
 	"github.com/SpecializedGeneralist/whatsnew/pkg/database"
-	"github.com/SpecializedGeneralist/whatsnew/pkg/grpcconn"
-	"github.com/SpecializedGeneralist/whatsnew/pkg/hnswclient"
 	"github.com/SpecializedGeneralist/whatsnew/pkg/workers"
 	"github.com/SpecializedGeneralist/whatsnew/pkg/workers/duplicatedetector"
 )
@@ -28,7 +26,7 @@ detection over existing WebArticles.
 }
 
 // Run runs the command "whatsnew detect-duplicates".
-func Run(ctx context.Context, conf *config.Config, args []string) error {
+func Run(_ context.Context, conf *config.Config, args []string) error {
 	if len(args) != 0 {
 		return command.ErrInvalidArguments
 	}
@@ -43,19 +41,12 @@ func Run(ctx context.Context, conf *config.Config, args []string) error {
 		}
 	}()
 
-	hnswConn, err := grpcconn.Dial(ctx, conf.HNSW.Server)
-	if err != nil {
-		return err
-	}
-
-	hnswClient := hnswclient.New(hnswConn, conf.HNSW.Index)
-
 	fk, err := workers.NewManager(conf.Faktory)
 	if err != nil {
 		return err
 	}
 
-	dd := duplicatedetector.New(conf.Workers.DuplicateDetector, db, hnswClient, fk)
+	dd := duplicatedetector.New(conf.Workers.DuplicateDetector, conf.HNSW, db, fk)
 	dd.Run()
 
 	return nil

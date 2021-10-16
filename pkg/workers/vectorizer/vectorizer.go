@@ -8,6 +8,7 @@ import (
 	"context"
 	"fmt"
 	"github.com/SpecializedGeneralist/whatsnew/pkg/config"
+	"github.com/SpecializedGeneralist/whatsnew/pkg/grpcconn"
 	"github.com/SpecializedGeneralist/whatsnew/pkg/hnswclient"
 	"github.com/SpecializedGeneralist/whatsnew/pkg/jobscheduler"
 	"github.com/SpecializedGeneralist/whatsnew/pkg/models"
@@ -18,7 +19,6 @@ import (
 	bertgrpcapi "github.com/nlpodyssey/spago/pkg/nlp/transformers/bert/grpcapi"
 	"github.com/rs/zerolog"
 	"github.com/rs/zerolog/log"
-	"google.golang.org/grpc"
 	"gorm.io/gorm"
 	"gorm.io/gorm/clause"
 	"strings"
@@ -28,23 +28,21 @@ import (
 // representation of WebArticles' titles.
 type Vectorizer struct {
 	basemodelworker.Worker
-	conf       config.Vectorizer
-	bertClient bertgrpcapi.BERTClient
-	hnswClient *hnswclient.Client
+	conf     config.Vectorizer
+	hnswConf config.HNSW
+	bertgrpcapi.BERTClient
 }
 
 // New creates a new WebScraper.
 func New(
 	conf config.Vectorizer,
+	hnswConf config.HNSW,
 	db *gorm.DB,
-	bertConn *grpc.ClientConn,
-	hnswClient *hnswclient.Client,
 	fk *faktory_worker.Manager,
 ) *Vectorizer {
 	v := &Vectorizer{
-		conf:       conf,
-		bertClient: bertgrpcapi.NewBERTClient(bertConn),
-		hnswClient: hnswClient,
+		conf:     conf,
+		hnswConf: hnswConf,
 	}
 	v.Worker = basemodelworker.Worker{
 		Name:        "Vectorizer",
@@ -113,12 +111,23 @@ func (v *Vectorizer) processWebArticle(
 		return nil
 	}
 
+	hnswConn, err := grpcconn.Dial(ctx, v.hnswConf.Server)
+	if err != nil {
+		return err
+	}
+	defer func() {
+		if err := hnswConn.Close(); err != nil {
+			v.Log.Err(err).Msg("error closing HNSW connection")
+		}
+	}()
+	hnswClient := hnswclient.New(hnswConn, v.hnswConf.Index)
+
 	vector, err := v.vectorize(ctx, title)
 	if err != nil {
 		return err
 	}
 
-	err = v.hnswClient.Insert(ctx, wa.ID, wa.PublishDate, vector)
+	err = hnswClient.Insert(ctx, wa.ID, wa.PublishDate, vector)
 	if err != nil {
 		return err
 	}
@@ -147,8 +156,19 @@ func (v *Vectorizer) processWebArticle(
 // It simply calls the remote BERT Encode method to get a vector, which is
 // then normalized and returned.
 func (v *Vectorizer) vectorize(ctx context.Context, text string) ([]float32, error) {
+	bertConn, err := grpcconn.Dial(ctx, v.conf.SpagoBERTServer)
+	if err != nil {
+		return nil, err
+	}
+	defer func() {
+		if err := bertConn.Close(); err != nil {
+			v.Log.Err(err).Msg("error closing BERT connection")
+		}
+	}()
+	bertClient := bertgrpcapi.NewBERTClient(bertConn)
+
 	request := &bertgrpcapi.EncodeRequest{Text: text}
-	encoding, err := v.bertClient.Encode(ctx, request)
+	encoding, err := bertClient.Encode(ctx, request)
 	if err != nil {
 		return nil, fmt.Errorf("BERT encoding error: %w", err)
 	}

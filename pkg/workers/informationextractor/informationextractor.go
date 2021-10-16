@@ -8,6 +8,7 @@ import (
 	"context"
 	"fmt"
 	"github.com/SpecializedGeneralist/whatsnew/pkg/config"
+	"github.com/SpecializedGeneralist/whatsnew/pkg/grpcconn"
 	"github.com/SpecializedGeneralist/whatsnew/pkg/jobscheduler"
 	"github.com/SpecializedGeneralist/whatsnew/pkg/models"
 	"github.com/SpecializedGeneralist/whatsnew/pkg/workers/basemodelworker"
@@ -15,7 +16,6 @@ import (
 	bertgrpcapi "github.com/nlpodyssey/spago/pkg/nlp/transformers/bert/grpcapi"
 	"github.com/rs/zerolog"
 	"github.com/rs/zerolog/log"
-	"google.golang.org/grpc"
 	"gorm.io/gorm"
 	"gorm.io/gorm/clause"
 	"strings"
@@ -25,20 +25,17 @@ import (
 // from WebArticles using spaGO BERT Question Answering service.
 type InformationExtractor struct {
 	basemodelworker.Worker
-	conf       config.InformationExtractor
-	bertClient bertgrpcapi.BERTClient
+	conf config.InformationExtractor
 }
 
 // New creates a new InformationExtractor.
 func New(
 	conf config.InformationExtractor,
 	db *gorm.DB,
-	bertConn *grpc.ClientConn,
 	fk *faktory_worker.Manager,
 ) *InformationExtractor {
 	ie := &InformationExtractor{
-		conf:       conf,
-		bertClient: bertgrpcapi.NewBERTClient(bertConn),
+		conf: conf,
 	}
 
 	ie.Worker = basemodelworker.Worker{
@@ -178,7 +175,18 @@ func (ie *InformationExtractor) getBestAnswer(
 	passage,
 	question string,
 ) (*bertgrpcapi.Answer, error) {
-	reply, err := ie.bertClient.Answer(ctx, &bertgrpcapi.AnswerRequest{
+	bertConn, err := grpcconn.Dial(ctx, ie.conf.SpagoBERTServer)
+	if err != nil {
+		return nil, err
+	}
+	defer func() {
+		if err := bertConn.Close(); err != nil {
+			ie.Log.Err(err).Msg("error closing BERT connection")
+		}
+	}()
+	bertClient := bertgrpcapi.NewBERTClient(bertConn)
+
+	reply, err := bertClient.Answer(ctx, &bertgrpcapi.AnswerRequest{
 		Passage:  strings.ToLower(passage),
 		Question: strings.ToLower(question),
 	})

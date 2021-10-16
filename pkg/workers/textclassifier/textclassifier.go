@@ -8,6 +8,7 @@ import (
 	"context"
 	"fmt"
 	"github.com/SpecializedGeneralist/whatsnew/pkg/config"
+	"github.com/SpecializedGeneralist/whatsnew/pkg/grpcconn"
 	"github.com/SpecializedGeneralist/whatsnew/pkg/jobscheduler"
 	"github.com/SpecializedGeneralist/whatsnew/pkg/models"
 	"github.com/SpecializedGeneralist/whatsnew/pkg/textclassification"
@@ -15,7 +16,6 @@ import (
 	"github.com/contribsys/faktory_worker_go"
 	"github.com/rs/zerolog"
 	"github.com/rs/zerolog/log"
-	"google.golang.org/grpc"
 	"gorm.io/gorm"
 	"gorm.io/gorm/clause"
 	"strings"
@@ -31,7 +31,6 @@ type TextClassifier struct {
 	// The default value is DefaultShouldScheduleNextJobs.
 	ShouldScheduleNextJobs ShouldScheduleNextJobsFn
 	conf                   config.TextClassifier
-	classifierClient       textclassification.ClassifierClient
 }
 
 // ShouldScheduleNextJobsFn is a function which returns a boolean flag
@@ -58,13 +57,11 @@ type ShouldScheduleNextJobsFn func(tx *gorm.DB, wa *models.WebArticle) (bool, er
 func New(
 	conf config.TextClassifier,
 	db *gorm.DB,
-	classifierConn *grpc.ClientConn,
 	fk *faktory_worker.Manager,
 ) *TextClassifier {
 	tc := &TextClassifier{
 		conf:                   conf,
 		ShouldScheduleNextJobs: DefaultShouldScheduleNextJobs,
-		classifierClient:       textclassification.NewClassifierClient(classifierConn),
 	}
 
 	tc.Worker = basemodelworker.Worker{
@@ -134,8 +131,19 @@ func (tc *TextClassifier) processWebArticle(
 		return nil
 	}
 
+	classifierConn, err := grpcconn.Dial(ctx, tc.conf.ClassifierServer)
+	if err != nil {
+		return err
+	}
+	defer func() {
+		if err := classifierConn.Close(); err != nil {
+			tc.Log.Err(err).Msg("error closing classifier connection")
+		}
+	}()
+	classifierClient := textclassification.NewClassifierClient(classifierConn)
+
 	req := &textclassification.ClassifyTextRequest{Text: title}
-	reply, err := tc.classifierClient.ClassifyText(ctx, req)
+	reply, err := classifierClient.ClassifyText(ctx, req)
 	if err != nil {
 		return fmt.Errorf("ClassifyText request error: %w", err)
 	}

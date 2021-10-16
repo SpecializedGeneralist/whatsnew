@@ -9,7 +9,6 @@ import (
 	"github.com/SpecializedGeneralist/whatsnew/pkg/cli/command"
 	"github.com/SpecializedGeneralist/whatsnew/pkg/config"
 	"github.com/SpecializedGeneralist/whatsnew/pkg/database"
-	"github.com/SpecializedGeneralist/whatsnew/pkg/grpcconn"
 	"github.com/SpecializedGeneralist/whatsnew/pkg/workers"
 	"github.com/SpecializedGeneralist/whatsnew/pkg/workers/textclassifier"
 )
@@ -27,7 +26,7 @@ of existing WebArticles.
 }
 
 // Run runs the command "whatsnew classify-text".
-func Run(ctx context.Context, conf *config.Config, args []string) error {
+func Run(_ context.Context, conf *config.Config, args []string) error {
 	if len(args) != 0 {
 		return command.ErrInvalidArguments
 	}
@@ -42,17 +41,12 @@ func Run(ctx context.Context, conf *config.Config, args []string) error {
 		}
 	}()
 
-	classifierConn, err := grpcconn.Dial(ctx, conf.Workers.TextClassifier.ClassifierServer)
-	if err != nil {
-		return err
-	}
-
 	fk, err := workers.NewManager(conf.Faktory)
 	if err != nil {
 		return err
 	}
 
-	zsc := textclassifier.New(conf.Workers.TextClassifier, db, classifierConn, fk)
+	zsc := textclassifier.New(conf.Workers.TextClassifier, db, fk)
 	zsc.Run()
 
 	return nil

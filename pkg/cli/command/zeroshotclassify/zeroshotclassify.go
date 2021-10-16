@@ -9,7 +9,6 @@ import (
 	"github.com/SpecializedGeneralist/whatsnew/pkg/cli/command"
 	"github.com/SpecializedGeneralist/whatsnew/pkg/config"
 	"github.com/SpecializedGeneralist/whatsnew/pkg/database"
-	"github.com/SpecializedGeneralist/whatsnew/pkg/grpcconn"
 	"github.com/SpecializedGeneralist/whatsnew/pkg/workers"
 	"github.com/SpecializedGeneralist/whatsnew/pkg/workers/zeroshotclassifier"
 )
@@ -27,7 +26,7 @@ classification of existing WebArticles.
 }
 
 // Run runs the command "whatsnew zero-shot-classify".
-func Run(ctx context.Context, conf *config.Config, args []string) error {
+func Run(_ context.Context, conf *config.Config, args []string) error {
 	if len(args) != 0 {
 		return command.ErrInvalidArguments
 	}
@@ -42,17 +41,12 @@ func Run(ctx context.Context, conf *config.Config, args []string) error {
 		}
 	}()
 
-	bartConn, err := grpcconn.Dial(ctx, conf.Workers.ZeroShotClassifier.SpagoBARTServer)
-	if err != nil {
-		return err
-	}
-
 	fk, err := workers.NewManager(conf.Faktory)
 	if err != nil {
 		return err
 	}
 
-	zsc := zeroshotclassifier.New(conf.Workers.ZeroShotClassifier, db, bartConn, fk)
+	zsc := zeroshotclassifier.New(conf.Workers.ZeroShotClassifier, db, fk)
 	zsc.Run()
 
 	return nil

@@ -9,7 +9,6 @@ import (
 	"github.com/SpecializedGeneralist/whatsnew/pkg/cli/command"
 	"github.com/SpecializedGeneralist/whatsnew/pkg/config"
 	"github.com/SpecializedGeneralist/whatsnew/pkg/database"
-	"github.com/SpecializedGeneralist/whatsnew/pkg/grpcconn"
 	"github.com/SpecializedGeneralist/whatsnew/pkg/workers"
 	"github.com/SpecializedGeneralist/whatsnew/pkg/workers/informationextractor"
 )
@@ -28,7 +27,7 @@ Answering service.
 }
 
 // Run runs the command "whatsnew extract-information".
-func Run(ctx context.Context, conf *config.Config, args []string) error {
+func Run(_ context.Context, conf *config.Config, args []string) error {
 	if len(args) != 0 {
 		return command.ErrInvalidArguments
 	}
@@ -43,17 +42,12 @@ func Run(ctx context.Context, conf *config.Config, args []string) error {
 		}
 	}()
 
-	bertConn, err := grpcconn.Dial(ctx, conf.Workers.InformationExtractor.SpagoBERTServer)
-	if err != nil {
-		return err
-	}
-
 	fk, err := workers.NewManager(conf.Faktory)
 	if err != nil {
 		return err
 	}
 
-	ie := informationextractor.New(conf.Workers.InformationExtractor, db, bertConn, fk)
+	ie := informationextractor.New(conf.Workers.InformationExtractor, db, fk)
 	ie.Run()
 
 	return nil
