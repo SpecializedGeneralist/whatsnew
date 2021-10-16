@@ -192,6 +192,32 @@ func (c *Client) SearchKNN(ctx context.Context, params SearchParams) (Hits, erro
 	return hits, nil
 }
 
+// IndicesOlderThan returns a list of names of indices whose WebArticle's
+// publishing date is older than the given Time.
+func (c *Client) IndicesOlderThan(ctx context.Context, t time.Time) ([]string, error) {
+	err := c.fetchIndices(ctx)
+	if err != nil {
+		return nil, err
+	}
+
+	upperIndexName := c.dailyIndexName(t)
+	expectedLen := len(c.conf.NamePrefix) + len(indexNameTimeLayout)
+
+	indices := make([]string, 0, len(c.indicesCache))
+	for index := range c.indicesCache {
+		// Because of how the dates are formatted, we can simply compare
+		// the strings to get the older indices, without involving
+		// time parsing.
+		if len(index) == expectedLen &&
+			strings.HasPrefix(index, c.conf.NamePrefix) &&
+			index < upperIndexName {
+			indices = append(indices, index)
+		}
+	}
+
+	return indices, nil
+}
+
 func (c *Client) dailyIndexNameRange(from, to time.Time) []string {
 	first := from.UTC().Truncate(day)
 	last := to.UTC().Truncate(day)
