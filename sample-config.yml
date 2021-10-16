@@ -97,7 +97,7 @@ workers:
         retry: 25
     language_filter: ['en', 'es', 'fr', 'it']
     request_timeout: '30s'
-    user_agent: 'WhatsNew/0.0.0'
+    user_agent: 'WhatsNew/1.0.0-beta'
     loglevel: 'info'
   translator:
     queues: ['translator']

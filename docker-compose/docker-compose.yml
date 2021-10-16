@@ -86,85 +86,85 @@ services:
 
   task-jobs-recoverer:
     restart: 'unless-stopped'
-    image: 'specializedgeneralist/whatsnew:1.0.0-alpha.3'
+    image: 'specializedgeneralist/whatsnew:1.0.0-beta'
     volumes: ['./config:/config']
     command: '-config=/config/whatsnew-config.yml recover-jobs'
 
   task-feed-scheduler:
     restart: 'unless-stopped'
-    image: 'specializedgeneralist/whatsnew:1.0.0-alpha.3'
+    image: 'specializedgeneralist/whatsnew:1.0.0-beta'
     volumes: ['./config:/config']
     command: '-config=/config/whatsnew-config.yml schedule-feeds'
 
   task-twitter-scheduler:
     restart: 'unless-stopped'
-    image: 'specializedgeneralist/whatsnew:1.0.0-alpha.3'
+    image: 'specializedgeneralist/whatsnew:1.0.0-beta'
     volumes: ['./config:/config']
     command: '-config=/config/whatsnew-config.yml schedule-twitter'
 
   task-gdelt-fetcher:
     restart: 'unless-stopped'
-    image: 'specializedgeneralist/whatsnew:1.0.0-alpha.3'
+    image: 'specializedgeneralist/whatsnew:1.0.0-beta'
     volumes: ['./config:/config']
     command: '-config=/config/whatsnew-config.yml fetch-gdelt'
 
   worker-feed-fetcher:
     restart: 'unless-stopped'
-    image: 'specializedgeneralist/whatsnew:1.0.0-alpha.3'
+    image: 'specializedgeneralist/whatsnew:1.0.0-beta'
     volumes: ['./config:/config']
     command: '-config=/config/whatsnew-config.yml fetch-feeds'
 
   worker-twitter-scraper:
     restart: 'unless-stopped'
-    image: 'specializedgeneralist/whatsnew:1.0.0-alpha.3'
+    image: 'specializedgeneralist/whatsnew:1.0.0-beta'
     volumes: ['./config:/config']
     command: '-config=/config/whatsnew-config.yml scrape-twitter'
 
   worker-web-scraper:
     restart: 'unless-stopped'
-    image: 'specializedgeneralist/whatsnew:1.0.0-alpha.3'
+    image: 'specializedgeneralist/whatsnew:1.0.0-beta'
     volumes: ['./config:/config']
     command: '-config=/config/whatsnew-config.yml scrape-web'
 
   worker-translator:
     restart: 'unless-stopped'
-    image: 'specializedgeneralist/whatsnew:1.0.0-alpha.3'
+    image: 'specializedgeneralist/whatsnew:1.0.0-beta'
     volumes: ['./config:/config']
     command: '-config=/config/whatsnew-config.yml translate'
 
   worker-zero-shot-classifier:
     restart: 'unless-stopped'
-    image: 'specializedgeneralist/whatsnew:1.0.0-alpha.3'
+    image: 'specializedgeneralist/whatsnew:1.0.0-beta'
     volumes: ['./config:/config']
     command: '-config=/config/whatsnew-config.yml zero-shot-classify'
 
   # Note: you should remove this service if you don't have a custom text classifier.
   worker-text-classifier:
     restart: 'unless-stopped'
-    image: 'specializedgeneralist/whatsnew:1.0.0-alpha.3'
+    image: 'specializedgeneralist/whatsnew:1.0.0-beta'
     volumes: ['./config:/config']
     command: '-config=/config/whatsnew-config.yml classify-text'
 
   worker-geo-parser:
     restart: 'unless-stopped'
-    image: 'specializedgeneralist/whatsnew:1.0.0-alpha.3'
+    image: 'specializedgeneralist/whatsnew:1.0.0-beta'
     volumes: ['./config:/config']
     command: '-config=/config/whatsnew-config.yml parse-geo'
 
   worker-vectorizer:
     restart: 'unless-stopped'
-    image: 'specializedgeneralist/whatsnew:1.0.0-alpha.3'
+    image: 'specializedgeneralist/whatsnew:1.0.0-beta'
     volumes: ['./config:/config']
     command: '-config=/config/whatsnew-config.yml vectorize'
 
   worker-duplicate-detector:
     restart: 'unless-stopped'
-    image: 'specializedgeneralist/whatsnew:1.0.0-alpha.3'
+    image: 'specializedgeneralist/whatsnew:1.0.0-beta'
     volumes: ['./config:/config']
     command: '-config=/config/whatsnew-config.yml detect-duplicates'
 
   worker-information-extractor:
     restart: 'unless-stopped'
-    image: 'specializedgeneralist/whatsnew:1.0.0-alpha.3'
+    image: 'specializedgeneralist/whatsnew:1.0.0-beta'
     volumes: ['./config:/config']
     command: '-config=/config/whatsnew-config.yml extract-information'
