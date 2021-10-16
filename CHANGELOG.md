@@ -12,6 +12,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Avoid long-living gRPC connections moving the dialing from commands
   initialization to workers (see commit a61fcbc7a42955dfdffb65feb020f456588fab56
   for details).
+- Upgrade dependencies.
 
 ## [1.0.0-alpha.3] - 2021-10-12
 ### Added

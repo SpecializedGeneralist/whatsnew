@@ -14,14 +14,14 @@ require (
 	github.com/abadojack/whatlanggo v1.0.1
 	github.com/advancedlogic/GoOse v0.0.0-20210820140952-9d5822d4a625
 	github.com/araddon/dateparse v0.0.0-20210429162001-6b43995a97de // indirect
-	github.com/contribsys/faktory v1.5.4
+	github.com/contribsys/faktory v1.5.5
 	github.com/contribsys/faktory_worker_go v1.5.0
 	github.com/go-resty/resty/v2 v2.6.0 // indirect
 	github.com/grpc-ecosystem/grpc-gateway/v2 v2.6.0
 	github.com/jackc/pgconn v1.10.0
 	github.com/jackc/pgtype v1.8.1
 	github.com/jackc/pgx/v4 v4.13.0 // indirect
-	github.com/jaytaylor/html2text v0.0.0-20200412013138-3577fbdbcff7 // indirect
+	github.com/jaytaylor/html2text v0.0.0-20211013233858-90c08c5027d3 // indirect
 	github.com/json-iterator/go v1.1.12 // indirect
 	github.com/mattn/go-runewidth v0.0.13 // indirect
 	github.com/mmcdole/gofeed v1.1.3
@@ -33,10 +33,10 @@ require (
 	github.com/rs/zerolog v1.25.0
 	github.com/stretchr/testify v1.7.0
 	golang.org/x/crypto v0.0.0-20210921155107-089bfa567519 // indirect
-	golang.org/x/net v0.0.0-20211011170408-caeb26a5c8c0
-	golang.org/x/sys v0.0.0-20211007075335-d3039528d8ac // indirect
+	golang.org/x/net v0.0.0-20211015210444-4f30a5c0130f
+	golang.org/x/sys v0.0.0-20211015200801-69063c4bb744 // indirect
 	golang.org/x/text v0.3.7
-	google.golang.org/genproto v0.0.0-20211011165927-a5fb3255271e
+	google.golang.org/genproto v0.0.0-20211016002631-37fc39342514
 	google.golang.org/grpc v1.41.0
 	google.golang.org/protobuf v1.27.1
 	gopkg.in/yaml.v3 v3.0.0-20210107192922-496545a6307b
