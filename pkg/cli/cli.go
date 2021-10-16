@@ -16,6 +16,7 @@ import (
 	"github.com/SpecializedGeneralist/whatsnew/pkg/cli/command/fetchfeeds"
 	"github.com/SpecializedGeneralist/whatsnew/pkg/cli/command/fetchgdelt"
 	"github.com/SpecializedGeneralist/whatsnew/pkg/cli/command/parsegeo"
+	"github.com/SpecializedGeneralist/whatsnew/pkg/cli/command/purgehnsw"
 	"github.com/SpecializedGeneralist/whatsnew/pkg/cli/command/recoverjobs"
 	"github.com/SpecializedGeneralist/whatsnew/pkg/cli/command/schedulefeeds"
 	"github.com/SpecializedGeneralist/whatsnew/pkg/cli/command/scheduletwitter"
@@ -52,6 +53,7 @@ var (
 		detectduplicates.CmdDetectDuplicates,
 		extractinformation.CmdExtractInformation,
 		recoverjobs.CmdRecoverJobs,
+		purgehnsw.CmdPurgeHNSW,
 	}
 )
 
