@@ -54,6 +54,10 @@ tasks:
     time_interval: '1m'
     leeway_time: '1m'
     loglevel: 'info'
+  hnsw_purger:
+    time_interval: '1h'
+    delete_indices_older_than_days: 6
+    loglevel: 'info'
 workers:
   feed_fetcher:
     queues: ['feed_fetcher']

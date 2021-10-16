@@ -131,6 +131,11 @@ func TestFromYAMLFile(t *testing.T) {
 					LeewayTime:   time.Minute,
 					LogLevel:     config.LogLevel(zerolog.InfoLevel),
 				},
+				HNSWPurger: config.HNSWPurger{
+					TimeInterval:               1 * time.Hour,
+					DeleteIndicesOlderThanDays: 6,
+					LogLevel:                   config.LogLevel(zerolog.InfoLevel),
+				},
 			},
 			Workers: config.Workers{
 				FeedFetcher: config.FeedFetcher{

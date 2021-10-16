@@ -189,10 +189,29 @@
               "$ref": "#/definitions/loglevel"
             }
           },
-          "required": ["time_interval", "leeway_time", "loglevel"]
+          "required": ["time_interval", "leeway_time", "loglevel"
+          ]
+        },
+        "hnsw_purger": {
+          "description": "Settings for periodic deletion of old HNSW indices.",
+          "type": "object",
+          "properties": {
+            "time_interval": {
+              "description": "How frequently the process must run. The value must be compatible with Go time.Duration.",
+              "type": "string"
+            },
+            "delete_indices_older_than_days": {
+              "description": "The task will delete all indices which are older than this number of days from \"now\".",
+              "type": "number"
+            },
+            "loglevel": {
+              "$ref": "#/definitions/loglevel"
+            }
+          },
+          "required": ["time_interval", "delete_indices_older_than_days", "loglevel"]
         }
       },
-      "required": ["feed_scheduler", "twitter_scheduler", "gdelt_fetcher", "jobs_recoverer"]
+      "required": ["feed_scheduler", "twitter_scheduler", "gdelt_fetcher", "jobs_recoverer", "hnsw_purger"]
     },
     "workers": {
       "description": "Settings for specific workers.",

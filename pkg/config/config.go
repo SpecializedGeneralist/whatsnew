@@ -88,6 +88,13 @@ type JobsRecoverer struct {
 	LogLevel     LogLevel      `yaml:"loglevel"`
 }
 
+// HNSWPurger holds settings for the periodic deletion of old HNSW indices.
+type HNSWPurger struct {
+	TimeInterval               time.Duration `yaml:"time_interval"`
+	DeleteIndicesOlderThanDays int           `yaml:"delete_indices_older_than_days"`
+	LogLevel                   LogLevel      `yaml:"loglevel"`
+}
+
 // Server holds settings for the HTTP and gRPC server.
 type Server struct {
 	Address        string   `yaml:"address"`
@@ -104,6 +111,7 @@ type Tasks struct {
 	TwitterScheduler TwitterScheduler `yaml:"twitter_scheduler"`
 	GDELTFetcher     GDELTFetcher     `yaml:"gdelt_fetcher"`
 	JobsRecoverer    JobsRecoverer    `yaml:"jobs_recoverer"`
+	HNSWPurger       HNSWPurger       `yaml:"hnsw_purger"`
 }
 
 // Workers holds settings for the various workers.
