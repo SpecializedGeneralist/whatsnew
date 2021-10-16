@@ -218,6 +218,16 @@ func (c *Client) IndicesOlderThan(ctx context.Context, t time.Time) ([]string, e
 	return indices, nil
 }
 
+// DeleteIndex deletes an HNSW index.
+func (c *Client) DeleteIndex(ctx context.Context, indexName string) error {
+	_, err := c.cli.DeleteIndex(ctx, &grpcapi.DeleteIndexRequest{IndexName: indexName})
+	if err != nil {
+		return fmt.Errorf("error deleting HNSW index %#v: %w", indexName, err)
+	}
+	delete(c.indicesCache, indexName)
+	return nil
+}
+
 func (c *Client) dailyIndexNameRange(from, to time.Time) []string {
 	first := from.UTC().Truncate(day)
 	last := to.UTC().Truncate(day)
