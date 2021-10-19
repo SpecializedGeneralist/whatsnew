@@ -26,7 +26,7 @@ require (
 	github.com/mattn/go-runewidth v0.0.13 // indirect
 	github.com/mmcdole/gofeed v1.1.3
 	github.com/mmcdole/goxpp v0.0.0-20200921145534-2f3784f67354 // indirect
-	github.com/n0madic/twitter-scraper v0.0.0-20211010133619-3848bb253911
+	github.com/n0madic/twitter-scraper v0.0.0-20211018203357-a2fb4f82473d
 	github.com/nlpodyssey/spago v0.7.0
 	github.com/olekukonko/tablewriter v0.0.5 // indirect
 	github.com/rs/cors v1.8.0
@@ -36,7 +36,7 @@ require (
 	golang.org/x/net v0.0.0-20211015210444-4f30a5c0130f
 	golang.org/x/sys v0.0.0-20211015200801-69063c4bb744 // indirect
 	golang.org/x/text v0.3.7
-	google.golang.org/genproto v0.0.0-20211016002631-37fc39342514
+	google.golang.org/genproto v0.0.0-20211019152133-63b7e35f4404
 	google.golang.org/grpc v1.41.0
 	google.golang.org/protobuf v1.27.1
 	gopkg.in/yaml.v3 v3.0.0-20210107192922-496545a6307b
