@@ -187,6 +187,22 @@ func (c *Client) DeleteIndex(ctx context.Context, indexName string) error {
 	return nil
 }
 
+// FlushAllIndices flushes all existing HNSW indices.
+func (c *Client) FlushAllIndices(ctx context.Context) error {
+	err := c.fetchIndices(ctx)
+	if err != nil {
+		return err
+	}
+
+	for index := range c.indicesCache {
+		_, err = c.cli.FlushIndex(ctx, &grpcapi.FlushRequest{IndexName: index})
+		if err != nil {
+			return fmt.Errorf("error flushing HNSW index %#v: %w", index, err)
+		}
+	}
+	return nil
+}
+
 func (c *Client) dailyIndexNameRange(from, to time.Time) []string {
 	first := from.UTC().Truncate(day)
 	last := to.UTC().Truncate(day)
