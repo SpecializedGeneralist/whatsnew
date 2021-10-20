@@ -40,8 +40,6 @@ import (
 // If an index with this final name does not exist, a new one is created
 // using the given configuration settings.
 //
-// The index is always flushed after each insertion.
-//
 // Searching for Similar Vectors
 //
 // Given a reference vector, the function Client.SearchKNN allows searching
@@ -112,10 +110,6 @@ func (c *Client) Insert(ctx context.Context, id uint, t time.Time, vec []float32
 		return fmt.Errorf("error inserting HNSW vector: %w", err)
 	}
 
-	_, err = c.cli.FlushIndex(ctx, &grpcapi.FlushRequest{IndexName: indexName})
-	if err != nil {
-		return fmt.Errorf("error flushing HNSW index %#v: %w", indexName, err)
-	}
 	return nil
 }
 

@@ -11,6 +11,11 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ### Changed
 - Upgrade dependencies.
 
+### Removed
+- `hnswclient.Client.Index` does not flush an HNSW index anymore at each
+  vector insertion. This was possibly causing slowdowns in case of
+  large indices and many concurrent jobs inserting new vectors.
+
 ### Fixed
 - A failing configuration test.
 
