@@ -12,6 +12,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Some tests.
 
 ### Changed
+- Use weaker database row-level locks wherever possible (`FOR SHARE` instead
+  of `FOR UPDATE`) to prevent possible slowdowns.
 - Upgrade dependencies.
 
 ### Removed

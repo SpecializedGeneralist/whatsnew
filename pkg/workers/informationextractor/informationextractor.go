@@ -75,7 +75,7 @@ func (ie *InformationExtractor) perform(ctx context.Context, webArticleID uint) 
 
 func getLockedWebArticle(tx *gorm.DB, id uint) (*models.WebArticle, error) {
 	var wa *models.WebArticle
-	res := tx.Clauses(clause.Locking{Strength: "UPDATE"}).Preload("ExtractedInfos").First(&wa, id)
+	res := tx.Clauses(clause.Locking{Strength: "SHARE"}).Preload("ExtractedInfos").First(&wa, id)
 	if res.Error != nil {
 		return nil, fmt.Errorf("error fetching WebArticle %d: %w", id, res.Error)
 	}

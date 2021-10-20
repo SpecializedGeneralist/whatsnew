@@ -113,7 +113,7 @@ func (dd *DuplicateDetector) perform(ctx context.Context, webArticleID uint) err
 
 func getLockedWebArticle(tx *gorm.DB, id uint) (*models.WebArticle, error) {
 	var wa *models.WebArticle
-	res := tx.Clauses(clause.Locking{Strength: "UPDATE"}).
+	res := tx.Clauses(clause.Locking{Strength: "SHARE"}).
 		Preload("Vector").
 		Preload("SimilarityInfo").
 		First(&wa, id)

@@ -75,7 +75,7 @@ func (zsc *ZeroShotClassifier) perform(ctx context.Context, webArticleID uint) e
 
 func getLockedWebArticle(tx *gorm.DB, id uint) (*models.WebArticle, error) {
 	var wa *models.WebArticle
-	res := tx.Clauses(clause.Locking{Strength: "UPDATE"}).Preload("ZeroShotClasses").First(&wa, id)
+	res := tx.Clauses(clause.Locking{Strength: "SHARE"}).Preload("ZeroShotClasses").First(&wa, id)
 	if res.Error != nil {
 		return nil, fmt.Errorf("error fetching WebArticle %d: %w", id, res.Error)
 	}

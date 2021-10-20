@@ -102,7 +102,7 @@ func (ws *WebScraper) perform(ctx context.Context, webResourceID uint) error {
 
 func lockWebResource(tx *gorm.DB, wrID uint) error {
 	var wr *models.WebResource
-	res := tx.Clauses(clause.Locking{Strength: "UPDATE"}).Select("ID").First(&wr, wrID)
+	res := tx.Clauses(clause.Locking{Strength: "SHARE"}).Select("ID").First(&wr, wrID)
 	if res.Error != nil {
 		return fmt.Errorf("error locking WebResource %d: %w", wrID, res.Error)
 	}

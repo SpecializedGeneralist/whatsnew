@@ -101,7 +101,7 @@ func (tc *TextClassifier) perform(ctx context.Context, webArticleID uint) error 
 
 func getLockedWebArticle(tx *gorm.DB, id uint) (*models.WebArticle, error) {
 	var wa *models.WebArticle
-	res := tx.Clauses(clause.Locking{Strength: "UPDATE"}).Preload("TextClasses").First(&wa, id)
+	res := tx.Clauses(clause.Locking{Strength: "SHARE"}).Preload("TextClasses").First(&wa, id)
 	if res.Error != nil {
 		return nil, fmt.Errorf("error fetching WebArticle %d: %w", id, res.Error)
 	}
