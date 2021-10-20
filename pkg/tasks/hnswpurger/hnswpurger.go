@@ -95,5 +95,5 @@ func (hp *HNSWPurger) purge(ctx context.Context) error {
 		}
 	}
 
-	return nil
+	return hnswClient.FlushAllIndices(ctx)
 }

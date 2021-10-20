@@ -7,6 +7,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ## [Unreleased]
 ### Added
 - `hnswclient.Client.FlushAllIndices` function.
+- HNSW-Purger task now flushes all remaining indices after deleting the old
+  ones. 
 - Some tests.
 
 ### Changed
