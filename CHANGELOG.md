@@ -5,6 +5,8 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
 ## [Unreleased]
+
+## [1.0.0-beta.1] - 2021-10-20
 ### Added
 - `hnswclient.Client.FlushAllIndices` function.
 - HNSW-Purger task now flushes all remaining indices after deleting the old
@@ -112,7 +114,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ## [0.1.0] - 2021-01-25
 First versioned release, ready to be tested.
 
-[Unreleased]: https://github.com/SpecializedGeneralist/whatsnew/compare/v1.0.0-beta...HEAD
+[Unreleased]: https://github.com/SpecializedGeneralist/whatsnew/compare/v1.0.0-beta.1...HEAD
+[1.0.0-beta.1]: https://github.com/SpecializedGeneralist/whatsnew/compare/v1.0.0-beta...v1.0.0-beta.1
 [1.0.0-beta]: https://github.com/SpecializedGeneralist/whatsnew/compare/v1.0.0-alpha.3...v1.0.0-beta
 [1.0.0-alpha.3]: https://github.com/SpecializedGeneralist/whatsnew/compare/v1.0.0-alpha.2...v1.0.0-alpha.3
 [1.0.0-alpha.2]: https://github.com/SpecializedGeneralist/whatsnew/compare/v1.0.0-alpha.1...v1.0.0-alpha.2

@@ -189,7 +189,7 @@ func TestFromYAMLFile(t *testing.T) {
 					},
 					LanguageFilter: []string{"en", "es", "fr", "it"},
 					RequestTimeout: 30 * time.Second,
-					UserAgent:      "WhatsNew/1.0.0-beta",
+					UserAgent:      "WhatsNew/1.0.0-beta.1",
 					LogLevel:       config.LogLevel(zerolog.InfoLevel),
 				},
 				Translator: config.Translator{
