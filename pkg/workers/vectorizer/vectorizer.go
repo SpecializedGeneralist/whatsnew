@@ -20,7 +20,6 @@ import (
 	"github.com/rs/zerolog"
 	"github.com/rs/zerolog/log"
 	"gorm.io/gorm"
-	"gorm.io/gorm/clause"
 	"strings"
 )
 
@@ -57,15 +56,29 @@ func New(
 }
 
 func (v *Vectorizer) perform(ctx context.Context, webArticleID uint) error {
-	js := jobscheduler.New()
+	tx := v.DB.WithContext(ctx)
 
-	err := v.DB.WithContext(ctx).Transaction(func(tx *gorm.DB) error {
-		wa, err := getLockedWebArticle(tx, webArticleID)
-		if err != nil {
-			return err
+	wa, err := getWebArticle(tx, webArticleID)
+	if err != nil {
+		return err
+	}
+
+	vecModel, err := v.processWebArticle(ctx, wa)
+	if err != nil {
+		return err
+	}
+	if vecModel == nil {
+		return nil // skipped
+	}
+
+	js := jobscheduler.New()
+	err = tx.Transaction(func(tx *gorm.DB) error {
+		res := tx.Create(vecModel)
+		if res.Error != nil {
+			return fmt.Errorf("error saving Vector: %w", res.Error)
 		}
 
-		err = v.processWebArticle(ctx, tx, wa, js)
+		err := js.AddJobs(v.conf.VectorizedWebArticleJobs, wa.ID)
 		if err != nil {
 			return err
 		}
@@ -79,9 +92,9 @@ func (v *Vectorizer) perform(ctx context.Context, webArticleID uint) error {
 	return js.PushJobsAndDeletePendingJobs(ctx, v.DB)
 }
 
-func getLockedWebArticle(tx *gorm.DB, id uint) (*models.WebArticle, error) {
+func getWebArticle(tx *gorm.DB, id uint) (*models.WebArticle, error) {
 	var wa *models.WebArticle
-	res := tx.Clauses(clause.Locking{Strength: "SHARE"}).Preload("Vector").First(&wa, id)
+	res := tx.Preload("Vector").First(&wa, id)
 	if res.Error != nil {
 		return nil, fmt.Errorf("error fetching WebArticle %d: %w", id, res.Error)
 	}
@@ -90,15 +103,13 @@ func getLockedWebArticle(tx *gorm.DB, id uint) (*models.WebArticle, error) {
 
 func (v *Vectorizer) processWebArticle(
 	ctx context.Context,
-	tx *gorm.DB,
 	wa *models.WebArticle,
-	js *jobscheduler.JobScheduler,
-) error {
+) (*models.Vector, error) {
 	logger := v.Log.With().Uint("WebArticle", wa.ID).Logger()
 
 	if wa.Vector != nil {
 		logger.Warn().Msg("this WebArticle already has a vector")
-		return nil
+		return nil, nil
 	}
 
 	title := strings.TrimSpace(wa.Title)
@@ -108,12 +119,12 @@ func (v *Vectorizer) processWebArticle(
 
 	if len(title) == 0 {
 		logger.Debug().Msg("empty title - web article skipped")
-		return nil
+		return nil, nil
 	}
 
 	hnswConn, err := grpcconn.Dial(ctx, v.hnswConf.Server)
 	if err != nil {
-		return err
+		return nil, err
 	}
 	defer func() {
 		if err := hnswConn.Close(); err != nil {
@@ -124,12 +135,12 @@ func (v *Vectorizer) processWebArticle(
 
 	vector, err := v.vectorize(ctx, title)
 	if err != nil {
-		return err
+		return nil, err
 	}
 
 	err = hnswClient.Insert(ctx, wa.ID, wa.PublishDate, vector)
 	if err != nil {
-		return err
+		return nil, err
 	}
 
 	vectorModel := &models.Vector{
@@ -138,15 +149,10 @@ func (v *Vectorizer) processWebArticle(
 	}
 	err = vectorModel.Data.Set(vector)
 	if err != nil {
-		return fmt.Errorf("error setting Vector data: %w", err)
+		return nil, fmt.Errorf("error setting Vector data: %w", err)
 	}
 
-	res := tx.Create(vectorModel)
-	if res.Error != nil {
-		return fmt.Errorf("error saving Vector: %w", res.Error)
-	}
-
-	return js.AddJobs(v.conf.VectorizedWebArticleJobs, wa.ID)
+	return vectorModel, nil
 }
 
 // vectorize returns a dense vector representation of the given text.
