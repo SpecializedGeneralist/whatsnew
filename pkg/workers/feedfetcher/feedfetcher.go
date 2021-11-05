@@ -215,11 +215,6 @@ func (ff *FeedFetcher) markFeedWithError(tx *gorm.DB, feed *models.Feed, feedErr
 }
 
 func (ff *FeedFetcher) resetFeedErrors(tx *gorm.DB, feed *models.Feed) error {
-	// Don't waste an UPDATE if there's nothing to change.
-	if !feed.LastError.Valid && feed.FailuresCount == 0 {
-		return nil
-	}
-
 	feed.LastError = sql.NullString{Valid: false, String: ""}
 	feed.FailuresCount = 0
 
