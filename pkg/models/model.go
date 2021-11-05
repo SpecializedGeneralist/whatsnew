@@ -15,3 +15,13 @@ type Model struct {
 	// Version for optimistic locking.
 	Version uint `gorm:"not null;default:0"`
 }
+
+var _ OptimisticLockModel = &Model{}
+
+func (m Model) GetVersion() uint {
+	return m.Version
+}
+
+func (m *Model) IncrementVersion() {
+	m.Version += 1
+}
