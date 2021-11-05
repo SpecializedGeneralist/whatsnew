@@ -19,7 +19,6 @@ import (
 	"github.com/rs/zerolog"
 	"github.com/rs/zerolog/log"
 	"gorm.io/gorm"
-	"gorm.io/gorm/clause"
 	"strings"
 )
 
@@ -51,15 +50,28 @@ func New(conf config.Translator, db *gorm.DB, fk *faktory_worker.Manager) *Trans
 }
 
 func (t *Translator) perform(ctx context.Context, webArticleID uint) error {
-	js := jobscheduler.New()
+	tx := t.DB.WithContext(ctx)
 
-	err := t.DB.WithContext(ctx).Transaction(func(tx *gorm.DB) error {
-		wa, err := getLockedWebArticle(tx, webArticleID)
-		if err != nil {
-			return err
+	wa, err := getWebArticle(tx, webArticleID)
+	if err != nil {
+		return err
+	}
+
+	translationOk, err := t.processWebArticle(ctx, tx, wa)
+	if err != nil {
+		return err
+	}
+
+	js := jobscheduler.New()
+	err = tx.Transaction(func(tx *gorm.DB) error {
+		if translationOk {
+			err := models.OptimisticSave(tx, wa)
+			if err != nil {
+				return fmt.Errorf("error saving WebArticle with translated title: %w", err)
+			}
 		}
 
-		err = t.processWebArticle(ctx, tx, wa, js)
+		err := js.AddJobs(t.conf.ProcessedWebArticleJobs, wa.ID)
 		if err != nil {
 			return err
 		}
@@ -73,9 +85,9 @@ func (t *Translator) perform(ctx context.Context, webArticleID uint) error {
 	return js.PushJobsAndDeletePendingJobs(ctx, t.DB)
 }
 
-func getLockedWebArticle(tx *gorm.DB, id uint) (*models.WebArticle, error) {
+func getWebArticle(tx *gorm.DB, id uint) (*models.WebArticle, error) {
 	var wa *models.WebArticle
-	res := tx.Clauses(clause.Locking{Strength: "UPDATE"}).First(&wa, id)
+	res := tx.First(&wa, id)
 	if res.Error != nil {
 		return nil, fmt.Errorf("error fetching WebArticle %d: %w", id, res.Error)
 	}
@@ -86,29 +98,30 @@ func (t *Translator) processWebArticle(
 	ctx context.Context,
 	tx *gorm.DB,
 	wa *models.WebArticle,
-	js *jobscheduler.JobScheduler,
-) error {
+) (bool, error) {
 	logger := t.Log.With().Uint("WebArticle", wa.ID).Logger()
 
 	if wa.TranslatedTitle.Valid && wa.TranslationLanguage.Valid {
 		logger.Warn().Msg("this WebArticle already has a translated title")
-		return nil
+		return false, nil
 	}
 
 	title := strings.TrimSpace(wa.Title)
 	if len(title) == 0 {
 		logger.Debug().Msg("empty title - web article skipped")
-		return nil
+		return false, nil
 	}
 
-	if t.languageWhitelist.Has(wa.Language) {
-		err := t.translateTitle(ctx, tx, wa, title)
-		if err != nil {
-			return err
-		}
+	if !t.languageWhitelist.Has(wa.Language) {
+		return false, nil
 	}
 
-	return js.AddJobs(t.conf.ProcessedWebArticleJobs, wa.ID)
+	err := t.translateTitle(ctx, tx, wa, title)
+	if err != nil {
+		return false, err
+	}
+
+	return true, nil
 }
 
 func (t *Translator) translateTitle(ctx context.Context, tx *gorm.DB, wa *models.WebArticle, title string) error {
@@ -144,10 +157,5 @@ func (t *Translator) translateTitle(ctx context.Context, tx *gorm.DB, wa *models
 
 	wa.TranslatedTitle = sql.NullString{String: translatedTitle, Valid: true}
 	wa.TranslationLanguage = sql.NullString{String: t.conf.TargetLanguage, Valid: true}
-
-	res := tx.Save(wa)
-	if res.Error != nil {
-		return fmt.Errorf("error saving WebArticle with translated title: %w", res.Error)
-	}
 	return nil
 }
