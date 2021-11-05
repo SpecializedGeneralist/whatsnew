@@ -62,7 +62,7 @@ func (ff *FeedFetcher) perform(ctx context.Context, feedID uint) error {
 			return nil
 		}
 
-		err = ff.processFeed(tx, feed, js)
+		err = ff.processFeed(ctx, tx, feed, js)
 		if err != nil {
 			return err
 		}
@@ -85,8 +85,10 @@ func getLockedFeed(tx *gorm.DB, feedID uint) (*models.Feed, error) {
 	return feed, nil
 }
 
-func (ff *FeedFetcher) processFeed(tx *gorm.DB, feed *models.Feed, js *jobscheduler.JobScheduler) error {
-	parsedFeed, err := ff.parser.ParseURL(feed.URL)
+func (ff *FeedFetcher) processFeed(ctx context.Context, tx *gorm.DB, feed *models.Feed, js *jobscheduler.JobScheduler) error {
+	ctxTimeout, cancel := context.WithTimeout(ctx, ff.conf.RequestTimeout)
+	defer cancel()
+	parsedFeed, err := ff.parser.ParseURLWithContext(feed.URL, ctxTimeout)
 	if err != nil {
 		ff.Log.Warn().Err(err).Msgf("error parsing feed %d", feed.ID)
 		return ff.markFeedWithError(tx, feed, err)

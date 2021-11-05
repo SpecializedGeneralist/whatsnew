@@ -136,6 +136,7 @@ type FeedFetcher struct {
 	MaxAllowedFailures       int                      `yaml:"max_allowed_failures"`
 	OmitItemsPublishedBefore OmitItemsPublishedBefore `yaml:"omit_items_published_before"`
 	LanguageFilter           []string                 `yaml:"language_filter"`
+	RequestTimeout           time.Duration            `yaml:"request_timeout"`
 	LogLevel                 LogLevel                 `yaml:"loglevel"`
 }
 

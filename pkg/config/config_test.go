@@ -155,6 +155,7 @@ func TestFromYAMLFile(t *testing.T) {
 						Time:    time.Date(2021, time.July, 1, 0, 0, 0, 0, time.UTC),
 					},
 					LanguageFilter: []string{"en", "es", "fr", "it"},
+					RequestTimeout: 10 * time.Second,
 					LogLevel:       config.LogLevel(zerolog.InfoLevel),
 				},
 				TwitterScraper: config.TwitterScraper{
