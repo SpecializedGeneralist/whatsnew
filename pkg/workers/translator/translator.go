@@ -7,6 +7,7 @@ package translator
 import (
 	"context"
 	"database/sql"
+	"errors"
 	"fmt"
 	translatorapi "github.com/SpecializedGeneralist/translator/pkg/api"
 	"github.com/SpecializedGeneralist/whatsnew/pkg/config"
@@ -49,6 +50,8 @@ func New(conf config.Translator, db *gorm.DB, fk *faktory_worker.Manager) *Trans
 	return t
 }
 
+var errSkip = errors.New("skip")
+
 func (t *Translator) perform(ctx context.Context, webArticleID uint) error {
 	tx := t.DB.WithContext(ctx)
 
@@ -57,7 +60,10 @@ func (t *Translator) perform(ctx context.Context, webArticleID uint) error {
 		return err
 	}
 
-	translationOk, err := t.processWebArticle(ctx, tx, wa)
+	translationOk, err := t.processWebArticle(ctx, wa)
+	if errors.Is(err, errSkip) {
+		return nil
+	}
 	if err != nil {
 		return err
 	}
@@ -96,35 +102,33 @@ func getWebArticle(tx *gorm.DB, id uint) (*models.WebArticle, error) {
 
 func (t *Translator) processWebArticle(
 	ctx context.Context,
-	tx *gorm.DB,
 	wa *models.WebArticle,
 ) (bool, error) {
 	logger := t.Log.With().Uint("WebArticle", wa.ID).Logger()
 
 	if wa.TranslatedTitle.Valid && wa.TranslationLanguage.Valid {
 		logger.Warn().Msg("this WebArticle already has a translated title")
-		return false, nil
+		return false, errSkip
 	}
 
 	title := strings.TrimSpace(wa.Title)
 	if len(title) == 0 {
 		logger.Debug().Msg("empty title - web article skipped")
-		return false, nil
+		return false, errSkip
 	}
 
 	if !t.languageWhitelist.Has(wa.Language) {
 		return false, nil
 	}
 
-	err := t.translateTitle(ctx, tx, wa, title)
+	err := t.translateTitle(ctx, wa, title)
 	if err != nil {
 		return false, err
 	}
-
 	return true, nil
 }
 
-func (t *Translator) translateTitle(ctx context.Context, tx *gorm.DB, wa *models.WebArticle, title string) error {
+func (t *Translator) translateTitle(ctx context.Context, wa *models.WebArticle, title string) error {
 	translatorConn, err := grpcconn.Dial(ctx, t.conf.TranslatorServer)
 	if err != nil {
 		return err

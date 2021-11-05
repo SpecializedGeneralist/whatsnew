@@ -76,7 +76,7 @@ func (ws *WebScraper) perform(ctx context.Context, webResourceID uint) error {
 		return err
 	}
 	if wa == nil {
-		return nil
+		return nil // skipped
 	}
 
 	js := jobscheduler.New()
@@ -134,6 +134,7 @@ func (ws *WebScraper) processWebResource(
 
 	if wr.WebArticle != nil {
 		logger.Warn().Uint("WebArticle", wr.WebArticle.ID).Msg("a WebArticle already exists")
+		return nil, nil
 	}
 
 	body, err := ws.scrapeURL(ctx, logger, wr.URL)

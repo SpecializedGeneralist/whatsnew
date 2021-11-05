@@ -58,7 +58,13 @@ func (gp *GeoParser) perform(ctx context.Context, webArticleID uint) error {
 		return err
 	}
 
-	countryOk, err := gp.processWebArticle(ctx, wa)
+	logger := gp.Log.With().Uint("WebArticle", wa.ID).Logger()
+	if wa.CountryCode.Valid {
+		logger.Warn().Msg("this WebArticle already has a country code assigned")
+		return nil
+	}
+
+	countryOk, err := gp.extractAndStoreCountry(ctx, wa)
 	if err != nil {
 		return err
 	}
@@ -93,20 +99,6 @@ func getWebArticle(tx *gorm.DB, id uint) (*models.WebArticle, error) {
 		return nil, fmt.Errorf("error fetching WebArticle %d: %w", id, res.Error)
 	}
 	return wa, nil
-}
-
-func (gp *GeoParser) processWebArticle(
-	ctx context.Context,
-	wa *models.WebArticle,
-) (bool, error) {
-	logger := gp.Log.With().Uint("WebArticle", wa.ID).Logger()
-
-	if wa.CountryCode.Valid {
-		logger.Warn().Msg("this WebArticle already has a country code assigned")
-		return false, nil
-	}
-
-	return gp.extractAndStoreCountry(ctx, wa)
 }
 
 func (gp *GeoParser) extractAndStoreCountry(

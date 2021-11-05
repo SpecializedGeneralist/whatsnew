@@ -6,6 +6,7 @@ package informationextractor
 
 import (
 	"context"
+	"errors"
 	"fmt"
 	"github.com/SpecializedGeneralist/whatsnew/pkg/config"
 	"github.com/SpecializedGeneralist/whatsnew/pkg/grpcconn"
@@ -49,6 +50,8 @@ func New(
 	return ie
 }
 
+var errSkip = errors.New("skip")
+
 func (ie *InformationExtractor) perform(ctx context.Context, webArticleID uint) error {
 	tx := ie.DB.WithContext(ctx)
 
@@ -58,6 +61,9 @@ func (ie *InformationExtractor) perform(ctx context.Context, webArticleID uint) 
 	}
 
 	infos, err := ie.processWebArticle(ctx, tx, wa)
+	if errors.Is(err, errSkip) {
+		return nil
+	}
 	if err != nil {
 		return err
 	}
@@ -103,7 +109,7 @@ func (ie *InformationExtractor) processWebArticle(
 
 	if len(wa.ExtractedInfos) > 0 {
 		logger.Warn().Msg("this WebArticle already has extracted info")
-		return nil, nil
+		return nil, errSkip
 	}
 
 	title := strings.TrimSpace(wa.Title)
@@ -113,7 +119,7 @@ func (ie *InformationExtractor) processWebArticle(
 
 	if len(title) == 0 {
 		logger.Debug().Msg("empty title - web article skipped")
-		return nil, nil
+		return nil, errSkip
 	}
 
 	return ie.extractAndSaveInfo(ctx, tx, wa, title)

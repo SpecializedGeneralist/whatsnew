@@ -6,6 +6,7 @@ package textclassifier
 
 import (
 	"context"
+	"errors"
 	"fmt"
 	"github.com/SpecializedGeneralist/whatsnew/pkg/config"
 	"github.com/SpecializedGeneralist/whatsnew/pkg/grpcconn"
@@ -75,6 +76,8 @@ func New(
 	return tc
 }
 
+var errSkip = errors.New("skip")
+
 func (tc *TextClassifier) perform(ctx context.Context, webArticleID uint) error {
 	tx := tc.DB.WithContext(ctx)
 	wa, err := getWebArticle(tx, webArticleID)
@@ -83,6 +86,9 @@ func (tc *TextClassifier) perform(ctx context.Context, webArticleID uint) error 
 	}
 
 	classes, err := tc.processWebArticle(ctx, wa)
+	if errors.Is(err, errSkip) {
+		return nil
+	}
 	if err != nil {
 		return err
 	}
@@ -136,7 +142,7 @@ func (tc *TextClassifier) processWebArticle(
 
 	if len(wa.TextClasses) > 0 {
 		logger.Warn().Msg("this WebArticle already has TextClasses")
-		return nil, nil
+		return nil, errSkip
 	}
 
 	title := strings.TrimSpace(wa.Title)
@@ -146,7 +152,7 @@ func (tc *TextClassifier) processWebArticle(
 
 	if len(title) == 0 {
 		logger.Debug().Msg("empty title - web article skipped")
-		return nil, nil
+		return nil, errSkip
 	}
 
 	classifierConn, err := grpcconn.Dial(ctx, tc.conf.ClassifierServer)
