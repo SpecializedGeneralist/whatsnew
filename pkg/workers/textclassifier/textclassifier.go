@@ -17,7 +17,6 @@ import (
 	"github.com/rs/zerolog"
 	"github.com/rs/zerolog/log"
 	"gorm.io/gorm"
-	"gorm.io/gorm/clause"
 	"strings"
 )
 
@@ -77,15 +76,36 @@ func New(
 }
 
 func (tc *TextClassifier) perform(ctx context.Context, webArticleID uint) error {
-	js := jobscheduler.New()
+	tx := tc.DB.WithContext(ctx)
+	wa, err := getWebArticle(tx, webArticleID)
+	if err != nil {
+		return err
+	}
 
-	err := tc.DB.WithContext(ctx).Transaction(func(tx *gorm.DB) error {
-		wa, err := getLockedWebArticle(tx, webArticleID)
+	classes, err := tc.processWebArticle(ctx, wa)
+	if err != nil {
+		return err
+	}
+
+	js := jobscheduler.New()
+	err = tx.Transaction(func(tx *gorm.DB) error {
+		if len(classes) > 0 {
+			res := tx.Create(&classes)
+			if res.Error != nil {
+				return fmt.Errorf("error saving new TextClasses: %w", res.Error)
+			}
+		}
+
+		wa.TextClasses = classes
+		shouldSchedule, err := tc.ShouldScheduleNextJobs(tx, wa)
 		if err != nil {
 			return err
 		}
+		if !shouldSchedule {
+			return nil
+		}
 
-		err = tc.processWebArticle(ctx, tx, wa, js)
+		err = js.AddJobs(tc.conf.ProcessedWebArticleJobs, wa.ID)
 		if err != nil {
 			return err
 		}
@@ -99,9 +119,9 @@ func (tc *TextClassifier) perform(ctx context.Context, webArticleID uint) error 
 	return js.PushJobsAndDeletePendingJobs(ctx, tc.DB)
 }
 
-func getLockedWebArticle(tx *gorm.DB, id uint) (*models.WebArticle, error) {
+func getWebArticle(tx *gorm.DB, id uint) (*models.WebArticle, error) {
 	var wa *models.WebArticle
-	res := tx.Clauses(clause.Locking{Strength: "SHARE"}).Preload("TextClasses").First(&wa, id)
+	res := tx.Preload("TextClasses").First(&wa, id)
 	if res.Error != nil {
 		return nil, fmt.Errorf("error fetching WebArticle %d: %w", id, res.Error)
 	}
@@ -110,15 +130,13 @@ func getLockedWebArticle(tx *gorm.DB, id uint) (*models.WebArticle, error) {
 
 func (tc *TextClassifier) processWebArticle(
 	ctx context.Context,
-	tx *gorm.DB,
 	wa *models.WebArticle,
-	js *jobscheduler.JobScheduler,
-) error {
+) ([]models.TextClass, error) {
 	logger := tc.Log.With().Uint("WebArticle", wa.ID).Logger()
 
 	if len(wa.TextClasses) > 0 {
 		logger.Warn().Msg("this WebArticle already has TextClasses")
-		return nil
+		return nil, nil
 	}
 
 	title := strings.TrimSpace(wa.Title)
@@ -128,12 +146,12 @@ func (tc *TextClassifier) processWebArticle(
 
 	if len(title) == 0 {
 		logger.Debug().Msg("empty title - web article skipped")
-		return nil
+		return nil, nil
 	}
 
 	classifierConn, err := grpcconn.Dial(ctx, tc.conf.ClassifierServer)
 	if err != nil {
-		return err
+		return nil, err
 	}
 	defer func() {
 		if err := classifierConn.Close(); err != nil {
@@ -145,7 +163,7 @@ func (tc *TextClassifier) processWebArticle(
 	req := &textclassification.ClassifyTextRequest{Text: title}
 	reply, err := classifierClient.ClassifyText(ctx, req)
 	if err != nil {
-		return fmt.Errorf("ClassifyText request error: %w", err)
+		return nil, fmt.Errorf("ClassifyText request error: %w", err)
 	}
 
 	classes := make([]models.TextClass, len(reply.Classes))
@@ -158,22 +176,7 @@ func (tc *TextClassifier) processWebArticle(
 		}
 	}
 
-	if len(classes) > 0 {
-		res := tx.Create(&classes)
-		if res.Error != nil {
-			return fmt.Errorf("error saving new TextClasses: %w", res.Error)
-		}
-	}
-
-	wa.TextClasses = classes
-	shouldSchedule, err := tc.ShouldScheduleNextJobs(tx, wa)
-	if err != nil {
-		return err
-	}
-	if !shouldSchedule {
-		return nil
-	}
-	return js.AddJobs(tc.conf.ProcessedWebArticleJobs, wa.ID)
+	return classes, nil
 }
 
 // DefaultShouldScheduleNextJobs is the default implementation of
