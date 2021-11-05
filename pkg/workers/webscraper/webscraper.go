@@ -24,7 +24,6 @@ import (
 	"golang.org/x/text/encoding"
 	"golang.org/x/text/transform"
 	"gorm.io/gorm"
-	"gorm.io/gorm/clause"
 	"io"
 	"net/http"
 	"strings"
@@ -65,28 +64,34 @@ func New(conf config.WebScraper, db *gorm.DB, fk *faktory_worker.Manager) *WebSc
 }
 
 func (ws *WebScraper) perform(ctx context.Context, webResourceID uint) error {
+	tx := ws.DB.WithContext(ctx)
+
+	wr, err := getWebResourceWithRelations(tx, webResourceID)
+	if err != nil {
+		return err
+	}
+
+	wa, err := ws.processWebResource(ctx, tx, wr)
+	if err != nil {
+		return err
+	}
+	if wa == nil {
+		return nil
+	}
+
 	js := jobscheduler.New()
-
-	err := ws.DB.WithContext(ctx).Transaction(func(tx *gorm.DB) error {
-		// It's not possible to fetch and lock the WebResource while also
-		// joining it with its related models with a single query.
-		// We could lock the model and Preload the associations, but that would
-		// result in many queries.
-		// So we always perform exactly two queries. A first light query
-		// simply locks the WebResource record, without getting any data.
-		// Then we get the whole WebResource also joining all interesting
-		// relations, with a single query and without having to worry about
-		// the locking anymore.
-		err := lockWebResource(tx, webResourceID)
-		if err != nil {
-			return err
+	err = tx.Transaction(func(tx *gorm.DB) error {
+		res := tx.Create(wa)
+		if database.IsUniqueViolationError(res.Error) {
+			ws.Log.Warn().Err(res.Error).Uint("WebResource", wr.ID).
+				Msg("WebArticle creation constraint violation")
+			return nil
 		}
-		wr, err := getWebResourceWithRelations(tx, webResourceID)
-		if err != nil {
-			return err
+		if res.Error != nil {
+			return fmt.Errorf("error creating WebArticle: %w", res.Error)
 		}
 
-		err = ws.processWebResource(ctx, tx, wr, js)
+		err := js.AddJobs(ws.conf.NewWebArticleJobs, wa.ID)
 		if err != nil {
 			return err
 		}
@@ -98,15 +103,6 @@ func (ws *WebScraper) perform(ctx context.Context, webResourceID uint) error {
 	}
 
 	return js.PushJobsAndDeletePendingJobs(ctx, ws.DB)
-}
-
-func lockWebResource(tx *gorm.DB, wrID uint) error {
-	var wr *models.WebResource
-	res := tx.Clauses(clause.Locking{Strength: "SHARE"}).Select("ID").First(&wr, wrID)
-	if res.Error != nil {
-		return fmt.Errorf("error locking WebResource %d: %w", wrID, res.Error)
-	}
-	return nil
 }
 
 func getWebResourceWithRelations(tx *gorm.DB, wrID uint) (*models.WebResource, error) {
@@ -133,8 +129,7 @@ func (ws *WebScraper) processWebResource(
 	ctx context.Context,
 	tx *gorm.DB,
 	wr *models.WebResource,
-	js *jobscheduler.JobScheduler,
-) error {
+) (*models.WebArticle, error) {
 	logger := ws.Log.With().Uint("WebResource", wr.ID).Logger()
 
 	if wr.WebArticle != nil {
@@ -143,50 +138,40 @@ func (ws *WebScraper) processWebResource(
 
 	body, err := ws.scrapeURL(ctx, logger, wr.URL)
 	if err != nil {
-		return err
+		return nil, err
 	}
 	if len(body) == 0 {
 		logger.Debug().Msgf("empty body: skipping article")
-		return nil
+		return nil, nil
 	}
 
 	article, err := ws.extractFromHTML(body, wr.URL)
 	if err != nil {
 		logger.Warn().Err(err).Msgf("error extracting article from HTML: skipping article")
-		return nil
+		return nil, nil
 	}
 
 	similarExists, err := webArticleWithSameTitleExists(tx, article.Title)
 	if err != nil {
-		return err
+		return nil, err
 	}
 	if similarExists {
 		logger.Debug().Str("Title", article.Title).Msgf("web article with same title already exists: article skipped")
-		return nil
+		return nil, nil
 	}
 
 	lang, langOk := resolveOrDetectLanguage(wr, article)
 	if !langOk {
 		logger.Warn().Str("Title", article.Title).Msg("failed to detect language")
-		return nil
+		return nil, nil
 	}
 	if !ws.languageIsAllowed(lang) {
 		logger.Debug().Str("Title", article.Title).Str("Lang", lang).Msg("language is not allowed")
-		return nil
+		return nil, nil
 	}
 
 	webArticle := ws.newWebArticle(wr, article, lang)
-
-	res := tx.Create(webArticle)
-	if database.IsUniqueViolationError(res.Error) {
-		logger.Warn().Err(res.Error).Msg("WebArticle creation constraint violation")
-		return nil
-	}
-	if res.Error != nil {
-		return fmt.Errorf("error creating WebArticle: %w", res.Error)
-	}
-
-	return js.AddJobs(ws.conf.NewWebArticleJobs, webArticle.ID)
+	return webArticle, nil
 }
 
 func (ws *WebScraper) newWebArticle(wr *models.WebResource, article *goose.Article, lang string) *models.WebArticle {
