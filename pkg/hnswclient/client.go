@@ -15,6 +15,7 @@ import (
 	"sort"
 	"strconv"
 	"strings"
+	"sync"
 	"time"
 )
 
@@ -120,7 +121,12 @@ func (c *Client) SearchKNN(ctx context.Context, params SearchParams) (Hits, erro
 	hits := make(Hits, 0)
 
 	indexNames := c.dailyIndexNameRange(params.From, params.To)
-	for _, indexName := range indexNames {
+
+	results := make([]Hits, len(indexNames))
+	errors := make([]error, len(indexNames))
+	var wg sync.WaitGroup
+
+	for i, indexName := range indexNames {
 		if !c.indicesCache.Has(indexName) {
 			if cacheUpdated {
 				continue
@@ -134,16 +140,33 @@ func (c *Client) SearchKNN(ctx context.Context, params SearchParams) (Hits, erro
 			}
 		}
 
-		grpcHits, err := c.searchKNN(ctx, indexName, params.Vector)
+		wg.Add(1)
+		go func(i int, indexName string) {
+			defer wg.Done()
+			grpcHits, err := c.searchKNN(ctx, indexName, params.Vector)
+			if err != nil {
+				errors[i] = err
+				return
+			}
+
+			newHits, err := filterAndConvertHits(grpcHits, params.DistanceThreshold)
+			if err != nil {
+				errors[i] = err
+				return
+			}
+
+			results[i] = newHits
+		}(i, indexName)
+	}
+	wg.Wait()
+
+	for _, err := range errors {
 		if err != nil {
 			return nil, err
 		}
+	}
 
-		newHits, err := filterAndConvertHits(grpcHits, params.DistanceThreshold)
-		if err != nil {
-			return nil, err
-		}
-
+	for _, newHits := range results {
 		hits = append(hits, newHits...)
 	}
 
