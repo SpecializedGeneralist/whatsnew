@@ -17,7 +17,6 @@ import (
 	"github.com/rs/zerolog"
 	"github.com/rs/zerolog/log"
 	"gorm.io/gorm"
-	"gorm.io/gorm/clause"
 	"time"
 )
 
@@ -89,20 +88,40 @@ func New(
 }
 
 func (dd *DuplicateDetector) perform(ctx context.Context, webArticleID uint) error {
-	js := jobscheduler.New()
+	tx := dd.DB.WithContext(ctx)
 
 	logger := dd.Log.With().Uint("WebArticle", webArticleID).Logger()
 	logger.Debug().Msg("perform starts")
 
-	err := dd.DB.WithContext(ctx).Transaction(func(tx *gorm.DB) error {
-		logger.Debug().Msg("get locked WebArticle")
-		wa, err := getLockedWebArticle(tx, webArticleID)
-		if err != nil {
-			return err
+	wa, err := getWebArticle(tx, webArticleID)
+	if err != nil {
+		return err
+	}
+
+	logger.Debug().Msg("process WebArticle")
+	simInfo, err := dd.processWebArticle(ctx, tx, wa)
+	if err != nil {
+		return err
+	}
+	if simInfo == nil {
+		return nil // skipped
+	}
+
+	logger.Debug().Msg("save model and pending jobs")
+
+	js := jobscheduler.New()
+	err = tx.Transaction(func(tx *gorm.DB) error {
+		res := tx.Create(simInfo)
+		if res.Error != nil {
+			return fmt.Errorf("error creating SimilarityInfo: %w", res.Error)
 		}
 
-		logger.Debug().Msg("process WebArticle")
-		err = dd.processWebArticle(ctx, tx, wa, js)
+		var err error
+		if simInfo.ParentID == nil {
+			err = js.AddJobs(dd.conf.NonDuplicateWebArticleJobs, wa.ID)
+		} else {
+			err = js.AddJobs(dd.conf.DuplicateWebArticleJobs, wa.ID)
+		}
 		if err != nil {
 			return err
 		}
@@ -125,9 +144,9 @@ func (dd *DuplicateDetector) perform(ctx context.Context, webArticleID uint) err
 	return nil
 }
 
-func getLockedWebArticle(tx *gorm.DB, id uint) (*models.WebArticle, error) {
+func getWebArticle(tx *gorm.DB, id uint) (*models.WebArticle, error) {
 	var wa *models.WebArticle
-	res := tx.Clauses(clause.Locking{Strength: "SHARE"}).
+	res := tx.
 		Preload("Vector").
 		Preload("SimilarityInfo").
 		First(&wa, id)
@@ -141,36 +160,28 @@ func (dd *DuplicateDetector) processWebArticle(
 	ctx context.Context,
 	tx *gorm.DB,
 	wa *models.WebArticle,
-	js *jobscheduler.JobScheduler,
-) error {
+) (*models.SimilarityInfo, error) {
 	logger := dd.Log.With().Uint("WebArticle", wa.ID).Logger()
 
 	if wa.SimilarityInfo != nil {
 		logger.Warn().Msg("SimilarityInfo is already present on this WebArticle")
-		return nil
+		return nil, nil
 	}
 	if wa.Vector == nil {
 		logger.Warn().Msg("this WebArticle does not have a vector")
-		return nil
+		return nil, nil
 	}
 
 	logger.Debug().Msg("find similar hit")
 	hit, err := dd.findSimilarHit(ctx, tx, wa, logger)
 	if err != nil {
-		return err
+		return nil, err
 	}
 
 	logger.Debug().Msg("create new SimilarityInfo")
 	si := newSimilarityInfo(wa, hit)
-	res := tx.Create(si)
-	if res.Error != nil {
-		return fmt.Errorf("error creating SimilarityInfo: %w", res.Error)
-	}
 
-	if hit != nil {
-		return js.AddJobs(dd.conf.DuplicateWebArticleJobs, wa.ID)
-	}
-	return js.AddJobs(dd.conf.NonDuplicateWebArticleJobs, wa.ID)
+	return si, nil
 }
 
 func newSimilarityInfo(wa *models.WebArticle, hit *hnswclient.Hit) *models.SimilarityInfo {
