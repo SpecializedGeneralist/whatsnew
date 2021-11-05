@@ -17,7 +17,6 @@ import (
 	"github.com/rs/zerolog"
 	"github.com/rs/zerolog/log"
 	"gorm.io/gorm"
-	"gorm.io/gorm/clause"
 	"strings"
 )
 
@@ -51,15 +50,28 @@ func New(
 }
 
 func (ie *InformationExtractor) perform(ctx context.Context, webArticleID uint) error {
-	js := jobscheduler.New()
+	tx := ie.DB.WithContext(ctx)
 
-	err := ie.DB.WithContext(ctx).Transaction(func(tx *gorm.DB) error {
-		wa, err := getLockedWebArticle(tx, webArticleID)
-		if err != nil {
-			return err
+	wa, err := getWebArticle(tx, webArticleID)
+	if err != nil {
+		return err
+	}
+
+	infos, err := ie.processWebArticle(ctx, tx, wa)
+	if err != nil {
+		return err
+	}
+
+	js := jobscheduler.New()
+	err = tx.Transaction(func(tx *gorm.DB) error {
+		if len(infos) > 0 {
+			res := tx.Create(&infos)
+			if res.Error != nil {
+				return fmt.Errorf("error saving new ExtractedInfo models: %w", res.Error)
+			}
 		}
 
-		err = ie.processWebArticle(ctx, tx, wa, js)
+		err := js.AddJobs(ie.conf.ProcessedWebArticleJobs, wa.ID)
 		if err != nil {
 			return err
 		}
@@ -73,9 +85,9 @@ func (ie *InformationExtractor) perform(ctx context.Context, webArticleID uint) 
 	return js.PushJobsAndDeletePendingJobs(ctx, ie.DB)
 }
 
-func getLockedWebArticle(tx *gorm.DB, id uint) (*models.WebArticle, error) {
+func getWebArticle(tx *gorm.DB, id uint) (*models.WebArticle, error) {
 	var wa *models.WebArticle
-	res := tx.Clauses(clause.Locking{Strength: "SHARE"}).Preload("ExtractedInfos").First(&wa, id)
+	res := tx.Preload("ExtractedInfos").First(&wa, id)
 	if res.Error != nil {
 		return nil, fmt.Errorf("error fetching WebArticle %d: %w", id, res.Error)
 	}
@@ -86,13 +98,12 @@ func (ie *InformationExtractor) processWebArticle(
 	ctx context.Context,
 	tx *gorm.DB,
 	wa *models.WebArticle,
-	js *jobscheduler.JobScheduler,
-) error {
+) ([]*models.ExtractedInfo, error) {
 	logger := ie.Log.With().Uint("WebArticle", wa.ID).Logger()
 
 	if len(wa.ExtractedInfos) > 0 {
 		logger.Warn().Msg("this WebArticle already has extracted info")
-		return nil
+		return nil, nil
 	}
 
 	title := strings.TrimSpace(wa.Title)
@@ -102,15 +113,10 @@ func (ie *InformationExtractor) processWebArticle(
 
 	if len(title) == 0 {
 		logger.Debug().Msg("empty title - web article skipped")
-		return nil
+		return nil, nil
 	}
 
-	err := ie.extractAndSaveInfo(ctx, tx, wa, title)
-	if err != nil {
-		return err
-	}
-
-	return js.AddJobs(ie.conf.ProcessedWebArticleJobs, wa.ID)
+	return ie.extractAndSaveInfo(ctx, tx, wa, title)
 }
 
 func (ie *InformationExtractor) extractAndSaveInfo(
@@ -118,13 +124,13 @@ func (ie *InformationExtractor) extractAndSaveInfo(
 	tx *gorm.DB,
 	wa *models.WebArticle,
 	title string,
-) error {
+) ([]*models.ExtractedInfo, error) {
 	rules, err := ie.getRules(tx)
 	if err != nil {
-		return err
+		return nil, err
 	}
 	if len(rules) == 0 {
-		return nil
+		return nil, nil
 	}
 
 	infos := make([]*models.ExtractedInfo, 0, len(rules))
@@ -132,7 +138,7 @@ func (ie *InformationExtractor) extractAndSaveInfo(
 	for _, rule := range rules {
 		ans, err := ie.getBestAnswer(ctx, title, rule.Question)
 		if err != nil {
-			return err
+			return nil, err
 		}
 		if ans == nil {
 			continue
@@ -159,15 +165,7 @@ func (ie *InformationExtractor) extractAndSaveInfo(
 		})
 	}
 
-	if len(infos) == 0 {
-		return nil
-	}
-
-	res := tx.Save(infos)
-	if res.Error != nil {
-		return fmt.Errorf("error saving new ExtractedInfo models: %w", res.Error)
-	}
-	return nil
+	return infos, nil
 }
 
 func (ie *InformationExtractor) getBestAnswer(
