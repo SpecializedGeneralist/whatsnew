@@ -11,4 +11,7 @@ type Model struct {
 	ID        uint      `gorm:"primaryKey"`
 	CreatedAt time.Time `gorm:"not null;default:now()"`
 	UpdatedAt time.Time `gorm:"not null;default:now()"`
+
+	// Version for optimistic locking.
+	Version uint `gorm:"not null;default:0"`
 }
