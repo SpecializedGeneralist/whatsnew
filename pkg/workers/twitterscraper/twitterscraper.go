@@ -19,7 +19,7 @@ import (
 	"github.com/rs/zerolog"
 	"github.com/rs/zerolog/log"
 	"gorm.io/gorm"
-	"gorm.io/gorm/clause"
+	"time"
 )
 
 // TwitterScraper implements a Faktory worker for scraping Twitter according
@@ -49,18 +49,19 @@ func New(conf config.TwitterScraper, db *gorm.DB, fk *faktory_worker.Manager) *T
 }
 
 func (ts *TwitterScraper) perform(ctx context.Context, twitterSourceID uint) error {
+	tx := ts.DB.WithContext(ctx)
+
+	src, err := getTwitterSource(tx, twitterSourceID)
+	if err != nil {
+		return err
+	}
+	if !src.Enabled {
+		ts.Log.Warn().Msgf("skipping TwitterSource %d: not enabled", src.ID)
+		return nil
+	}
+
 	js := jobscheduler.New()
-
-	err := ts.DB.WithContext(ctx).Transaction(func(tx *gorm.DB) error {
-		src, err := getLockedTwitterSource(tx, twitterSourceID)
-		if err != nil {
-			return err
-		}
-		if !src.Enabled {
-			ts.Log.Warn().Msgf("skipping TwitterSource %d: not enabled", src.ID)
-			return nil
-		}
-
+	err = tx.Transaction(func(tx *gorm.DB) error {
 		err = ts.processTwitterSource(ctx, tx, src, js)
 		if err != nil {
 			return err
@@ -75,9 +76,9 @@ func (ts *TwitterScraper) perform(ctx context.Context, twitterSourceID uint) err
 	return js.PushJobsAndDeletePendingJobs(ctx, ts.DB)
 }
 
-func getLockedTwitterSource(tx *gorm.DB, tsID uint) (*models.TwitterSource, error) {
+func getTwitterSource(tx *gorm.DB, tsID uint) (*models.TwitterSource, error) {
 	var src *models.TwitterSource
-	res := tx.Clauses(clause.Locking{Strength: "UPDATE"}).First(&src, tsID)
+	res := tx.First(&src, tsID)
 	if res.Error != nil {
 		return nil, fmt.Errorf("error fetching TwitterSource %d: %w", tsID, res.Error)
 	}
@@ -109,6 +110,7 @@ func (ts *TwitterScraper) processTwitterSource(
 			return ts.markSourceWithError(tx, src, tr.Error)
 		}
 		err := ts.processTweet(tx, src, tr.Tweet, js)
+		// TODO: tolerate idx_web_resources_url constraint violations!
 		if err != nil {
 			return fmt.Errorf("error processing tweet result: %w", err)
 		}
@@ -245,29 +247,25 @@ func createWebArticle(tx *gorm.DB, logger zerolog.Logger, wa *models.WebArticle)
 	return nil
 }
 
-func (ts *TwitterScraper) markSourceWithError(tx *gorm.DB, src *models.TwitterSource, err error) error {
-	src.LastError = sql.NullString{Valid: true, String: err.Error()}
+func (ts *TwitterScraper) markSourceWithError(tx *gorm.DB, src *models.TwitterSource, sourceErr error) error {
+	src.LastError = sql.NullString{Valid: true, String: sourceErr.Error()}
 	src.FailuresCount++
 
-	res := tx.Save(src)
-	if res.Error != nil {
-		return fmt.Errorf("error saving TwitterSource (marked with error): %w", res.Error)
+	err := models.OptimisticSave(tx, src)
+	if err != nil {
+		return fmt.Errorf("error saving TwitterSource (marked with error): %w", err)
 	}
 	return nil
 }
 
 func (ts *TwitterScraper) resetSourceErrors(tx *gorm.DB, src *models.TwitterSource) error {
-	// Don't waste an UPDATE if there's nothing to change.
-	if !src.LastError.Valid && src.FailuresCount == 0 {
-		return nil
-	}
-
+	src.LastRetrievedAt = sql.NullTime{Time: time.Now().UTC(), Valid: true}
 	src.LastError = sql.NullString{Valid: false, String: ""}
 	src.FailuresCount = 0
 
-	res := tx.Save(src)
-	if res.Error != nil {
-		return fmt.Errorf("error saving TwitterSource (resetting errors): %w", res.Error)
+	err := models.OptimisticSave(tx, src)
+	if err != nil {
+		return fmt.Errorf("error saving TwitterSource (resetting errors): %w", err)
 	}
 	return nil
 }
