@@ -17,7 +17,6 @@ import (
 	"github.com/rs/zerolog"
 	"github.com/rs/zerolog/log"
 	"gorm.io/gorm"
-	"gorm.io/gorm/clause"
 	"strings"
 )
 
@@ -52,15 +51,28 @@ func New(
 }
 
 func (gp *GeoParser) perform(ctx context.Context, webArticleID uint) error {
-	js := jobscheduler.New()
+	tx := gp.DB.WithContext(ctx)
 
-	err := gp.DB.WithContext(ctx).Transaction(func(tx *gorm.DB) error {
-		wa, err := getLockedWebArticle(tx, webArticleID)
-		if err != nil {
-			return err
+	wa, err := getWebArticle(tx, webArticleID)
+	if err != nil {
+		return err
+	}
+
+	countryOk, err := gp.processWebArticle(ctx, wa)
+	if err != nil {
+		return err
+	}
+
+	js := jobscheduler.New()
+	err = tx.Transaction(func(tx *gorm.DB) error {
+		if countryOk {
+			err := models.OptimisticSave(tx, wa)
+			if err != nil {
+				return fmt.Errorf("error saving WebArticle: %w", err)
+			}
 		}
 
-		err = gp.processWebArticle(ctx, tx, wa, js)
+		err := js.AddJobs(gp.conf.ProcessedWebArticleJobs, wa.ID)
 		if err != nil {
 			return err
 		}
@@ -74,9 +86,9 @@ func (gp *GeoParser) perform(ctx context.Context, webArticleID uint) error {
 	return js.PushJobsAndDeletePendingJobs(ctx, gp.DB)
 }
 
-func getLockedWebArticle(tx *gorm.DB, id uint) (*models.WebArticle, error) {
+func getWebArticle(tx *gorm.DB, id uint) (*models.WebArticle, error) {
 	var wa *models.WebArticle
-	res := tx.Clauses(clause.Locking{Strength: "UPDATE"}).First(&wa, id)
+	res := tx.First(&wa, id)
 	if res.Error != nil {
 		return nil, fmt.Errorf("error fetching WebArticle %d: %w", id, res.Error)
 	}
@@ -85,53 +97,41 @@ func getLockedWebArticle(tx *gorm.DB, id uint) (*models.WebArticle, error) {
 
 func (gp *GeoParser) processWebArticle(
 	ctx context.Context,
-	tx *gorm.DB,
 	wa *models.WebArticle,
-	js *jobscheduler.JobScheduler,
-) error {
+) (bool, error) {
 	logger := gp.Log.With().Uint("WebArticle", wa.ID).Logger()
 
 	if wa.CountryCode.Valid {
 		logger.Warn().Msg("this WebArticle already has a country code assigned")
-		return nil
+		return false, nil
 	}
 
-	err := gp.extractAndStoreCountry(ctx, tx, wa)
-	if err != nil {
-		return err
-	}
-
-	return js.AddJobs(gp.conf.ProcessedWebArticleJobs, wa.ID)
+	return gp.extractAndStoreCountry(ctx, wa)
 }
 
 func (gp *GeoParser) extractAndStoreCountry(
 	ctx context.Context,
-	tx *gorm.DB,
 	wa *models.WebArticle,
-) error {
+) (bool, error) {
 	logger := gp.Log.With().Uint("WebArticle", wa.ID).Logger()
 
 	textOK, text, lang := chooseText(wa)
 	if !textOK {
 		logger.Debug().Msg("no text to parse")
-		return nil
+		return false, nil
 	}
 
 	countryOK, code, err := gp.extractCountry(ctx, text, lang)
 	if err != nil {
-		return err
+		return false, err
 	}
 	if !countryOK {
 		logger.Debug().Msg("no country found")
-		return nil
+		return false, nil
 	}
 
 	wa.CountryCode = sql.NullString{String: code, Valid: true}
-	res := tx.Save(wa)
-	if res.Error != nil {
-		return fmt.Errorf("error saving WebArticle: %w", res.Error)
-	}
-	return nil
+	return true, nil
 }
 
 var languages = map[string]cliff.Language{
