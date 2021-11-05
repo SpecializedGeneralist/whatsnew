@@ -91,12 +91,17 @@ func New(
 func (dd *DuplicateDetector) perform(ctx context.Context, webArticleID uint) error {
 	js := jobscheduler.New()
 
+	logger := dd.Log.With().Uint("WebArticle", webArticleID).Logger()
+	logger.Debug().Msg("perform starts")
+
 	err := dd.DB.WithContext(ctx).Transaction(func(tx *gorm.DB) error {
+		logger.Debug().Msg("get locked WebArticle")
 		wa, err := getLockedWebArticle(tx, webArticleID)
 		if err != nil {
 			return err
 		}
 
+		logger.Debug().Msg("process WebArticle")
 		err = dd.processWebArticle(ctx, tx, wa, js)
 		if err != nil {
 			return err
@@ -108,7 +113,16 @@ func (dd *DuplicateDetector) perform(ctx context.Context, webArticleID uint) err
 		return err
 	}
 
-	return js.PushJobsAndDeletePendingJobs(ctx, dd.DB)
+	logger.Debug().Msg("push jobs")
+
+	err = js.PushJobsAndDeletePendingJobs(ctx, dd.DB)
+	if err != nil {
+		return err
+	}
+
+	logger.Debug().Msg("perform ends")
+
+	return nil
 }
 
 func getLockedWebArticle(tx *gorm.DB, id uint) (*models.WebArticle, error) {
@@ -140,11 +154,13 @@ func (dd *DuplicateDetector) processWebArticle(
 		return nil
 	}
 
-	hit, err := dd.findSimilarHit(ctx, tx, wa)
+	logger.Debug().Msg("find similar hit")
+	hit, err := dd.findSimilarHit(ctx, tx, wa, logger)
 	if err != nil {
 		return err
 	}
 
+	logger.Debug().Msg("create new SimilarityInfo")
 	si := newSimilarityInfo(wa, hit)
 	res := tx.Create(si)
 	if res.Error != nil {
@@ -170,6 +186,7 @@ func (dd *DuplicateDetector) findSimilarHit(
 	ctx context.Context,
 	tx *gorm.DB,
 	wa *models.WebArticle,
+	logger zerolog.Logger,
 ) (*hnswclient.Hit, error) {
 	vector, err := wa.Vector.DataAsFloat32Slice()
 	if err != nil {
@@ -187,6 +204,8 @@ func (dd *DuplicateDetector) findSimilarHit(
 	}()
 	hnswClient := hnswclient.New(hnswConn, dd.hnswConf.Index)
 
+	logger.Debug().Msg("KNN-Search")
+
 	hits, err := hnswClient.SearchKNN(ctx, hnswclient.SearchParams{
 		From:              wa.PublishDate.Add(-time.Duration(dd.conf.TimeframeDays) * day),
 		To:                wa.PublishDate,
@@ -197,6 +216,7 @@ func (dd *DuplicateDetector) findSimilarHit(
 		return nil, err
 	}
 
+	logger.Debug().Msg("select top hit")
 	return dd.SelectTopHit(tx, wa, hits)
 }
 

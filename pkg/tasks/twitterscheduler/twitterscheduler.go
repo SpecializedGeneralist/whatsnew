@@ -81,7 +81,7 @@ func (fs *TwitterScheduler) findAndScheduleSources(ctx context.Context) error {
 
 	var sources []*models.TwitterSource
 	res := query.FindInBatches(&sources, batchSize, func(_ *gorm.DB, batch int) error {
-		fs.log.Trace().Msgf("batch %d", batch)
+		fs.log.Debug().Msgf("batch %d", batch)
 		return fs.processBatch(ctx, sources)
 	})
 	return res.Error
@@ -112,7 +112,7 @@ func (fs *TwitterScheduler) scheduleSourceJobs(source *models.TwitterSource) err
 		job.ReserveFor = fj.ReserveFor
 		job.Retry = fj.Retry
 
-		fs.log.Trace().Interface("job", job).Msg("schedule new job")
+		fs.log.Trace().Interface("job", job).Msg("push job")
 
 		err := fs.fk.Push(job)
 		if err != nil {

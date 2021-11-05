@@ -142,12 +142,12 @@ func (ie *InformationExtractor) extractAndSaveInfo(
 			Float32("confidence", confidence).Logger()
 
 		if confidence < rule.Threshold {
-			logger.Trace().Msg("answer confidence below threshold")
+			logger.Debug().Msg("answer confidence below threshold")
 			continue
 		}
 
 		if !rule.AnswerRegexp.MatchString(ans.Text) {
-			logger.Trace().Msg("no regexp match")
+			logger.Debug().Msg("no regexp match")
 			continue
 		}
 

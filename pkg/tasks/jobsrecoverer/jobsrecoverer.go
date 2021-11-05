@@ -81,7 +81,7 @@ func (jr *JobsRecoverer) findAndRecoverPendingJobs(ctx context.Context) error {
 
 	var pjs []*models.PendingJob
 	res := query.FindInBatches(&pjs, batchSize, func(_ *gorm.DB, batch int) error {
-		jr.log.Trace().Msgf("batch %d", batch)
+		jr.log.Debug().Msgf("batch %d", batch)
 		return jr.processBatch(ctx, pjs)
 	})
 	return res.Error

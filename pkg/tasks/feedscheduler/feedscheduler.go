@@ -81,7 +81,7 @@ func (fs *FeedScheduler) findAndScheduleFeeds(ctx context.Context) error {
 
 	var feeds []*models.Feed
 	res := query.FindInBatches(&feeds, batchSize, func(_ *gorm.DB, batch int) error {
-		fs.log.Trace().Msgf("batch %d", batch)
+		fs.log.Debug().Msgf("batch %d", batch)
 		return fs.processBatch(ctx, feeds)
 	})
 	return res.Error
@@ -112,7 +112,7 @@ func (fs *FeedScheduler) scheduleFeedJobs(feed *models.Feed) error {
 		job.ReserveFor = fj.ReserveFor
 		job.Retry = fj.Retry
 
-		fs.log.Trace().Interface("job", job).Msg("schedule new job")
+		fs.log.Trace().Interface("job", job).Msg("push job")
 
 		err := fs.fk.Push(job)
 		if err != nil {

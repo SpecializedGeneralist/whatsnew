@@ -77,12 +77,15 @@ Loop:
 }
 
 func (gf *GDELTFetcher) fetchAndProcessEvents(ctx context.Context) error {
+	gf.log.Debug().Msg("getting latest events")
 	evs, err := gdelt.GetLatestEvents()
 	if err != nil {
 		return fmt.Errorf("error fetching latest GDELT events: %w", err)
 	}
 
 	js := jobscheduler.New()
+
+	gf.log.Debug().Msg("processing all events")
 
 	err = gf.db.WithContext(ctx).Transaction(func(tx *gorm.DB) error {
 		visitedURLs := sets.NewStringSetWithSize(len(evs))
@@ -134,14 +137,20 @@ func (gf *GDELTFetcher) processEvent(tx *gorm.DB, ev *events.Event, js *jobsched
 	if webResource != nil {
 		logger = logger.With().Uint("WebResource", webResource.ID).Logger()
 
+		logger.Debug().Msg("WebResource already exists")
+
 		if webResource.GDELTEvent != nil {
 			logger.Debug().Uint("GDELTEvent", webResource.GDELTEvent.ID).Msg("a GDELT event already exists")
 			return nil
 		}
 
+		logger.Debug().Msg("creating new GDELTEvent")
+
 		gdeltEvent.WebResourceID = webResource.ID
 		return createGDELTEvent(tx, logger, gdeltEvent)
 	}
+
+	logger.Debug().Msg("creating new WebResource and GDELTEvent")
 
 	webResource = &models.WebResource{
 		URL:        ev.SourceURL,
