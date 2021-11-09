@@ -9,6 +9,11 @@ import (
 	"gorm.io/gorm"
 )
 
+// ErrStaleObject is an error returned when attempting to save a stale record.
+// A record is stale when it's being saved by another query after instantiation.
+// It's part of the optimistic locking mechanism.
+var ErrStaleObject = errors.New("stale object error")
+
 type OptimisticLockModel interface {
 	GetVersion() uint
 	IncrementVersion()
@@ -23,7 +28,7 @@ func OptimisticSave(tx *gorm.DB, m OptimisticLockModel) error {
 		return ret.Error
 	}
 	if ret.RowsAffected == 0 {
-		return errors.New("optimistic-lock saving failed")
+		return ErrStaleObject
 	}
 	return nil
 }
