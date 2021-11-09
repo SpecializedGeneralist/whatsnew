@@ -23,6 +23,5 @@ func (m Model) GetVersion() uint {
 }
 
 func (m *Model) IncrementVersion() {
-	m.Version += 1
-	m.UpdatedAt = time.Now().UTC()
+	m.Version++
 }

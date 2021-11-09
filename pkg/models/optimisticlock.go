@@ -18,7 +18,7 @@ func OptimisticSave(tx *gorm.DB, m OptimisticLockModel) error {
 	ver := m.GetVersion()
 	m.IncrementVersion()
 
-	ret := tx.Model(m).Where("version", ver).UpdateColumns(m)
+	ret := tx.Model(m).Where("version", ver).Updates(m)
 	if ret.Error != nil {
 		return ret.Error
 	}
