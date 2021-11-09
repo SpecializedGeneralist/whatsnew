@@ -6,6 +6,7 @@ package zeroshotclassifier
 
 import (
 	"context"
+	"errors"
 	"fmt"
 	"github.com/SpecializedGeneralist/whatsnew/pkg/config"
 	"github.com/SpecializedGeneralist/whatsnew/pkg/grpcconn"
@@ -17,7 +18,6 @@ import (
 	"github.com/rs/zerolog"
 	"github.com/rs/zerolog/log"
 	"gorm.io/gorm"
-	"gorm.io/gorm/clause"
 	"strings"
 )
 
@@ -50,16 +50,34 @@ func New(
 	return zsc
 }
 
-func (zsc *ZeroShotClassifier) perform(ctx context.Context, webArticleID uint) error {
-	js := jobscheduler.New()
+var errSkip = errors.New("skip")
 
-	err := zsc.DB.WithContext(ctx).Transaction(func(tx *gorm.DB) error {
-		wa, err := getLockedWebArticle(tx, webArticleID)
-		if err != nil {
-			return err
+func (zsc *ZeroShotClassifier) perform(ctx context.Context, webArticleID uint) error {
+	tx := zsc.DB.WithContext(ctx)
+
+	wa, err := getWebArticle(tx, webArticleID)
+	if err != nil {
+		return err
+	}
+
+	classes, err := zsc.processWebArticle(ctx, tx, wa)
+	if errors.Is(err, errSkip) {
+		return nil
+	}
+	if err != nil {
+		return err
+	}
+
+	js := jobscheduler.New()
+	err = tx.Transaction(func(tx *gorm.DB) error {
+		if len(classes) > 0 {
+			res := tx.Create(&classes)
+			if res.Error != nil {
+				return fmt.Errorf("error creating ZeroShotClass models: %w", res.Error)
+			}
 		}
 
-		err = zsc.processWebArticle(ctx, tx, wa, js)
+		err = js.AddJobs(zsc.conf.ProcessedWebArticleJobs, wa.ID)
 		if err != nil {
 			return err
 		}
@@ -73,9 +91,9 @@ func (zsc *ZeroShotClassifier) perform(ctx context.Context, webArticleID uint) e
 	return js.PushJobsAndDeletePendingJobs(ctx, zsc.DB)
 }
 
-func getLockedWebArticle(tx *gorm.DB, id uint) (*models.WebArticle, error) {
+func getWebArticle(tx *gorm.DB, id uint) (*models.WebArticle, error) {
 	var wa *models.WebArticle
-	res := tx.Clauses(clause.Locking{Strength: "SHARE"}).Preload("ZeroShotClasses").First(&wa, id)
+	res := tx.Preload("ZeroShotClasses").First(&wa, id)
 	if res.Error != nil {
 		return nil, fmt.Errorf("error fetching WebArticle %d: %w", id, res.Error)
 	}
@@ -86,13 +104,12 @@ func (zsc *ZeroShotClassifier) processWebArticle(
 	ctx context.Context,
 	tx *gorm.DB,
 	wa *models.WebArticle,
-	js *jobscheduler.JobScheduler,
-) error {
+) ([]*models.ZeroShotClass, error) {
 	logger := zsc.Log.With().Uint("WebArticle", wa.ID).Logger()
 
 	if len(wa.ZeroShotClasses) > 0 {
 		logger.Warn().Msg("this WebArticle already has classes")
-		return nil
+		return nil, errSkip
 	}
 
 	title := strings.TrimSpace(wa.Title)
@@ -102,31 +119,24 @@ func (zsc *ZeroShotClassifier) processWebArticle(
 
 	if len(title) == 0 {
 		logger.Debug().Msg("empty title - web article skipped")
-		return nil
+		return nil, errSkip
 	}
 
 	templates, err := zsc.getHypotheses(tx)
 	if err != nil {
-		return err
+		return nil, err
 	}
 
 	var classes []*models.ZeroShotClass
 	for _, template := range templates {
 		newClasses, err := zsc.classify(ctx, wa.ID, title, template)
 		if err != nil {
-			return err
+			return nil, err
 		}
 		classes = append(classes, newClasses...)
 	}
 
-	if len(classes) > 0 {
-		res := tx.Create(classes)
-		if res.Error != nil {
-			return fmt.Errorf("error saving new ZeroShotClasses: %w", res.Error)
-		}
-	}
-
-	return js.AddJobs(zsc.conf.ProcessedWebArticleJobs, wa.ID)
+	return classes, nil
 }
 
 func (zsc *ZeroShotClassifier) getHypotheses(tx *gorm.DB) ([]models.ZeroShotHypothesisTemplate, error) {
