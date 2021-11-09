@@ -60,11 +60,15 @@ func (ff *FeedFetcher) perform(ctx context.Context, feedID uint) error {
 		return nil
 	}
 
-	parsedFeed, parsedFeedError := ff.parseFeedURL(ctx, feed.URL)
+	parsedFeed, err := ff.parseFeedURL(ctx, feed.URL)
+	if err != nil {
+		ff.Log.Warn().Err(err).Msgf("error parsing feed %d", feed.ID)
+		return ff.markFeedWithError(tx, feed, err)
+	}
 
 	js := jobscheduler.New()
 	err = tx.Transaction(func(tx *gorm.DB) error {
-		err = ff.processFeed(tx, feed, js, parsedFeed, parsedFeedError)
+		err = ff.processFeed(tx, feed, js, parsedFeed)
 		if err != nil {
 			return err
 		}
@@ -92,36 +96,38 @@ func (ff *FeedFetcher) parseFeedURL(ctx context.Context, url string) (*gofeed.Fe
 	return ff.parser.ParseURLWithContext(url, ctxTimeout)
 }
 
+func (ff *FeedFetcher) markFeedWithError(tx *gorm.DB, feed *models.Feed, feedError error) error {
+	feed.LastError = sql.NullString{Valid: true, String: feedError.Error()}
+	feed.FailuresCount++
+	feed.Enabled = feed.FailuresCount <= ff.conf.MaxAllowedFailures
+
+	err := models.OptimisticSave(tx, feed)
+	if err != nil {
+		return fmt.Errorf("error saving feed (marked with error): %w", err)
+	}
+	return nil
+}
+
 func (ff *FeedFetcher) processFeed(
 	tx *gorm.DB,
 	feed *models.Feed,
 	js *jobscheduler.JobScheduler,
 	parsedFeed *gofeed.Feed,
-	parsedFeedError error,
 ) error {
-	if parsedFeedError != nil {
-		ff.Log.Warn().Err(parsedFeedError).Msgf("error parsing feed %d", feed.ID)
-		return ff.markFeedWithError(tx, feed, parsedFeedError)
-	}
-
-	err := ff.resetFeedErrors(tx, feed)
-	if err != nil {
-		return err
-	}
-
 	for _, item := range parsedFeed.Items {
-		err = ff.processParsedFeedItem(tx, feed, item, js)
+		err := ff.processParsedFeedItem(tx, feed, item, js)
 		if err != nil {
 			return fmt.Errorf("error processing parsed feed item: %w", err)
 		}
 	}
 
+	feed.LastError = sql.NullString{Valid: false, String: ""}
+	feed.FailuresCount = 0
 	feed.LastRetrievedAt = sql.NullTime{Time: time.Now().UTC(), Valid: true}
-	err = models.OptimisticSave(tx, feed)
+	err := models.OptimisticSave(tx, feed)
 	if err != nil {
-		return fmt.Errorf("error updating Feed.LastRetrievedAt: %w", err)
+		return fmt.Errorf("error updating processed Feed: %w", err)
 	}
-
 	return nil
 }
 
@@ -198,29 +204,6 @@ func createFeedItem(tx *gorm.DB, logger zerolog.Logger, fi *models.FeedItem) err
 	}
 	if res.Error != nil {
 		return fmt.Errorf("error creating FeedItem: %w", res.Error)
-	}
-	return nil
-}
-
-func (ff *FeedFetcher) markFeedWithError(tx *gorm.DB, feed *models.Feed, feedError error) error {
-	feed.LastError = sql.NullString{Valid: true, String: feedError.Error()}
-	feed.FailuresCount++
-	feed.Enabled = feed.FailuresCount <= ff.conf.MaxAllowedFailures
-
-	err := models.OptimisticSave(tx, feed)
-	if err != nil {
-		return fmt.Errorf("error saving feed (marked with error): %w", err)
-	}
-	return nil
-}
-
-func (ff *FeedFetcher) resetFeedErrors(tx *gorm.DB, feed *models.Feed) error {
-	feed.LastError = sql.NullString{Valid: false, String: ""}
-	feed.FailuresCount = 0
-
-	err := models.OptimisticSave(tx, feed)
-	if err != nil {
-		return fmt.Errorf("error saving feed (resetting errors): %w", err)
 	}
 	return nil
 }
