@@ -5,6 +5,28 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
 ## [Unreleased]
+### Added
+- HTTP requests made by the feed-fetcher worker can be limited with the new
+  `request_timeout` setting.
+- Optimistic locking mechanism for GORM models.
+  See: `models.OptimisticLockModel`, `models.OptimisticSave` and
+  `models.ErrStaleObject`.
+
+### Changed
+- The base GORM model (`models.Model`) now includes a `Version` field and
+  satisfies the `models.OptimisticLockModel` interface, allowing
+  optimistic locking.
+- Each worker has been modified avoiding long-lasting transactions, extracting
+  from them heavy operations, and opting for optimistic locking when
+  record updates are involved. Reducing the transactions' duration and removing
+  the explicit row-level locks can produce tremendous improvements
+  on the performance of the whole system, when under heavy loads (i.e.
+  at least thousands of sources).
+- Improve `hnswcloent.Client.SearchKNN` performance, making the requests to
+  each candidate daily HNSW index concurrently.
+- Minor refactoring and improvements to some log messages and their severity
+  level.
+- Upgrade dependencies.
 
 ## [1.0.0-beta.1] - 2021-10-20
 ### Added
