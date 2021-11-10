@@ -24,6 +24,8 @@ func (m Model) GetVersion() uint {
 	return m.Version
 }
 
+// IncrementVersion increments Model.Version by 1, satisfying the
+// OptimisticLockModel interface.
 func (m *Model) IncrementVersion() {
 	m.Version++
 }
