@@ -18,6 +18,8 @@ type Model struct {
 
 var _ OptimisticLockModel = &Model{}
 
+// GetVersion returns Model.Version, satisfying the
+// OptimisticLockModel interface.
 func (m Model) GetVersion() uint {
 	return m.Version
 }
