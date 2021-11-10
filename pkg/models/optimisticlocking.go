@@ -42,6 +42,13 @@ type OptimisticLockModel interface {
 	IncrementVersion()
 }
 
+// OptimisticSave saves the given model to the database, applyint the
+// optimistic locking mechanism.
+// It performs a GORM DB.Updates under the hood. If the update fails for any
+// reason, the resulting DB.Error is returned unmodified.
+// If another process already modified the same record, causing a version
+// mismatch, the model is considered "stale", and the error ErrStaleObject is
+// returned.
 func OptimisticSave(tx *gorm.DB, m OptimisticLockModel) error {
 	ver := m.GetVersion()
 	m.IncrementVersion()
