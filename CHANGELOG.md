@@ -22,6 +22,9 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
   the explicit row-level locks can produce tremendous improvements
   on the performance of the whole system, when under heavy loads (i.e.
   at least thousands of sources).
+- Give ordering priority to sources never retrieved before (i.e.
+  `last_retrieved_at` is null) when looping through sources to schedule from
+  feed-scheduler and twitter-scheduler tasks. 
 - Improve `hnswcloent.Client.SearchKNN` performance, making the requests to
   each candidate daily HNSW index concurrently.
 - Minor refactoring and improvements to some log messages and their severity
