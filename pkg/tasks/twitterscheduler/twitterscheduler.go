@@ -77,7 +77,7 @@ func (fs *TwitterScheduler) findAndScheduleSources(ctx context.Context) error {
 
 	query := fs.db.WithContext(ctx).
 		Where("enabled = true").
-		Order("last_retrieved_at NULL FIRST, id")
+		Order("last_retrieved_at NULLS FIRST, id")
 
 	var sources []*models.TwitterSource
 	res := query.FindInBatches(&sources, batchSize, func(_ *gorm.DB, batch int) error {
