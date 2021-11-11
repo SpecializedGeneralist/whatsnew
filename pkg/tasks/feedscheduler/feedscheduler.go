@@ -77,7 +77,7 @@ func (fs *FeedScheduler) findAndScheduleFeeds(ctx context.Context) error {
 
 	query := fs.db.WithContext(ctx).
 		Where("enabled = true").
-		Order("last_retrieved_at, id")
+		Order("last_retrieved_at NULLS FIRST, id")
 
 	var feeds []*models.Feed
 	res := query.FindInBatches(&feeds, batchSize, func(_ *gorm.DB, batch int) error {
