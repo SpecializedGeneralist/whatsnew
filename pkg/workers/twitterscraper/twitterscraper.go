@@ -110,7 +110,6 @@ func (ts *TwitterScraper) processTwitterSource(
 			return ts.markSourceWithError(tx, src, tr.Error)
 		}
 		err := ts.processTweet(tx, src, tr.Tweet, js)
-		// TODO: tolerate idx_web_resources_url constraint violations!
 		if err != nil {
 			return fmt.Errorf("error processing tweet result: %w", err)
 		}
