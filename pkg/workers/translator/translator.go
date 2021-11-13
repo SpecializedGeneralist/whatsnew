@@ -77,12 +77,7 @@ func (t *Translator) perform(ctx context.Context, webArticleID uint) error {
 			}
 		}
 
-		err := js.AddJobs(t.conf.ProcessedWebArticleJobs, wa.ID)
-		if err != nil {
-			return err
-		}
-
-		return js.CreatePendingJobs(tx)
+		return js.AddJobsAndCreatePendingJobs(tx, t.conf.ProcessedWebArticleJobs, wa.ID)
 	})
 	if err != nil {
 		return err

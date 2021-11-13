@@ -111,12 +111,7 @@ func (tc *TextClassifier) perform(ctx context.Context, webArticleID uint) error 
 			return nil
 		}
 
-		err = js.AddJobs(tc.conf.ProcessedWebArticleJobs, wa.ID)
-		if err != nil {
-			return err
-		}
-
-		return js.CreatePendingJobs(tx)
+		return js.AddJobsAndCreatePendingJobs(tx, tc.conf.ProcessedWebArticleJobs, wa.ID)
 	})
 	if err != nil {
 		return err

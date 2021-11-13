@@ -78,12 +78,7 @@ func (v *Vectorizer) perform(ctx context.Context, webArticleID uint) error {
 			return fmt.Errorf("error saving Vector: %w", res.Error)
 		}
 
-		err := js.AddJobs(v.conf.VectorizedWebArticleJobs, wa.ID)
-		if err != nil {
-			return err
-		}
-
-		return js.CreatePendingJobs(tx)
+		return js.AddJobsAndCreatePendingJobs(tx, v.conf.VectorizedWebArticleJobs, wa.ID)
 	})
 	if err != nil {
 		return err

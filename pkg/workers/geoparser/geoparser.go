@@ -78,12 +78,7 @@ func (gp *GeoParser) perform(ctx context.Context, webArticleID uint) error {
 			}
 		}
 
-		err := js.AddJobs(gp.conf.ProcessedWebArticleJobs, wa.ID)
-		if err != nil {
-			return err
-		}
-
-		return js.CreatePendingJobs(tx)
+		return js.AddJobsAndCreatePendingJobs(tx, gp.conf.ProcessedWebArticleJobs, wa.ID)
 	})
 	if err != nil {
 		return err

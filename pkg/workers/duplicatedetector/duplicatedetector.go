@@ -116,17 +116,13 @@ func (dd *DuplicateDetector) perform(ctx context.Context, webArticleID uint) err
 			return fmt.Errorf("error creating SimilarityInfo: %w", res.Error)
 		}
 
-		var err error
+		var jobs []config.FaktoryJob
 		if simInfo.ParentID == nil {
-			err = js.AddJobs(dd.conf.NonDuplicateWebArticleJobs, wa.ID)
+			jobs = dd.conf.NonDuplicateWebArticleJobs
 		} else {
-			err = js.AddJobs(dd.conf.DuplicateWebArticleJobs, wa.ID)
+			jobs = dd.conf.DuplicateWebArticleJobs
 		}
-		if err != nil {
-			return err
-		}
-
-		return js.CreatePendingJobs(tx)
+		return js.AddJobsAndCreatePendingJobs(tx, jobs, wa.ID)
 	})
 	if err != nil {
 		return err

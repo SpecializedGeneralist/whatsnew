@@ -91,12 +91,7 @@ func (ws *WebScraper) perform(ctx context.Context, webResourceID uint) error {
 			return fmt.Errorf("error creating WebArticle: %w", res.Error)
 		}
 
-		err := js.AddJobs(ws.conf.NewWebArticleJobs, wa.ID)
-		if err != nil {
-			return err
-		}
-
-		return js.CreatePendingJobs(tx)
+		return js.AddJobsAndCreatePendingJobs(tx, ws.conf.NewWebArticleJobs, wa.ID)
 	})
 	if err != nil {
 		return err

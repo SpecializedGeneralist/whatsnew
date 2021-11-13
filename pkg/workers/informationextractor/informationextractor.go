@@ -77,12 +77,7 @@ func (ie *InformationExtractor) perform(ctx context.Context, webArticleID uint) 
 			}
 		}
 
-		err := js.AddJobs(ie.conf.ProcessedWebArticleJobs, wa.ID)
-		if err != nil {
-			return err
-		}
-
-		return js.CreatePendingJobs(tx)
+		return js.AddJobsAndCreatePendingJobs(tx, ie.conf.ProcessedWebArticleJobs, wa.ID)
 	})
 	if err != nil {
 		return err

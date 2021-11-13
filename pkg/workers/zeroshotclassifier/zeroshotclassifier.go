@@ -77,12 +77,7 @@ func (zsc *ZeroShotClassifier) perform(ctx context.Context, webArticleID uint) e
 			}
 		}
 
-		err = js.AddJobs(zsc.conf.ProcessedWebArticleJobs, wa.ID)
-		if err != nil {
-			return err
-		}
-
-		return js.CreatePendingJobs(tx)
+		return js.AddJobsAndCreatePendingJobs(tx, zsc.conf.ProcessedWebArticleJobs, wa.ID)
 	})
 	if err != nil {
 		return err
