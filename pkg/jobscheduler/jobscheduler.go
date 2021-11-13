@@ -181,6 +181,16 @@ func (js *JobScheduler) CreatePendingJobs(tx *gorm.DB) error {
 	return nil
 }
 
+// AddJobsAndCreatePendingJobs calls AddJobs and CreatePendingJobs in
+// succession. It returns the first error encountered, if any.
+func (js *JobScheduler) AddJobsAndCreatePendingJobs(tx *gorm.DB, fjs []config.FaktoryJob, args ...interface{}) error {
+	err := js.AddJobs(fjs, args...)
+	if err != nil {
+		return err
+	}
+	return js.CreatePendingJobs(tx)
+}
+
 // PushJobs pushes all collected Jobs to the Faktory server.
 //
 // This method must only be called within the context of an executing Faktory
