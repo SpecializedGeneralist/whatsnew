@@ -110,7 +110,8 @@ func (fs *FeedScheduler) scheduleFeedJobs(feed *models.Feed) error {
 		job := faktory.NewJob(fj.JobType, feed.ID)
 		job.Queue = fj.Queue
 		job.ReserveFor = fj.ReserveFor
-		job.Retry = fj.Retry
+		job.Retry = new(int)
+		*job.Retry = fj.Retry
 
 		fs.log.Trace().Interface("job", job).Msg("push job")
 

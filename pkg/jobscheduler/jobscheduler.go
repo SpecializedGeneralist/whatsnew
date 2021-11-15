@@ -129,7 +129,8 @@ func (js *JobScheduler) AddJob(fj config.FaktoryJob, args ...interface{}) error 
 	job := faktory.NewJob(fj.JobType, args...)
 	job.Queue = fj.Queue
 	job.ReserveFor = fj.ReserveFor
-	job.Retry = fj.Retry
+	job.Retry = new(int)
+	*job.Retry = fj.Retry
 
 	pj, err := models.NewPendingJob(job)
 	if err != nil {
