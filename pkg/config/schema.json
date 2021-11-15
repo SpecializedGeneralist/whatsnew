@@ -254,6 +254,9 @@
                 "type": "string"
               }
             },
+            "request_timeout": {
+              "type": "string"
+            },
             "loglevel": {
               "$ref": "#/definitions/loglevel"
             }
@@ -263,6 +266,7 @@
             "concurrency",
             "new_web_resource_jobs",
             "language_filter",
+            "request_timeout",
             "max_allowed_failures",
             "omit_items_published_before",
             "loglevel"
