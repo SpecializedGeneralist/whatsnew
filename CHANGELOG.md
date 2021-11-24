@@ -5,6 +5,9 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
 ## [Unreleased]
+### Changed
+- `hnswclient.New` now accepts an HNSW `grpcapi.ServerClient` argument,
+  instead of a generic gRPC connection. This makes testing easier.
 
 ## [1.0.0-beta.2] 2021-11-15
 ### Added

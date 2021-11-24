@@ -6,6 +6,7 @@ package hnswpurger
 
 import (
 	"context"
+	hnswpb "github.com/SpecializedGeneralist/hnsw-grpc-server/pkg/grpcapi"
 	"github.com/SpecializedGeneralist/whatsnew/pkg/config"
 	"github.com/SpecializedGeneralist/whatsnew/pkg/grpcconn"
 	"github.com/SpecializedGeneralist/whatsnew/pkg/hnswclient"
@@ -75,7 +76,7 @@ func (hp *HNSWPurger) purge(ctx context.Context) error {
 			hp.log.Err(err).Msg("error closing HNSW connection")
 		}
 	}()
-	hnswClient := hnswclient.New(hnswConn, hp.hnswConf.Index)
+	hnswClient := hnswclient.New(hnswpb.NewServerClient(hnswConn), hp.hnswConf.Index)
 
 	daysFromNow := time.Duration(hp.conf.DeleteIndicesOlderThanDays) * day
 	upperTime := time.Now().UTC().Add(-daysFromNow)

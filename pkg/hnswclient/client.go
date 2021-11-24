@@ -10,7 +10,6 @@ import (
 	"github.com/SpecializedGeneralist/hnsw-grpc-server/pkg/grpcapi"
 	"github.com/SpecializedGeneralist/whatsnew/pkg/config"
 	"github.com/SpecializedGeneralist/whatsnew/pkg/sets"
-	"google.golang.org/grpc"
 	"google.golang.org/protobuf/types/known/emptypb"
 	"sort"
 	"strconv"
@@ -85,9 +84,9 @@ const indexNameTimeLayout = "2006-01-02"
 const day = 24 * time.Hour
 
 // New creates a new Client.
-func New(conn *grpc.ClientConn, conf config.HNSWIndex) *Client {
+func New(cli grpcapi.ServerClient, conf config.HNSWIndex) *Client {
 	return &Client{
-		cli:          grpcapi.NewServerClient(conn),
+		cli:          cli,
 		conf:         conf,
 		indicesCache: sets.NewStringSet(),
 	}

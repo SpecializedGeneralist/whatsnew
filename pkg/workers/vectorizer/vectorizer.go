@@ -7,6 +7,7 @@ package vectorizer
 import (
 	"context"
 	"fmt"
+	hnswpb "github.com/SpecializedGeneralist/hnsw-grpc-server/pkg/grpcapi"
 	"github.com/SpecializedGeneralist/whatsnew/pkg/config"
 	"github.com/SpecializedGeneralist/whatsnew/pkg/grpcconn"
 	"github.com/SpecializedGeneralist/whatsnew/pkg/hnswclient"
@@ -126,7 +127,7 @@ func (v *Vectorizer) processWebArticle(
 			v.Log.Err(err).Msg("error closing HNSW connection")
 		}
 	}()
-	hnswClient := hnswclient.New(hnswConn, v.hnswConf.Index)
+	hnswClient := hnswclient.New(hnswpb.NewServerClient(hnswConn), v.hnswConf.Index)
 
 	vector, err := v.vectorize(ctx, title)
 	if err != nil {

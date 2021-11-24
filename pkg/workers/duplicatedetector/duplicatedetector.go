@@ -7,6 +7,7 @@ package duplicatedetector
 import (
 	"context"
 	"fmt"
+	hnswpb "github.com/SpecializedGeneralist/hnsw-grpc-server/pkg/grpcapi"
 	"github.com/SpecializedGeneralist/whatsnew/pkg/config"
 	"github.com/SpecializedGeneralist/whatsnew/pkg/grpcconn"
 	"github.com/SpecializedGeneralist/whatsnew/pkg/hnswclient"
@@ -209,7 +210,7 @@ func (dd *DuplicateDetector) findSimilarHit(
 			dd.Log.Err(err).Msg("error closing HNSW connection")
 		}
 	}()
-	hnswClient := hnswclient.New(hnswConn, dd.hnswConf.Index)
+	hnswClient := hnswclient.New(hnswpb.NewServerClient(hnswConn), dd.hnswConf.Index)
 
 	logger.Debug().Msg("KNN-Search")
 
