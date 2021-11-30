@@ -5,6 +5,8 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
 ## [Unreleased]
+
+## [1.0.0-beta.3] - 2021-11-30
 ### Added
 - Some tests.
 
@@ -147,7 +149,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ## [0.1.0] - 2021-01-25
 First versioned release, ready to be tested.
 
-[Unreleased]: https://github.com/SpecializedGeneralist/whatsnew/compare/v1.0.0-beta.2...HEAD
+[Unreleased]: https://github.com/SpecializedGeneralist/whatsnew/compare/v1.0.0-beta.3...HEAD
+[1.0.0-beta.3]: https://github.com/SpecializedGeneralist/whatsnew/compare/v1.0.0-beta.2...v1.0.0-beta.3
 [1.0.0-beta.2]: https://github.com/SpecializedGeneralist/whatsnew/compare/v1.0.0-beta.1...v1.0.0-beta.2
 [1.0.0-beta.1]: https://github.com/SpecializedGeneralist/whatsnew/compare/v1.0.0-beta...v1.0.0-beta.1
 [1.0.0-beta]: https://github.com/SpecializedGeneralist/whatsnew/compare/v1.0.0-alpha.3...v1.0.0-beta
