@@ -1,3 +1,5 @@
+> Currently, we cannot maintain the project with our current capacity, so we decided to archive it. Use it at your own risk!
+
 # WhatsNew
 
 [![Contributor Covenant](https://img.shields.io/badge/Contributor%20Covenant-2.0-4baaaa.svg)](CODE_OF_CONDUCT.md) 
